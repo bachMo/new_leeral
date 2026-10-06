@@ -1,10 +1,21 @@
 import argparse
 import asyncio
 import logging
+import time
+from collections.abc import Sequence
+from datetime import datetime
+from pathlib import Path
 
 from app.ai import build_ai_engine
-from app.ai.contracts import PageInput
-from app.core.config import get_settings
+from app.ai.contracts import (
+    ConversationTurn,
+    DocumentAnalysis,
+    DocumentContext,
+    PageInput,
+    QuestionContext,
+)
+from app.ai.engine import AiEngine
+from app.core.config import PROJECT_ROOT, get_settings
 from app.core.languages import AVAILABLE_LANGUAGES, Language
 from app.core.logging import configure_logging
 from app.db.session import get_engine, get_session_factory
@@ -13,6 +24,7 @@ from app.models import WhatsAppChannel
 from app.repositories.system import WhatsAppChannelRepository
 from app.services.ai_jobs import AiJobTracker
 from app.services.core_vocabulary import CORE_WORDS
+from app.services.media import FileKind, build_pages, detect
 from app.services.ui_prompt_service import UiPromptSynchronizer
 from app.services.vocabulary_builder import VocabularyBuilder
 
@@ -108,6 +120,167 @@ async def check_ai(language: str) -> None:
         await ai.aclose()
 
 
+class Report:
+    def __init__(self, directory: Path) -> None:
+        self.directory = directory
+        self._lines: list[str] = []
+
+    def line(self, text: str = "") -> None:
+        print(text)
+        self._lines.append(text)
+
+    def section(self, title: str) -> None:
+        self.line()
+        self.line(f"== {title}")
+
+    def save(self) -> Path:
+        path = self.directory / "report.txt"
+        path.write_text("\n".join(self._lines) + "\n", encoding="utf-8")
+        return path
+
+
+async def try_document(
+    paths: Sequence[str],
+    language: str,
+    questions: Sequence[str],
+    questions_fr: Sequence[str],
+    audio_questions: Sequence[str],
+    output: str | None,
+) -> None:
+    ai = build_ai_engine()
+    target = Language(language)
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    directory = Path(output) if output else PROJECT_ROOT / "var" / "try" / stamp
+    directory.mkdir(parents=True, exist_ok=True)
+    report = Report(directory)
+    try:
+        report.line(f"provider: {ai.name} | language: {target.value}")
+        pages = await _load_pages(ai, paths, report)
+        if pages is None:
+            return
+        started = time.perf_counter()
+        analysis = await ai.analyze_document(pages)
+        report.line(f"analysis: {time.perf_counter() - started:.1f}s for {len(pages)} page(s)")
+        if not analysis.readable:
+            report.line("document unreadable")
+            return
+        _report_analysis(report, analysis)
+        context = DocumentContext(
+            doc_type=analysis.doc_type,
+            title=analysis.title,
+            summary_fr=analysis.summary_fr,
+            full_text=analysis.full_text,
+            medications=analysis.medications,
+        )
+        report.section(f"Explanation ({target.value})")
+        await _voice(ai, report, analysis.summary_fr, target, context, "explanation")
+        if analysis.key_points:
+            report.section(f"Key points ({target.value})")
+            for point in analysis.key_points:
+                spoken = ". ".join(part for part in (point.title_fr, point.detail_fr) if part)
+                localized = await ai.localize(
+                    spoken, target, protected_terms=context.protected_terms
+                )
+                report.line(f"- {localized.text}")
+        asked = [*await _spoken_questions(ai, audio_questions, target, report)]
+        for text in questions:
+            asked.append(await ai.to_french(text, target))
+        asked.extend(questions_fr)
+        history: list[ConversationTurn] = []
+        for index, question_fr in enumerate(asked, start=1):
+            report.section(f"Question {index}")
+            report.line(f"question (fr): {question_fr}")
+            started = time.perf_counter()
+            reply = await ai.answer(
+                QuestionContext(question_fr=question_fr, document=context, history=tuple(history))
+            )
+            report.line(f"answer (fr): {reply.text_fr}")
+            report.line(f"grounded: {reply.grounded} | {time.perf_counter() - started:.1f}s")
+            if reply.source_quote:
+                report.line(f"source: {reply.source_quote}")
+            await _voice(ai, report, reply.text_fr, target, context, f"answer-{index}")
+            history.extend(
+                (
+                    ConversationTurn(role="user", text_fr=question_fr),
+                    ConversationTurn(role="assistant", text_fr=reply.text_fr),
+                )
+            )
+    finally:
+        await ai.aclose()
+        report.line()
+        report.line(f"saved in {report.save().parent}")
+
+
+async def _load_pages(ai: AiEngine, paths: Sequence[str], report: Report) -> list[PageInput] | None:
+    files = []
+    for raw in paths:
+        path = Path(raw)
+        content = await asyncio.to_thread(path.read_bytes)
+        detected = detect(content)
+        if detected.kind is FileKind.IMAGE:
+            quality = await ai.check_image(content)
+            report.line(
+                f"{path.name}: {quality.issue or 'ok'} (blur {quality.blur_score:.0f}, "
+                f"brightness {quality.brightness:.0f}, {quality.width}x{quality.height})"
+            )
+            if not quality.ok:
+                return None
+        files.append((detected, content, path.name))
+    return await asyncio.to_thread(build_pages, files, get_settings().max_pages_per_document)
+
+
+def _report_analysis(report: Report, analysis: DocumentAnalysis) -> None:
+    report.section("Analysis (fr)")
+    report.line(f"type: {analysis.doc_type} | category: {analysis.category}")
+    report.line(f"title: {analysis.title}")
+    report.line(f"issuer: {analysis.issuer} | date: {analysis.document_date}")
+    report.line(f"amount: {analysis.main_amount_xof} | due: {analysis.main_due_date}")
+    report.line(f"urgency: {analysis.urgency} {analysis.urgency_label or ''}".rstrip())
+    report.line(f"summary: {analysis.summary_fr}")
+    for point in analysis.key_points:
+        report.line(f"- [{point.kind}] {point.title_fr} | {point.detail_fr or ''}")
+    for line in analysis.medications:
+        report.line(
+            f"* {line.status} | read: {line.name_read} | lexicon: {line.lexicon_name} "
+            f"| suggestion: {line.lexicon_suggestion} | {line.strength} | "
+            f"{line.times_per_day}x/day | {line.duration_days} days | {line.timing} "
+            f"| flags: {', '.join(line.pharmacology_flags) or '-'}"
+        )
+    for question in analysis.suggested_questions_fr:
+        report.line(f"? {question}")
+
+
+async def _spoken_questions(
+    ai: AiEngine, paths: Sequence[str], language: Language, report: Report
+) -> list[str]:
+    asked: list[str] = []
+    for raw in paths:
+        path = Path(raw)
+        audio = await asyncio.to_thread(path.read_bytes)
+        transcript = await ai.transcribe(audio, filename=path.name, language=language)
+        report.line(f"{path.name} heard: {transcript.text}")
+        asked.append(await ai.to_french(transcript.text, language))
+    return asked
+
+
+async def _voice(
+    ai: AiEngine,
+    report: Report,
+    text_fr: str,
+    language: Language,
+    context: DocumentContext,
+    name: str,
+) -> None:
+    localized = await ai.localize(text_fr, language, protected_terms=context.protected_terms)
+    report.line(f"{language.value}: {localized.text}")
+    if not localized.complete:
+        report.line("warning: some sentences could not be translated")
+    audio = await ai.speak(localized.text, language)
+    path = report.directory / f"{name}-{language.value}.{audio.extension}"
+    await asyncio.to_thread(path.write_bytes, audio.content)
+    report.line(f"audio: {path.name} ({audio.duration_s}s)")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="leeral", description="Leeral administration")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -128,13 +301,37 @@ def main(argv: list[str] | None = None) -> None:
         "--language", default="wo", choices=[lang.value for lang in AVAILABLE_LANGUAGES]
     )
 
+    trial = commands.add_parser(
+        "try-document", help="run the real document pipeline on local files, without database"
+    )
+    trial.add_argument("files", nargs="+", help="photos, PDF or DOCX of one document")
+    trial.add_argument(
+        "--language", default="wo", choices=[lang.value for lang in AVAILABLE_LANGUAGES]
+    )
+    trial.add_argument("--question", action="append", default=[], help="in the chosen language")
+    trial.add_argument("--question-fr", action="append", default=[], help="in French")
+    trial.add_argument("--question-audio", action="append", default=[], help="voice note file")
+    trial.add_argument("--output", help="folder for audio files and report.txt")
+
     args = parser.parse_args(argv)
+    if args.command == "try-document":
+        missing = [raw for raw in (*args.files, *args.question_audio) if not Path(raw).is_file()]
+        if missing:
+            raise SystemExit(f"file not found: {', '.join(missing)}")
     configure_logging("WARNING", json_output=False)
     runners = {
         "seed-channel": lambda: seed_channel(args.display_number, args.language),
         "seed-words": lambda: seed_words(args.language),
         "sync-prompts": lambda: sync_prompts(args.language, args.force),
         "check-ai": lambda: check_ai(args.language),
+        "try-document": lambda: try_document(
+            args.files,
+            args.language,
+            args.question,
+            args.question_fr,
+            args.question_audio,
+            args.output,
+        ),
     }
 
     async def run() -> None:
