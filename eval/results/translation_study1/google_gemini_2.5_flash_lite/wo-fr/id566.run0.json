@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ceci peut ressembler à un remède miracle pour de nombreuses maladies. Cependant, si nous voulons une guérison durable, nous devons identifier les difficultés, et nous devons les éliminer.",
+ "provider": "Google",
+ "latency_s": 0.56,
+ "prompt_tokens": 89,
+ "completion_tokens": 38,
+ "cost": 2.41e-05
+}

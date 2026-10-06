@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La monnaie des Falklands que nous reconnaissons est la livre des Falklands (FKP) dont la valeur est égale à la livre sterling (GBP).",
+ "provider": "Google",
+ "latency_s": 0.78,
+ "prompt_tokens": 74,
+ "completion_tokens": 32,
+ "cost": 2.02e-05
+}

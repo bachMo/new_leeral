@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans dañu ko tuddee ci UNESCO bu mooy bérab bu ñuy sàmm ci àdduna sépp (World Heritage Site). Pàrt bi ci àll bi nekk ci biti réewum End, dañu koy wooye Sundarbans National Park.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.99,
+ "prompt_tokens": 100,
+ "completion_tokens": 103,
+ "reasoning_tokens": 0,
+ "cost": 0.00123
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La monnaie des îles Falkland que nous avons confirmée est le pound des îles Falkland (FKP), sachant que sa valeur est fixée à parité avec la livre sterling (GBP).",
+ "provider": "Reka",
+ "latency_s": 1.16,
+ "prompt_tokens": 86,
+ "completion_tokens": 44,
+ "cost": 0.0001935328
+}

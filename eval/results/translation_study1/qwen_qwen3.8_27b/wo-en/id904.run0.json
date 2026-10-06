@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The archipelago is located 120 km north of the Peninsula. The largest island is King George Island, which hosts the Villa Las Estrellas base.",
+ "provider": "Cerebras",
+ "latency_s": 0.47,
+ "prompt_tokens": 80,
+ "completion_tokens": 34,
+ "cost": 0.00012986
+}

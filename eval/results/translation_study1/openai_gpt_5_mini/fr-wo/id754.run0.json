@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-wo",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Monnéy bu mujj ci Îles Malouines moo taxawu la livre Îles Malouines (FKP) bu am ay giáwul mu mel ni benn livre sterling (GBP).",
+ "provider": "OpenAI",
+ "latency_s": 1.27,
+ "prompt_tokens": 68,
+ "completion_tokens": 59,
+ "cost": 0.000135
+}

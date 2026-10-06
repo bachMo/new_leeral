@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "All seven peaks, known as \"The Seven Sisters,\" have a minimum width of 100 meters (328 feet).",
+ "provider": "Ionstream",
+ "latency_s": 0.84,
+ "prompt_tokens": 105,
+ "completion_tokens": 28,
+ "cost": 7.51765e-05
+}

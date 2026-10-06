@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "en-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder ɗii jamaanuuji, hareeji tiiɗuɗi waɗii hakkunde rimɓe heewɓe haɓantooɓe jappeere laamu.",
+ "provider": "Google",
+ "latency_s": 7.78,
+ "prompt_tokens": 50,
+ "completion_tokens": 678,
+ "reasoning_tokens": 635,
+ "cost": 0.008236
+}

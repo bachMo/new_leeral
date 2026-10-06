@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'épidémie a poussé le gouvernement indien à prendre des mesures telles que l'installation de dispositifs de détection des moustiques dans les zones où l'épidémie est la plus répandue, la distribution de milliers de moustiquaires et la pulvérisation d'insecticide.",
+ "provider": "Google",
+ "latency_s": 6.28,
+ "prompt_tokens": 91,
+ "completion_tokens": 586,
+ "reasoning_tokens": 524,
+ "cost": 0.007214
+}

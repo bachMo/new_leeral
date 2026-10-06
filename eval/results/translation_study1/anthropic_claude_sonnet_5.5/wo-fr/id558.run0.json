@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Même si les chemins de fer étaient composés de deux rails parallèles, on permettait aux chevaux de les tirer afin d'obtenir de la vitesse et de transporter des charges plus lourdes que sur les routes plus rugueuses d'aujourd'hui.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.17,
+ "prompt_tokens": 145,
+ "completion_tokens": 93,
+ "reasoning_tokens": 0,
+ "cost": 0.00122
+}

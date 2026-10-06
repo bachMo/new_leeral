@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-en",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "He was afraid of what had happened and of changing; he kept his mouth shut about it, because he thought it would be of no use to tell anyone what had been done.",
+ "provider": "OpenAI",
+ "latency_s": 1.22,
+ "prompt_tokens": 81,
+ "completion_tokens": 54,
+ "cost": 0.00012825
+}

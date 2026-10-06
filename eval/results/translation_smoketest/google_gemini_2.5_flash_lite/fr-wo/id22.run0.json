@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci keneen yi ci bokk ci liñu soppale la ci film bu jara am, regisseur bu jara am, cameraman bu jara am, xutbax bu jara am, liggéey bu jara am, musiq bu jara am, seen bu jara am, liggéey bu jara am, mixage bu jara am, ak xutbax bu jara am.",
+ "provider": "Google",
+ "latency_s": 1.7,
+ "prompt_tokens": 87,
+ "completion_tokens": 92,
+ "cost": 4.55e-05
+}

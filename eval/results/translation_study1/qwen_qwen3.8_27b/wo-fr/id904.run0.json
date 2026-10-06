@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'archipel se situe à 120 km au sud de la péninsule. L'île la plus grande est l'île du Roi George, qui abrite la base Villa Las Estrellas.",
+ "provider": "AkashML",
+ "latency_s": 1.38,
+ "prompt_tokens": 80,
+ "completion_tokens": 45,
+ "cost": 9.639e-05
+}

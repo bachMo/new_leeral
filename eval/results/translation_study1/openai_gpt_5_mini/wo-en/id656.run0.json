@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "These thoughts deeply trouble the hearts of some people because they want to know what others do and what in the world can make them do or not do certain things.",
+ "provider": "OpenAI",
+ "latency_s": 1.19,
+ "prompt_tokens": 84,
+ "completion_tokens": 50,
+ "cost": 0.000121
+}

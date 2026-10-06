@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Some of the compounds being studied to combat the parasite that causes malaria, the researchers must thoroughly investigate them, as they have evaluated the study and its benefits.",
+ "provider": "Phala",
+ "latency_s": 5.39,
+ "prompt_tokens": 99,
+ "completion_tokens": 32,
+ "cost": 7.485e-05
+}

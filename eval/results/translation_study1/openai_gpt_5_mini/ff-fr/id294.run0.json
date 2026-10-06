@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ils ont confiance en la parole donnée et en le changement, il faut garder la main sur ce qui reste, leur cœur est en paix, ils savent se souvenir, ce qui reste a de la valeur, il vaut mieux faire ce qu'il faut.",
+ "provider": "OpenAI",
+ "latency_s": 1.22,
+ "prompt_tokens": 81,
+ "completion_tokens": 68,
+ "cost": 0.00015625
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr Tony Moll saw that extensively drug-resistant tuberculosis (XDR-TB) could not be cured in the South African province called KwaZulu-Natal.\n\nActually, let me give the cleaner version: Dr Tony Moll discovered extensively drug-resistant tuberculosis (XDR-TB) in the South African province of KwaZulu-Natal.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.58,
+ "prompt_tokens": 121,
+ "completion_tokens": 126,
+ "reasoning_tokens": 0,
+ "cost": 0.001502
+}

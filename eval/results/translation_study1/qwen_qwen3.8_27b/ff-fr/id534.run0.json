@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "C'est le matin qui a le pouvoir, c'est le matin de notre mère qui a le pouvoir.",
+ "provider": "Mancer 2",
+ "latency_s": 1.19,
+ "prompt_tokens": 68,
+ "completion_tokens": 22,
+ "cost": 6.75e-05
+}

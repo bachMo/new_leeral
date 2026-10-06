@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "À cette époque, j’avais quitté mon village, et je suis resté jusqu’à ce que mon père revienne dans mon village, en Palestine, après la guerre de 1967.",
+ "provider": "Ionstream",
+ "latency_s": 3.39,
+ "prompt_tokens": 109,
+ "completion_tokens": 43,
+ "cost": 0.0001107837
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les enfants jouent avec enthousiasme dans la cour de l'école tous les jours.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.42,
+ "prompt_tokens": 76,
+ "completion_tokens": 27,
+ "cost": 0.000211
+}

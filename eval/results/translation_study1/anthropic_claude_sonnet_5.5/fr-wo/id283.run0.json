@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-wo",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yoon wi mbir mi xewee dañu ko tëj ci diir bu gàtt, ngir may ñi ñuy dooleel (jàpple) génne waxtaankat bu Audi TT bu xonq bi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.53,
+ "prompt_tokens": 108,
+ "completion_tokens": 79,
+ "reasoning_tokens": 0,
+ "cost": 0.001006
+}

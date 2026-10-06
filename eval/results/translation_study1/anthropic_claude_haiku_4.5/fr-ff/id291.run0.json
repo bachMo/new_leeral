@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Haa jibinannde, dokumaa ndee waylugol e nder jannde goɗɗe Palestine yeggina haa ko'e e nder goɗɗe maa jeyaa haa'i kaɓe 1967 e nder geɗe Araab.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.7,
+ "prompt_tokens": 94,
+ "completion_tokens": 79,
+ "cost": 0.000489
+}

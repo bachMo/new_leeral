@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yoonu telewiyo yi di wone ne bunt bu xóot dafay génn ci usine bi.",
+ "provider": "AkashML",
+ "latency_s": 1.14,
+ "prompt_tokens": 51,
+ "completion_tokens": 27,
+ "cost": 5.84415e-05
+}

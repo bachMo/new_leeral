@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Il y a des reportages à la télé qui montrent la fumée noire qui sort de l'usine.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.09,
+ "prompt_tokens": 90,
+ "completion_tokens": 35,
+ "reasoning_tokens": 0,
+ "cost": 0.00053
+}

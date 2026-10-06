@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "You can do it with a silent alarm, which will gently wake you up without startling you.",
+ "provider": "Google",
+ "latency_s": 0.48,
+ "prompt_tokens": 65,
+ "completion_tokens": 19,
+ "cost": 1.41e-05
+}

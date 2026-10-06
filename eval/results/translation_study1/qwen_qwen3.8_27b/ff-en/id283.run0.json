@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The data was collected from people who were asked to provide their own Audi TT models.",
+ "provider": "Wafer",
+ "latency_s": 1.3,
+ "prompt_tokens": 86,
+ "completion_tokens": 18,
+ "cost": 8.0364e-05
+}

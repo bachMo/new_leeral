@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les autres animaux qu'ils traquent pour compléter le traitement des plantes contre d'autres parasites, les rangers doivent les surveiller attentivement, car ils estiment que la surveillance est bénéfique.",
+ "provider": "Google",
+ "latency_s": 0.81,
+ "prompt_tokens": 84,
+ "completion_tokens": 40,
+ "cost": 2.44e-05
+}

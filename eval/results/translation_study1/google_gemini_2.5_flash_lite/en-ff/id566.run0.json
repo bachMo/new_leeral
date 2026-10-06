@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗum woni no wiɗto daliila nder limce ɗuuɗe. Kono, si en yiɗii tan ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe mbaɗata ko wuurdude, ɓe",
+ "provider": "Google",
+ "latency_s": 2.16,
+ "prompt_tokens": 73,
+ "completion_tokens": 400,
+ "cost": 0.0001673
+}

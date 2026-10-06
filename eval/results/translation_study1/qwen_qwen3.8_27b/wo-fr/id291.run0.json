@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La résolution, notre soutien à ce qu’elle a obtenu, a permis d’obtenir des forces armées, que la Palestine a souhaité pour ses forces armées avant la guerre du Moyen-Orient en 1967.",
+ "provider": "Darkbloom",
+ "latency_s": 3.09,
+ "prompt_tokens": 106,
+ "completion_tokens": 48,
+ "cost": 0.0001109
+}

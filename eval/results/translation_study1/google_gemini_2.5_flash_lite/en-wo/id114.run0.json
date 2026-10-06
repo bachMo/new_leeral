@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Bàkk bi dafa jàppale réewum India ngir mu def ci li mel noon, ni topp ci njàqare yi, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lépp lu ci am solo, joxe ci ay jàmm yu ñu jàpp ci lé",
+ "provider": "Google",
+ "latency_s": 1.7,
+ "prompt_tokens": 59,
+ "completion_tokens": 400,
+ "cost": 0.0001659
+}

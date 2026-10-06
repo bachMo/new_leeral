@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Xalis bu am solo ci Falklands mooy Falkland pound (FKP) bii, bu juge ci ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu ginnaaw bu gin",
+ "provider": "Google",
+ "latency_s": 1.33,
+ "prompt_tokens": 56,
+ "completion_tokens": 400,
+ "cost": 0.0001656
+}

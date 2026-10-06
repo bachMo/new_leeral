@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-wo",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Mbas mi tax na nguurug End gi jël ay matuwaay yu mel ni yónnee ñuy dajale mbam-xuux yi ci gox yi mu gëna laal, séddale ay junney sàkketu yoo, ak wis ay garabu yoo.",
+ "provider": "Google",
+ "latency_s": 6.69,
+ "prompt_tokens": 79,
+ "completion_tokens": 625,
+ "reasoning_tokens": 560,
+ "cost": 0.007658
+}

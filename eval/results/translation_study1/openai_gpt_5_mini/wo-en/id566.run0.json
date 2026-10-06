@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This is like a heavy storm that floods a school in many ways. Therefore, if we do not want lasting conflict, we must see the real problems and then we must solve them.",
+ "provider": "OpenAI",
+ "latency_s": 1.41,
+ "prompt_tokens": 88,
+ "completion_tokens": 55,
+ "cost": 0.000132
+}

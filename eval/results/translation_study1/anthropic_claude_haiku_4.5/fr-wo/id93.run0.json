@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Xibaarukaay yu télévisioon lañu wax ne duup macc bu gara ci usine bi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.88,
+ "prompt_tokens": 61,
+ "completion_tokens": 33,
+ "cost": 0.000226
+}

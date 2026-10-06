@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans dafa joxe ko ci UNESCO World Heritage Site. Xaaj bu nekk ci benn biy India dafa laaj Sundarbans National Park.",
+ "provider": "Wafer",
+ "latency_s": 1.34,
+ "prompt_tokens": 69,
+ "completion_tokens": 39,
+ "cost": 0.000171306
+}

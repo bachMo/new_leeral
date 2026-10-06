@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗum waawnoo waɗude no feewti e huutoraade alarm clock nde alaa yiite no feewti ngam waddude ma e semmbe koɗo, walaa wakkilaare ma fof.",
+ "provider": "Google",
+ "latency_s": 1.24,
+ "prompt_tokens": 57,
+ "completion_tokens": 54,
+ "cost": 2.73e-05
+}

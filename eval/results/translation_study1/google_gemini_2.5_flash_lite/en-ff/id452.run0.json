@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder ndeen duuɓi, wolde nde ɓuri famɗude waɗii hakkunde ɓiɓɓe laamɓe ɓurɓe heewde, ɓe kaɓata ngam jappeere laamu.",
+ "provider": "Google",
+ "latency_s": 1.16,
+ "prompt_tokens": 50,
+ "completion_tokens": 58,
+ "cost": 2.82e-05
+}

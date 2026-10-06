@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗee kaɓirɗe ɗee ƴeewata ko waɗi enen ɓe njiɗi ko ɓe mbaɗata, e ko woni e nder nokku ɓe ngoni, ɗum ɓe ɓeyda mbaɗde walla ɓe ɓeydaa mbaɗde enen.",
+ "provider": "Phala",
+ "latency_s": 2.94,
+ "prompt_tokens": 87,
+ "completion_tokens": 102,
+ "cost": 0.0002043
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-en",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Japan's Ministry of Economy, Trade and Industry (METI) said it would take measures to prevent losses in the 27 sectors that were affected.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.44,
+ "prompt_tokens": 111,
+ "completion_tokens": 35,
+ "cost": 0.000286
+}

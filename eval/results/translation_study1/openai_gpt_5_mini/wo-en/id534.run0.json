@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "You can do it with a loud alarm; when you know it will wake you gradually without letting you fall back asleep, it will work for you.",
+ "provider": "OpenAI",
+ "latency_s": 1.17,
+ "prompt_tokens": 68,
+ "completion_tokens": 48,
+ "cost": 0.000113
+}

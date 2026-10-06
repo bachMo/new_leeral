@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dinaay yi ci tele yi ñu gis dafa yi ci fecc.",
+ "provider": "Google",
+ "latency_s": 0.58,
+ "prompt_tokens": 46,
+ "completion_tokens": 17,
+ "cost": 1.14e-05
+}

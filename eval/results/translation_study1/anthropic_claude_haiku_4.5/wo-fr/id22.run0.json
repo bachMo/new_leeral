@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les catégories de films qui sont incluses dans Noël incluent, entre autres, les films de science-fiction, les westerns, les films d'horreur, la musique classique, les films d'action, les films d'aventure, les films comiques et les films dramatiques.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.88,
+ "prompt_tokens": 110,
+ "completion_tokens": 71,
+ "cost": 0.000465
+}

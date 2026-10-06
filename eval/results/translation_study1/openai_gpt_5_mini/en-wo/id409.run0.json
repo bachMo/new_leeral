@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci benn weer bu ñuul ñaar, Amerikaan yi ak fitnaay yiw Free French ajaar nañu suuf Fraans bi te dañuy wéy ci kaw Aalamani.",
+ "provider": "OpenAI",
+ "latency_s": 1.92,
+ "prompt_tokens": 52,
+ "completion_tokens": 61,
+ "cost": 0.000135
+}

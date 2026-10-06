@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E ɗemngal tan, Amerikankooɓe e kesoɓe Farayse ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi ɓe mbaɗi",
+ "provider": "Chutes",
+ "latency_s": 3.03,
+ "prompt_tokens": 66,
+ "completion_tokens": 98,
+ "cost": 0.00023144
+}

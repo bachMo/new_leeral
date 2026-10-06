@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "They inject the participants, change the treatment of the disease, test and observe it closely, and they monitor the testing to see if it is effective when applied.",
+ "provider": "Google",
+ "latency_s": 8.59,
+ "prompt_tokens": 80,
+ "completion_tokens": 917,
+ "reasoning_tokens": 885,
+ "cost": 0.011164
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-ff",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ministeer Economi, Jaɓɓaŋgal e Industri Japon (METI) wi'i ko anndi ɓurɗum 27 ko waɗi e jahaaji ngam kaɓirɗe ɗe.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.25,
+ "prompt_tokens": 105,
+ "completion_tokens": 81,
+ "reasoning_tokens": 0,
+ "cost": 0.00102
+}

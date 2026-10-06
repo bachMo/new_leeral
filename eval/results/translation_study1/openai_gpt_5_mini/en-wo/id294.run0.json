@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nokku-illal yi ci taalibe ju réewal bu wér, rangers dinañu sant, ndax taalib bi nekk nañu mujjewoo te ñaxtu leen ci jamono ju mujjul ak séen njaxlaf.",
+ "provider": "OpenAI",
+ "latency_s": 1.81,
+ "prompt_tokens": 59,
+ "completion_tokens": 77,
+ "cost": 0.00016875
+}

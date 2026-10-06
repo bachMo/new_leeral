@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-en",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Stories are many among those people; some say one thing and others say another; when something is said in one place, other things are said elsewhere.",
+ "provider": "OpenAI",
+ "latency_s": 1.8,
+ "prompt_tokens": 95,
+ "completion_tokens": 48,
+ "cost": 0.00011975
+}

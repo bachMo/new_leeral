@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yimɓe ɓe njokki e ƴeewndo ɓeydiiɗo ngam haɗde ɓanndu ɗe ɓe njokki, ina haani ɓe ƴeewtee no feewi e ɓe ɓe njokki, sabu ƴeewndo o ina waɗee e ɓe ɓe njokki, te ɗo ɗe ɓe njokki ɗe ɓe ƴeewii.",
+ "provider": "DeepInfra",
+ "latency_s": 7.16,
+ "prompt_tokens": 85,
+ "completion_tokens": 141,
+ "cost": 0.000277125
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nder ɗuum wakkati, wakkati ɗin, YARLUNDE HOOREJO ƴi'i ndaa ngiɗa. Nden ɓeen laamiiɓe ɓurɓe ɗuuɗaade ko woni ngam laamu.\n\nActually let me give a cleaner version:\n\nNder wakkatiiji ɗin, ɓe-ɓirɗe hakkunde laamɓe ɗuuɗɓe e hoɗɓe ngam laamu ngoo ngaddi yeeso ndaarde.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.56,
+ "prompt_tokens": 111,
+ "completion_tokens": 191,
+ "reasoning_tokens": 0,
+ "cost": 0.002132
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "I can't translate this with confidence. The text looks like a non-standard or dialectal form of Fulfulde, and parts of it are unclear to me. This is my best attempt:\n\nThose people who were chosen should go to the field, not to the one that is bigger, but ... watching a film, sitting near a film, sitting watching a film and their game on TV.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.08,
+ "prompt_tokens": 149,
+ "completion_tokens": 111,
+ "reasoning_tokens": 0,
+ "cost": 0.001408
+}

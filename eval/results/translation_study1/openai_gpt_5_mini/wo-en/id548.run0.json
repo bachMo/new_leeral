@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "So, the youths responded in that period, when around 800,000 Soviet Red Army soldiers had entered and taken control of Belarusian and Ukrainian territories after those cities were placed under Polish control by the Riga Peace Treaty, the Soviet-Polish Non-Aggression Pact, and other agreements between countries, many provinces and many towns.",
+ "provider": "OpenAI",
+ "latency_s": 1.41,
+ "prompt_tokens": 133,
+ "completion_tokens": 85,
+ "cost": 0.00020325
+}

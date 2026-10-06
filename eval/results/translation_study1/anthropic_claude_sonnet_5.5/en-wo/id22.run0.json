@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yeneen nominasiyoŋ yi ñu fa defar mooy Film bi gën a rafet, Rëddkat bi (Réalisateur), Foto bi (Cinématographie), Defar yi ñuy sol (Costume), Dëgg-dëgg film bi (Montage), Ndaw-ndawal musig bi (Original Score), Defar bi ñuy defar film bi (Production Design), Defar kaaraange baat (Sound Editing), Boole baat yi (Sound Mixing) ak Léebu film bu njëkk (Original Screenplay).",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.89,
+ "prompt_tokens": 117,
+ "completion_tokens": 198,
+ "reasoning_tokens": 0,
+ "cost": 0.002214
+}

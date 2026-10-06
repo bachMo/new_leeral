@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "en-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder yonati ɗiɗi tan, Ameriknaaɓe e konuuli Farayse rimɗuɗi ɗin rimɗinno fombina Farayse, ɓe hucciti Almaañ.",
+ "provider": "Google",
+ "latency_s": 7.44,
+ "prompt_tokens": 55,
+ "completion_tokens": 773,
+ "reasoning_tokens": 721,
+ "cost": 0.009386
+}

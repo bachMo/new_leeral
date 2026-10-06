@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Epidemiy bi taxna reewum India jël ay tegu ci li mel ni yëngal ci gox yu am solo yi, joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay xal-xal yu bari ak joxe ci ay",
+ "provider": "Google",
+ "latency_s": 1.72,
+ "prompt_tokens": 79,
+ "completion_tokens": 400,
+ "cost": 0.0001679
+}

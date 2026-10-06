@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La route a été fermée et les voleurs ont été vus en train de sortir de l'Audi TT rouge.",
+ "provider": "Google",
+ "latency_s": 0.53,
+ "prompt_tokens": 72,
+ "completion_tokens": 25,
+ "cost": 1.72e-05
+}

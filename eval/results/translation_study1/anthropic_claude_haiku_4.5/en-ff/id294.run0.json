@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jannguɗe e jaɓɓorgo suudu-maako ɗin maa jannguɗe maa heɓtaa ranger ɗe, haa jaɓɓorgo ɗin naa jaaɓaa kadi ko waɗi ɗin naa ƴellitaa.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.8,
+ "prompt_tokens": 76,
+ "completion_tokens": 89,
+ "cost": 0.000521
+}

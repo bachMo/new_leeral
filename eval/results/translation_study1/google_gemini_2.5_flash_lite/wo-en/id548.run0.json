@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "So, the Germans were defeated in the night, when about 800,000 soldiers of the Soviet Union Red Army invaded and formed Belarusian and Ukrainian corps after they had agreed to cities in western Poland in violation of the Riga Peace Treaty, the Soviet-Polish Non-Aggression Pact, and other agreements with countries, all of them two by two and many by many.",
+ "provider": "Google",
+ "latency_s": 0.75,
+ "prompt_tokens": 134,
+ "completion_tokens": 78,
+ "cost": 4.46e-05
+}

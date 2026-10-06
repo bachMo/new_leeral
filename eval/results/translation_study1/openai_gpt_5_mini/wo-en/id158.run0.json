@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "All the peaks, which are called \"The Seven Sisters\", range from 100 to 250 meters in height (328 to 820 feet) above sea level.",
+ "provider": "OpenAI",
+ "latency_s": 1.55,
+ "prompt_tokens": 88,
+ "completion_tokens": 51,
+ "cost": 0.000124
+}

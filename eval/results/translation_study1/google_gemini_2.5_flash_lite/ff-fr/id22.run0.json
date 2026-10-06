@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-fr",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les gens qui ont choisi le film ne sont pas là, mais le film est le meilleur, le film est beau, le scénario du film est bon, le film est bien joué à la télé.",
+ "provider": "Google",
+ "latency_s": 2.56,
+ "prompt_tokens": 90,
+ "completion_tokens": 41,
+ "cost": 2.54e-05
+}

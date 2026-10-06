@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les Kodayeke (voies de chariots) ont commencé à être construites, elles permettent aux chariots de transporter des charges lourdes sur des routes plus lisses.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.67,
+ "prompt_tokens": 111,
+ "completion_tokens": 60,
+ "reasoning_tokens": 0,
+ "cost": 0.000822
+}

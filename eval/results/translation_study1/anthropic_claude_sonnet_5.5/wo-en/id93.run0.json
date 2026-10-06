@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "There are reports on TV showing the smoke of the factory that rises up toward the moon.\n\nHmm, let me reconsider: \"saxaar su weer yu bawoo ci usine bi\" — \"saxaar\" = smoke, \"su weer\" = \"black\"? Actually \"weer\" in Wolof means \"white\"? \"wekk\"... \"weex\" is white, \"ñuul\" is black. \"weer\" means moon/month. So \"saxaar su weer\" = smoke that is bright/clear? \"yu bawoo ci usine bi\" = that come from the factory.\n\nThere are reports on TV showing moonlit/monthly smoke from the factory.\n\nThere are reports on TV showing smoke every month coming from the factory.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.73,
+ "prompt_tokens": 90,
+ "completion_tokens": 226,
+ "reasoning_tokens": 0,
+ "cost": 0.00244
+}

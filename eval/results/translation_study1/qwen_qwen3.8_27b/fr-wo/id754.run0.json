@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Moneta ofisiel bu Ñaari Malouin mooy liiv bu Ñaari Malouin (FKP), te am na doole yu niroo ak liiv Sterling (GBP).",
+ "provider": "Novita",
+ "latency_s": 3.2,
+ "prompt_tokens": 76,
+ "completion_tokens": 47,
+ "cost": 0.00017292
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan, which began in the 15th century, saw European powers arrive and rename the island from Formosa, or the beautiful island.",
+ "provider": "Phala",
+ "latency_s": 2.2,
+ "prompt_tokens": 97,
+ "completion_tokens": 31,
+ "cost": 7.2675e-05
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yoon yi ci jëfandikoo bu yombal ci lëkkalekaay bi ngir dindi mbaydi yu amul solo, dañu wara am xel mu yombal ci kàttan yi, ndax jëfandikoo bi dafa am xel te am nañu xool ndax dafa am solo.",
+ "provider": "Ionstream",
+ "latency_s": 3.84,
+ "prompt_tokens": 67,
+ "completion_tokens": 82,
+ "cost": 0.0001986831
+}

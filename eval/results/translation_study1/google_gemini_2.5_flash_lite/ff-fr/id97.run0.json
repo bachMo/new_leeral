@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-fr",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le Dr Tony Moll a traité un cas de tuberculose ultrarésistante (XDR-TB) dans le KwaZulu-Natal en Afrique du Sud.",
+ "provider": "Google",
+ "latency_s": 0.47,
+ "prompt_tokens": 72,
+ "completion_tokens": 32,
+ "cost": 2e-05
+}

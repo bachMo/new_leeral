@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ceŋe goɗɗe ɗe poondi ɗum ngoni: sinima ɓurnga moƴƴugo, hoosiyanɗo sinima ɓurɗo moƴƴugo, nastugo sinima (cinématographie) ɓurngo moƴƴugo, lummbe ɓurɗe moƴƴugo, tammbitaago sinima ɓurngo moƴƴugo, kosol gimol aaw-mum ɓurngol moƴƴugo, kuutinirɗe ɓurɗe moƴƴugo, tammbitaago ndaar-jaŋde ɓurngo moƴƴugo, ɗon-ɗoftaago ɓurngo moƴƴugo e winndere sinima aaw-mum ɓurnde moƴƴugo.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 6.11,
+ "prompt_tokens": 174,
+ "completion_tokens": 275,
+ "reasoning_tokens": 0,
+ "cost": 0.003098
+}

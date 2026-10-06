@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Diiw bu ci nekk ci biir guedj gu mag gi, bi ñu tudde \"Samaar-Samaar\", am na lu ëpp ci 100 ba 250i metër ci kawam.",
+ "provider": "Google",
+ "latency_s": 1.06,
+ "prompt_tokens": 74,
+ "completion_tokens": 54,
+ "cost": 2.9e-05
+}

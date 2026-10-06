@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans ɗon hollitaa wonde ko nokkuure mawnde e nder leydi, UNESCO ɗon jibini. Feccere ndee ɗo woodi e nder leydi Indiya, ɗon wi'etee Parku Nasyonal Sundarbans.",
+ "provider": "Novita",
+ "latency_s": 2.52,
+ "prompt_tokens": 83,
+ "completion_tokens": 73,
+ "cost": 0.00025386
+}

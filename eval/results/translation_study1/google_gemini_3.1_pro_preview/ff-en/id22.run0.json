@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The rest of the selected people will be in the categories of best film picture, film equipment, film directing, film editing, and television acting.",
+ "provider": "Google",
+ "latency_s": 7.38,
+ "prompt_tokens": 90,
+ "completion_tokens": 813,
+ "reasoning_tokens": 784,
+ "cost": 0.009936
+}

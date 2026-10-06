@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Japan's Ministry of Economy, Trade and Industry (METI) said it was aware of 27 accidents involving the equipment.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.17,
+ "prompt_tokens": 137,
+ "completion_tokens": 45,
+ "reasoning_tokens": 0,
+ "cost": 0.000724
+}

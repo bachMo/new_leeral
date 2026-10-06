@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'archipel se trouve à 120 km au-dessus de la péninsule. La plus grande île est King George Island, avec la localité de Villa Las Estrellas.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.52,
+ "prompt_tokens": 117,
+ "completion_tokens": 57,
+ "reasoning_tokens": 0,
+ "cost": 0.000804
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ngal laawol waɗiima ɗe njiyataa goongɗude dow laamu Indiya heen nde, ɓe yuurni ɗe kadi ɗe soɓɓii gootol ɗiɗo towti e leydiiji waɗata, ɓe yeeytii rewɓe ɗiɗi mbaɗani ɗiɗi e ɓe pultii kisal ɗiɗi.",
+ "provider": "OpenAI",
+ "latency_s": 2.08,
+ "prompt_tokens": 69,
+ "completion_tokens": 109,
+ "cost": 0.00023525
+}

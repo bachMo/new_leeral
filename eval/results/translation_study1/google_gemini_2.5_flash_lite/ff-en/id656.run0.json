@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "These things are about what people want and what they want, and also things that are around them, which are what they do and what they do.",
+ "provider": "Google",
+ "latency_s": 0.47,
+ "prompt_tokens": 92,
+ "completion_tokens": 30,
+ "cost": 2.12e-05
+}

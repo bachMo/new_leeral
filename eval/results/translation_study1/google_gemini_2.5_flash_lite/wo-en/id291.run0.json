@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "However, our research into the matter reveals that the wars that occurred in the occupied territories, when Palestine sought to regain its occupied territories before the Middle East war in 1967.",
+ "provider": "Google",
+ "latency_s": 1.03,
+ "prompt_tokens": 95,
+ "completion_tokens": 38,
+ "cost": 2.47e-05
+}

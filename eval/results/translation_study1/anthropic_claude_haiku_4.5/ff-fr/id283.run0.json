@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le volant a été volé sur une voiture de luxe appartenant à un homme riche qui venait d'acheter une Audi TT neuve.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.72,
+ "prompt_tokens": 94,
+ "completion_tokens": 40,
+ "cost": 0.000294
+}

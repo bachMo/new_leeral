@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Falklands currency we use is the pound of the Falklands (FKP) — you should know that it is the same as the British pound (GBP).",
+ "provider": "OpenAI",
+ "latency_s": 1.17,
+ "prompt_tokens": 75,
+ "completion_tokens": 51,
+ "cost": 0.00012075
+}

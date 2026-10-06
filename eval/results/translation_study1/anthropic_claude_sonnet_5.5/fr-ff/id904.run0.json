@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Duuɓi ɗiɗi ko fuɗɗaa e nder to ngoo ngonnoo. Ngam ɗuum, ndaa e nder ɗum.\n\nHakkiilo: Ndeye ɗum mi waawi ɗum. Mi anndaa no nde'i.\n\nƁurna tawa mi yiɗi hokkude jawaabu cuɓaaɗo: \n\nSuudu-leydi Pulaar:\n\nNgool ɗiiɗi (archipel) ina woni ko woɗɗi 120 km to rewo-fuɗnaange ngenndi ɗu'um. Gooŋgol Roi-George, e wuro Villa Las Estrellas, ɗum ɓurɗum mawnude.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 7.02,
+ "prompt_tokens": 118,
+ "completion_tokens": 257,
+ "reasoning_tokens": 0,
+ "cost": 0.002806
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Mais les chemins du désert sont deux fois plus sinueux, nous avons mis nos sacs à dos et nous les avons secoués pour avoir des vivres et ramener beaucoup de médicaments dans ces voyages difficiles d'aujourd'hui.",
+ "provider": "OpenAI",
+ "latency_s": 1.51,
+ "prompt_tokens": 96,
+ "completion_tokens": 64,
+ "cost": 0.000152
+}

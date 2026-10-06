@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nake, mbir yi amul solo ci jamono boobu, bi 800.000 soldaar yu jamono ji ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li am solo ci li",
+ "provider": "Google",
+ "latency_s": 1.7,
+ "prompt_tokens": 102,
+ "completion_tokens": 400,
+ "cost": 0.0001702
+}

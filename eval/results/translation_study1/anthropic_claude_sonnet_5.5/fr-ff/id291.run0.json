@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ngam ko jaaynooji ɗum, binndol ndin hollan sarɗi ngam sembiɗɗo ndii ɗo Palestine ɗon ƴamta ko wonnoo e sarɗi ɗi mbaawnoo ko adii ɗolnugol Hirjinoore Hakkunde ndee ka 1967.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.47,
+ "prompt_tokens": 123,
+ "completion_tokens": 121,
+ "reasoning_tokens": 0,
+ "cost": 0.001456
+}

@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tee njiit yi amul solo ci jamono boobu, ci genn jant bi, ci bi mu jëlee 800 000 soldaaru Armée rouge bu réewum Soviet yi ñoo ñëw te def Republique bii ak Ukraine ci gannaaw bi ñu jàpp réewi Pologne yi ci bëj-gànnaar, te loolu dafa jàpp ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi ci lislaam bi",
+ "provider": "Google",
+ "latency_s": 2.0,
+ "prompt_tokens": 145,
+ "completion_tokens": 400,
+ "cost": 0.0001745
+}

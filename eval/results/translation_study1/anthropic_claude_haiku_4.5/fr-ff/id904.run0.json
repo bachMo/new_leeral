@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Gannde ndee woni 120 km haa woɗɗe sahel nder jannge. Gannde Mawnde George, maa leñol Villa Las Estrellas, ko gannde mawɗo.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.95,
+ "prompt_tokens": 92,
+ "completion_tokens": 63,
+ "cost": 0.000407
+}

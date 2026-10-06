@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This is similar in many ways to a medical certificate. However, if we don't want a quick fix, then we must see the root of the problem, and we must remove it.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.05,
+ "prompt_tokens": 132,
+ "completion_tokens": 49,
+ "reasoning_tokens": 0,
+ "cost": 0.000754
+}

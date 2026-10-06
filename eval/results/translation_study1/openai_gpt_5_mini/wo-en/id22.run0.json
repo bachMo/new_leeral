@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Other workshops included in the festival are choir, youth, cinematography, West African arts, filmmaking, traditional music, fashion design, audio production, computer audio and sound effects.",
+ "provider": "OpenAI",
+ "latency_s": 1.52,
+ "prompt_tokens": 96,
+ "completion_tokens": 53,
+ "cost": 0.00013
+}

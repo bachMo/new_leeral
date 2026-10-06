@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Suudu-suudu goɗɗi ina jaŋde Picture Meeɗugo, Director, Cinematography, Costume Design, Film-editing, Original Score, Production Design, Sound Editing, Sound Mixing, e Original Screenplay.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.67,
+ "prompt_tokens": 86,
+ "completion_tokens": 65,
+ "cost": 0.000411
+}

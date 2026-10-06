@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ainsi, les Allemands ont attaqué dans la nuit, lorsque environ 800 000 soldats de l'Armée rouge de l'Union soviétique sont entrés et ont formé les fronts biélorusse et ukrainien après avoir refusé de quitter les villes de l'ouest de la Pologne en raison du traité de paix de Riga, du pacte de non-agression soviéto-polonais et d'autres accords avec les pays, tous deux avec de nombreuses pertes.",
+ "provider": "Google",
+ "latency_s": 1.28,
+ "prompt_tokens": 134,
+ "completion_tokens": 106,
+ "cost": 5.58e-05
+}

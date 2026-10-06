@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Mboros nguu waɗii laamu Inndo ƴetta peeje ko wayi no neldugol mooftooɓe aladuuji e nokkuuji ɓurɗi loraade ɗii, senndugol ujunnaaje sankeeli e fiisugol leɗɗe mbarooje kulle.",
+ "provider": "Google",
+ "latency_s": 8.39,
+ "prompt_tokens": 86,
+ "completion_tokens": 865,
+ "reasoning_tokens": 790,
+ "cost": 0.010552
+}

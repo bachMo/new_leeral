@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "D'autres études ont été menées pour évaluer l'efficacité des médicaments contre d'autres parasites ; les chercheurs doivent donc les étudier attentivement, car ils ont évalué l'étude et son utilité.",
+ "provider": "Wafer",
+ "latency_s": 1.11,
+ "prompt_tokens": 99,
+ "completion_tokens": 44,
+ "cost": 0.000193776
+}

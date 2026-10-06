@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci yeneen yi ñu ko mel melni bu meilleur film, bu meilleur réalisateur, bu meilleur cinématographie, bu meilleur costumes, bu meilleur montage, bu meilleur musique originale, bu meilleur décors, bu meilleur montage sonore, bu meilleur mixage ak bu meilleur scénario original.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.67,
+ "prompt_tokens": 125,
+ "completion_tokens": 93,
+ "cost": 0.00059
+}

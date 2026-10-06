@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans dafa nangu ni njël site ju UNESCO mu wér. Pàrt bii ci pet hoeet bi ci biir teritori indiyaa lañu gën a tudd Sundarbans National Park.",
+ "provider": "OpenAI",
+ "latency_s": 1.11,
+ "prompt_tokens": 61,
+ "completion_tokens": 66,
+ "cost": 0.00014725
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan has become known in the 15th century as the island the Europeans called Ilhéu Formosa, or the beautiful island.",
+ "provider": "OpenAI",
+ "latency_s": 1.41,
+ "prompt_tokens": 84,
+ "completion_tokens": 46,
+ "cost": 0.000113
+}

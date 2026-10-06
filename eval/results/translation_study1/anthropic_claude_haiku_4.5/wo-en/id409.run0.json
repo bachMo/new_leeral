@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "In two years Americans and Free French soldiers fought to liberate France from the Germans.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.86,
+ "prompt_tokens": 74,
+ "completion_tokens": 20,
+ "cost": 0.000174
+}

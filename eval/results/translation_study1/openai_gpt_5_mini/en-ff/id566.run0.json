@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ko ɗum woodi ko fii juulnde e laawolji ɗe. Ammaan, so min waɗiima ko feewnude waɗa e ɗiɗi, kono min yiɗiima moolraade, woni min yaru huunde nden e min fayi waɗtuɗe.",
+ "provider": "OpenAI",
+ "latency_s": 1.19,
+ "prompt_tokens": 76,
+ "completion_tokens": 86,
+ "cost": 0.000191
+}

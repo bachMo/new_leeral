@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Soyez fidèles et restez vigilants face aux tentations du monde, car elles peuvent vous éloigner du chemin de Dieu. Cherchez plutôt à suivre ses enseignements et à vivre selon ses commandements pour obtenir sa bénédiction et son aide.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.98,
+ "prompt_tokens": 98,
+ "completion_tokens": 71,
+ "cost": 0.000453
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder ɗeen ɗaɗol ɗiɗi, ina woodi ɗaɗol film goonga, ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol ɗaɗol",
+ "provider": "Darkbloom",
+ "latency_s": 6.31,
+ "prompt_tokens": 104,
+ "completion_tokens": 400,
+ "cost": 0.0008852
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sur la paroi de la grotte, il y a une formation appelée « Les Sept Sœurs », d'un diamètre d'environ 100 à 250 mètres (328 à 820 pieds).",
+ "provider": "OpenAI",
+ "latency_s": 1.61,
+ "prompt_tokens": 80,
+ "completion_tokens": 57,
+ "cost": 0.000134
+}

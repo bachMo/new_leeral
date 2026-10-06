@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Mën nañu ko defar ci yoon bu yomb, su ñu jëfandikoo alarme bu amul bari, ngir nga xam ne nga dund te nga du yéeg ci boppam.",
+ "provider": "DekaLLM",
+ "latency_s": 4.03,
+ "prompt_tokens": 67,
+ "completion_tokens": 54,
+ "cost": 0.000165283
+}

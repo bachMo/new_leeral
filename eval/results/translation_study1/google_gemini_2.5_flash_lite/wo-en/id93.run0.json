@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "There are reports on TV showing smoke coming from the factory.",
+ "provider": "Google",
+ "latency_s": 0.89,
+ "prompt_tokens": 53,
+ "completion_tokens": 12,
+ "cost": 1.01e-05
+}

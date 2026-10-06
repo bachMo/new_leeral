@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Leydi ɗiɗi ɗii ina ngoni 120 km haa dow Peninsula. Ɗo ɓuri mawnude ko Leydi King George, ɗo woni nokkuure Villa Las Estrellas.",
+ "provider": "Wafer",
+ "latency_s": 1.75,
+ "prompt_tokens": 76,
+ "completion_tokens": 59,
+ "cost": 0.000258474
+}

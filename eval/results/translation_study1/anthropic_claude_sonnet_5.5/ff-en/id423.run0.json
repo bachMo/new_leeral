@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The history of Taiwan goes back only about 1500 years, and when Europeans began to arrive, they named the island Ilha Formosa, meaning \"beautiful island.\"",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.36,
+ "prompt_tokens": 151,
+ "completion_tokens": 56,
+ "reasoning_tokens": 0,
+ "cost": 0.000862
+}

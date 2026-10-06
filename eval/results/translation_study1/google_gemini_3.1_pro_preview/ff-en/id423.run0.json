@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The history of Taiwan dates back to the 1500s, when Europeans traveling by sea named the island Ilha Formosa, which means beautiful island.",
+ "provider": "Google",
+ "latency_s": 6.66,
+ "prompt_tokens": 93,
+ "completion_tokens": 646,
+ "reasoning_tokens": 613,
+ "cost": 0.007938
+}

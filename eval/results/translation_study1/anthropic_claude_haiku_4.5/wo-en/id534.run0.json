@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "You can do it with an alarm clock that works well, if you know that it will wake you up on time and you won't oversleep.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.48,
+ "prompt_tokens": 80,
+ "completion_tokens": 33,
+ "cost": 0.000245
+}

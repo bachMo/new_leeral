@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taïwan a commencé au début du 15e siècle lorsque des marins venus d'Europe y sont passés et ont enregistré le nom de l'île sous le nom d'Ilha Formosa, ou belle île.",
+ "provider": "Google",
+ "latency_s": 6.08,
+ "prompt_tokens": 80,
+ "completion_tokens": 702,
+ "reasoning_tokens": 653,
+ "cost": 0.008584
+}

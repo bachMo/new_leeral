@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗum ko waawi defte ngam sago hakkunde alarm clock maako nde haa jooɗi ko ngam haa jokkaade ko.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.0,
+ "prompt_tokens": 70,
+ "completion_tokens": 44,
+ "cost": 0.00029
+}

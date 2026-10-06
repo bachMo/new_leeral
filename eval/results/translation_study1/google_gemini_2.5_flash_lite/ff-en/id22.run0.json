@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The chosen people will be on the side, not the movie that is better, the movie's story, the movie's script and the acting on TV.",
+ "provider": "Google",
+ "latency_s": 0.56,
+ "prompt_tokens": 90,
+ "completion_tokens": 33,
+ "cost": 2.22e-05
+}

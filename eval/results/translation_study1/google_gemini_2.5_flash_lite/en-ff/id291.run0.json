@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dokumente, no wi'i ko yalti, wiyata ko e haala keerol, ɗum Palestine yiɗi e dow keerol ko wonnoo ko adii wolde hakkunde leyɗeele 1967.",
+ "provider": "Google",
+ "latency_s": 0.91,
+ "prompt_tokens": 69,
+ "completion_tokens": 54,
+ "cost": 2.85e-05
+}

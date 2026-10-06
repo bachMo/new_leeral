@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ñi topp ci liggéey bi ci jàppale ci jàmm, ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo waroon a jàppale ci ñi topp ci jàmm, te ñoo",
+ "provider": "Google",
+ "latency_s": 1.49,
+ "prompt_tokens": 66,
+ "completion_tokens": 400,
+ "cost": 0.0001666
+}

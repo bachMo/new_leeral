@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "I was born in a village, and I grew up until the day my father’s house was destroyed, the day the Palestinians were expelled from the area around my father’s house in the 1967 war.",
+ "provider": "AkashML",
+ "latency_s": 1.92,
+ "prompt_tokens": 109,
+ "completion_tokens": 45,
+ "cost": 0.0001022625
+}

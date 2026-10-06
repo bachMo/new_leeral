@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-en",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Trains (wagonways) are fast, they carry many passengers and goods over long distances quickly.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.86,
+ "prompt_tokens": 86,
+ "completion_tokens": 24,
+ "cost": 0.000206
+}

@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-fr",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'entrée de la grotte, qui porte le nom de « The Seven Sisters », a un diamètre d'au moins 100 à 250 mètres (328 à 820 pieds).",
+ "provider": "Google",
+ "latency_s": 5.33,
+ "prompt_tokens": 87,
+ "completion_tokens": 445,
+ "reasoning_tokens": 399,
+ "cost": 0.005514
+}

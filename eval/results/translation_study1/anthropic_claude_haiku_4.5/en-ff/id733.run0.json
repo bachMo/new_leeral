@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans woni declareede UNESCO World Heritage Site. Bangre forest nde Indian territory ndee Sundarbans National Park goɗɗi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.48,
+ "prompt_tokens": 78,
+ "completion_tokens": 40,
+ "cost": 0.000278
+}

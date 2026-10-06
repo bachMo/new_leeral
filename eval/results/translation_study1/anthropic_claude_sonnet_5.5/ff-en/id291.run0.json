@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This text is difficult to translate with certainty, but my best rendering is:\n\nThat writing of mine, as my words have come out, they are speaking of the dispute over the issue of dividing my town, that the Palestinians want the dividing of my town to be along the lines of the borders set in 1967.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.47,
+ "prompt_tokens": 141,
+ "completion_tokens": 91,
+ "reasoning_tokens": 0,
+ "cost": 0.001192
+}

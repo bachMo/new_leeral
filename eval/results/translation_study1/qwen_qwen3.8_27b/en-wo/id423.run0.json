@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tànni, Taiwan dafay tambali ci rëy 15, fi ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ngi di wax ne ñi ng",
+ "provider": "DeepInfra",
+ "latency_s": 27.81,
+ "prompt_tokens": 72,
+ "completion_tokens": 225,
+ "cost": 0.000432675
+}

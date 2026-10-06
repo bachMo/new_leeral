@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr. Tony Moll discovered a drug-resistant tuberculosis (XDR-TB) in the KwaZulu-Natal province of South Africa.",
+ "provider": "Ionstream",
+ "latency_s": 0.86,
+ "prompt_tokens": 82,
+ "completion_tokens": 30,
+ "cost": 7.78226e-05
+}

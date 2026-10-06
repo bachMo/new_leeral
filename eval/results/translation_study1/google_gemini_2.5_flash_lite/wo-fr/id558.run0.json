@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Bien que les routes de la savane soient deux bandes parallèles, elles nous permettent de monter à cheval et de les traverser rapidement pour atteindre des destinations plus lointaines et plus sûres que les routes actuelles.",
+ "provider": "Google",
+ "latency_s": 0.5,
+ "prompt_tokens": 97,
+ "completion_tokens": 44,
+ "cost": 2.73e-05
+}

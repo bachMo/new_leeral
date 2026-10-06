@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E ɗemngal ngal, dokimaa o ina hollita caɗeele ceŋtugol ɗo Palasitiina ɗaɓɓata e dow ceŋtugol ɗe ngoni ko adii yeeso yamiroore 1967 e nder Ɓesngu Ɓadiiɗo.",
+ "provider": "AkashML",
+ "latency_s": 1.89,
+ "prompt_tokens": 89,
+ "completion_tokens": 93,
+ "cost": 0.0001837485
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tu peux le faire avec un réveil bien réglé, sachant qu'il te le fera passer rapidement et que tu n'auras pas à t'en plaindre.",
+ "provider": "Alibaba",
+ "latency_s": 2.91,
+ "prompt_tokens": 78,
+ "completion_tokens": 36,
+ "cost": 0.00012495
+}

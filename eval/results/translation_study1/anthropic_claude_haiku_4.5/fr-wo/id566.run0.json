@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci yeneen cas yi, dafa nekk ci jëm yu mag xaal. Nangaa, bu nu bëgg na ko doon jëm bu mag, nu foofu ko jëm yi ak nu seetal ko.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.14,
+ "prompt_tokens": 97,
+ "completion_tokens": 59,
+ "cost": 0.000392
+}

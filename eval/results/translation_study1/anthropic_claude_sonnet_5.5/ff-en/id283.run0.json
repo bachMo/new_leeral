@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The crowd gathered at the scene where people were trying to free the driver from the black Audi TT.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.62,
+ "prompt_tokens": 119,
+ "completion_tokens": 32,
+ "reasoning_tokens": 0,
+ "cost": 0.000558
+}

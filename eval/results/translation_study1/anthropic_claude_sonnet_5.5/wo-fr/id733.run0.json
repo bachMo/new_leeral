@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les Sundarbans figurent parmi les sites que l'UNESCO considère comme faisant partie du patrimoine mondial. La partie de la forêt située en Inde s'appelle le parc national des Sundarbans.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.22,
+ "prompt_tokens": 132,
+ "completion_tokens": 76,
+ "reasoning_tokens": 0,
+ "cost": 0.001024
+}

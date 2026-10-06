@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dokimaa bi, ni leak bi ko biralee, dina wax ci jàmbat bi ci digg réew yi ci wàllu tund yi, te Palestine bëgg ko ci tund yi nekkoon laata xareb 1967 bi ci Penku-Digg-Bi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.99,
+ "prompt_tokens": 95,
+ "completion_tokens": 102,
+ "reasoning_tokens": 0,
+ "cost": 0.00121
+}

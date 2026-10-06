@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ne nous avons pas pu rejoindre leur grande réunion parce qu’ils ne nous ont pas permis d’entrer. Mais, si vous voulez que la caisse soit retournée, donnez-la et si elle pose encore des problèmes, nous la reprendrons.",
+ "provider": "OpenAI",
+ "latency_s": 1.23,
+ "prompt_tokens": 88,
+ "completion_tokens": 68,
+ "cost": 0.000158
+}

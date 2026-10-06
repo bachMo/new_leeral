@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les gens qui ont des problèmes de santé mentale sont ceux qui ont des difficultés à comprendre les choses et à communiquer avec les autres.",
+ "provider": "Darkbloom",
+ "latency_s": 1.27,
+ "prompt_tokens": 105,
+ "completion_tokens": 27,
+ "cost": 6.465e-05
+}

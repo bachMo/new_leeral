@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Some of the categories included in the catalog are: King, Cinematography, Westerns, Film production, Pure music, Playwriting, Creating a play, Combining plays, and Pure theater.",
+ "provider": "Darkbloom",
+ "latency_s": 2.31,
+ "prompt_tokens": 102,
+ "completion_tokens": 41,
+ "cost": 9.53e-05
+}

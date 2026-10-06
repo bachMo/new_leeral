@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Donte yoon yi ngir wagoŋ yi doon nañu leen def ak planche yu xarala yu tegu ci benn bopp, ñu ngi maye ñaari yi di leen jëfandikoo ngir am gaawaay bu gën a kawe te jël lool bu gën a réy, ci anam gu gën a baax ci yoon yi ñu nekkoon ci jëfandikoo bi, yu amoon ay xarala yu néew.",
+ "provider": "Reka",
+ "latency_s": 2.2,
+ "prompt_tokens": 97,
+ "completion_tokens": 125,
+ "cost": 0.0005461556
+}

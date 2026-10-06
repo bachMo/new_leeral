@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr. Tony Moll has contracted extensively drug-resistant tuberculosis (XDR-TB) in KwaZulu-Natal, South Africa.",
+ "provider": "Google",
+ "latency_s": 0.52,
+ "prompt_tokens": 72,
+ "completion_tokens": 25,
+ "cost": 1.72e-05
+}

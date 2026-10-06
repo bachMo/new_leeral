@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ko ñalnguudi ɗiɗi heɓi 120 km ɗooɓi ngam Peninsilu. Keeƴi ɗuuɗi woni King George Island ɗe, kanko noon ɓuriɓe, waɗi dowrowol Villa Las Estrellas.",
+ "provider": "OpenAI",
+ "latency_s": 1.33,
+ "prompt_tokens": 65,
+ "completion_tokens": 77,
+ "cost": 0.00017025
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Conversion des Malouines que nous appelons en réalité la livre des Malouines (FKP) — vous savez que parfois on la traite comme s'il s'agissait de la livre sterling (GBP).",
+ "provider": "OpenAI",
+ "latency_s": 1.17,
+ "prompt_tokens": 75,
+ "completion_tokens": 60,
+ "cost": 0.00013875
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "au moment où le combat pour l'honneur est sur le point de commencer, il existe une confrontation entre ceux qui défendent leur dignité et les partisans de la richesse qui luttent pour s'imposer.",
+ "provider": "OpenAI",
+ "latency_s": 1.27,
+ "prompt_tokens": 67,
+ "completion_tokens": 62,
+ "cost": 0.00014075
+}

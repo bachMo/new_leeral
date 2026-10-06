@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La résolution, selon les fuites, fera référence aux conflits frontaliers, la Palestine voulant s'appuyer sur les frontières d'avant la guerre du Moyen-Orient de 1967.",
+ "provider": "Google",
+ "latency_s": 6.17,
+ "prompt_tokens": 95,
+ "completion_tokens": 637,
+ "reasoning_tokens": 592,
+ "cost": 0.007834
+}

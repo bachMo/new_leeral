@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan began in the 15th century when European sailors named the island Ilha Formosa, or beautiful island.",
+ "provider": "Google",
+ "latency_s": 0.81,
+ "prompt_tokens": 80,
+ "completion_tokens": 24,
+ "cost": 1.76e-05
+}

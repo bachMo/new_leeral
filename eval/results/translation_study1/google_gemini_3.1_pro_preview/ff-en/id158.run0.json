@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Every entrance to the cave, which is called “The Seven Sisters”, has a diameter of at least 100 to 250 meters (328 to 820 feet).",
+ "provider": "Google",
+ "latency_s": 6.88,
+ "prompt_tokens": 87,
+ "completion_tokens": 744,
+ "reasoning_tokens": 703,
+ "cost": 0.009102
+}

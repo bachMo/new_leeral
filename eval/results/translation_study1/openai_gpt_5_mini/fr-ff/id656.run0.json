@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ko ɗum waɗi waɗtude ɗe waɗiima e nder waɗɓe ɗi waɗi woni waɗugo ko ɓe yiɗi e ko waɗi, e ko ɓe nder maaɓɓe mum rewti ɓe waɗugo wala ɓe waɗataa ko ɗi.",
+ "provider": "OpenAI",
+ "latency_s": 1.61,
+ "prompt_tokens": 75,
+ "completion_tokens": 86,
+ "cost": 0.00019075
+}

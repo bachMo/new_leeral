@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The archipelago is about 120 km north of the Peninsula. The largest is King George Island with the settlement of Villa Las Estrellas.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 1.84,
+ "prompt_tokens": 117,
+ "completion_tokens": 47,
+ "reasoning_tokens": 0,
+ "cost": 0.000704
+}

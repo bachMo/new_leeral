@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "You can do it with a gentle alarm, knowing that it will wake you up quickly and you won't be late.",
+ "provider": "Wafer",
+ "latency_s": 1.2,
+ "prompt_tokens": 78,
+ "completion_tokens": 25,
+ "cost": 0.000110622
+}

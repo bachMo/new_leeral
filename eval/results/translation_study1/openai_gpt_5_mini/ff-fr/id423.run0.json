@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La découverte de Taïwan remonte à environ 1500, lorsque des Européens ont commencé à naviguer et à donner des noms à cette île appelée Ilha Formosa ou simplement l'île magnifique.",
+ "provider": "OpenAI",
+ "latency_s": 1.11,
+ "prompt_tokens": 96,
+ "completion_tokens": 60,
+ "cost": 0.000144
+}

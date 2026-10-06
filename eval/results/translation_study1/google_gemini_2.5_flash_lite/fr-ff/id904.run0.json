@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Leyɗe ɗe woni 120 km to funnaange duɗe. Leyɗe King George, e wuro Villa Las Estrellas, ɗum ɓuri mawnude.",
+ "provider": "Google",
+ "latency_s": 0.64,
+ "prompt_tokens": 78,
+ "completion_tokens": 46,
+ "cost": 2.62e-05
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Minister of Economy, Trade and Industry (METI) of Japan stated that he has received 27 letters from the Diet.",
+ "provider": "Darkbloom",
+ "latency_s": 1.22,
+ "prompt_tokens": 96,
+ "completion_tokens": 28,
+ "cost": 6.64e-05
+}

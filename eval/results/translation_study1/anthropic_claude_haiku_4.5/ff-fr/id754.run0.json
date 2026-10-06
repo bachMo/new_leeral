@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La livre des Îles Malouines est la monnaie officielle des Îles Malouines (FKP) et elle est directement liée à la livre sterling britannique (GBP).",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.53,
+ "prompt_tokens": 94,
+ "completion_tokens": 51,
+ "cost": 0.000349
+}

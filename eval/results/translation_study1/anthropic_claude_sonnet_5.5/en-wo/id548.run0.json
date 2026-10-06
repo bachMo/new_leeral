@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Waaye plan yooyu dañu leen def ñu bañ koo jariñ ba mu ni ñu ko jàpp ci guddi gu bees, ndax ñu ëpp 800 000 ci soldaar yu Armée Rouge bu Union Soviétique dugg nañu, te sos nañu fron yu Belaris ak yu Ukraine, bi ñu duggee ci diiwaani penku yu Poloñ, di fecci Tëralinu Jàmm bu Riga, Peeñu Bañ Songante bu diggante Sovyet ak Poloñ, ak yeneen layoo yu àddina, ñu jëm ci ñaar ak ñu jëm ci ñu bare.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 6.77,
+ "prompt_tokens": 182,
+ "completion_tokens": 244,
+ "reasoning_tokens": 0,
+ "cost": 0.002804
+}

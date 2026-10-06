@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr Tony Moll wax jëm tuberculosis bu nekk ci njugunte yu bari (TB-MR) ci réjiyoon Afrik Saalum yu KwaZulu-Natal.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.0,
+ "prompt_tokens": 77,
+ "completion_tokens": 53,
+ "cost": 0.000342
+}

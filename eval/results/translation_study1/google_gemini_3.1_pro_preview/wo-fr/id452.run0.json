@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "À cette époque-là, il y avait une lutte acharnée entre les personnes très riches qui se battaient pour devenir chef.",
+ "provider": "Google",
+ "latency_s": 6.41,
+ "prompt_tokens": 62,
+ "completion_tokens": 687,
+ "reasoning_tokens": 659,
+ "cost": 0.008368
+}

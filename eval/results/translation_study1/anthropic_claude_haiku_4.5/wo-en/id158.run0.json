@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "All the Buntu peaks, which are called \"The Seven Sisters\", are between 100 and 250 meters high (328 to 820 feet) above sea level.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.38,
+ "prompt_tokens": 101,
+ "completion_tokens": 42,
+ "cost": 0.000311
+}

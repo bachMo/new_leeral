@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le taux de change du pound des îles Falkland (FKP) par rapport à la livre sterling (GBP) est le taux de change utilisé pour convertir le pound des îles Falkland en livre sterling.",
+ "provider": "Ionstream",
+ "latency_s": 0.95,
+ "prompt_tokens": 82,
+ "completion_tokens": 44,
+ "cost": 0.0001107226
+}

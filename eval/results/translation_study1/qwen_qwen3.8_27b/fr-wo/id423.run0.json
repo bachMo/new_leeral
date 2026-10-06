@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Xibaar yi njëkk yi ci Taïwan duggu ci saugluw 15, waaye ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci xam-xamu ñi ngi am ci",
+ "provider": "Phala",
+ "latency_s": 11.22,
+ "prompt_tokens": 91,
+ "completion_tokens": 209,
+ "cost": 0.000405525
+}

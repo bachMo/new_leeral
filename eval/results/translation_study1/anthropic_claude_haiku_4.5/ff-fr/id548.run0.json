@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Maintenant, un an après le début de cette guerre, environ 800 000 soldats russes ont été tués selon la Russie et les pays occidentaux disent que les soldats biélorusses et ukrainiens ont été tués près de la frontière avec la Pologne. Ces combats continuent à faire rage alors que les forces russes et polonaises s'affrontent.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.83,
+ "prompt_tokens": 199,
+ "completion_tokens": 93,
+ "cost": 0.000664
+}

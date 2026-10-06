@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kono, plan ɗin ɗi njaltii e nder jamma gooto, so duɗe 800,000 e nder laamu Soowiyetii, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal Belarussia e ɗemngal Ukraine, ɗi naati e nder ɗemngal Pulaas, ɗi mbaɗi ɗemngal",
+ "provider": "Darkbloom",
+ "latency_s": 6.12,
+ "prompt_tokens": 122,
+ "completion_tokens": 358,
+ "cost": 0.0007937
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗum ena jooni jaɓɓorgo tedde e yoɓɓe kala. Kono, soo amen haa deɗɗa ko jokka maako, to amen maasude heewde ɓiɓɓe, e amen maasude deɓɓitde ɗum.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.16,
+ "prompt_tokens": 89,
+ "completion_tokens": 91,
+ "cost": 0.000544
+}

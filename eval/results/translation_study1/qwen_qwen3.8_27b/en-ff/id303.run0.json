@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ministeeri Ekaru, Kaɓirgol e Indastri (METI) e Japan hollitii wonde ɗi anndaa ko 27 caɗeele jokkondire e geɗe ɗee.",
+ "provider": "Novita",
+ "latency_s": 3.97,
+ "prompt_tokens": 75,
+ "completion_tokens": 59,
+ "cost": 0.0002085
+}

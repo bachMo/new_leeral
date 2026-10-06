@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dow kalaaji ɗiɗi nanondiri, jibbineeji yeeso mawni waɗi e nder dowrowol ɓe waɗi teelte nder jeyaaɗo kala.",
+ "provider": "OpenAI",
+ "latency_s": 1.49,
+ "prompt_tokens": 53,
+ "completion_tokens": 62,
+ "cost": 0.00013725
+}

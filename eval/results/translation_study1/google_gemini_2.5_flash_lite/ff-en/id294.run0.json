@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "They are born in the world with the ability to find food and eat it, and they are careful that they find food that is useful.",
+ "provider": "Google",
+ "latency_s": 0.86,
+ "prompt_tokens": 80,
+ "completion_tokens": 28,
+ "cost": 1.92e-05
+}

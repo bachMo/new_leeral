@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Falkland Islands currency is the Falkland pound (FKP) which you should know is equivalent to the British pound (GBP).",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.45,
+ "prompt_tokens": 92,
+ "completion_tokens": 37,
+ "cost": 0.000277
+}

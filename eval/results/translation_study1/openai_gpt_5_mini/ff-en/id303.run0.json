@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-en",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Japan’s Ministry of Economy, Trade and Industry (METI) says they know there has been damage to 27 houses and shops.",
+ "provider": "OpenAI",
+ "latency_s": 2.24,
+ "prompt_tokens": 91,
+ "completion_tokens": 45,
+ "cost": 0.00011275
+}

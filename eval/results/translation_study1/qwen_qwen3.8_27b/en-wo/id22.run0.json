@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yennu yu nekk ci biir yennu yi am nañu: Film bu gën a bañ, Mbofeer, Cinematographie, Tàmbali kàmm, Tàmbali film, Muzik bu ñu defar, Tàmbali produksion, Tàmbali son, Tàmbali son (mixing), ak Senaryo bu ñu defar.",
+ "provider": "Darkbloom",
+ "latency_s": 3.08,
+ "prompt_tokens": 76,
+ "completion_tokens": 95,
+ "cost": 0.0002128
+}

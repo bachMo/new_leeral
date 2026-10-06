@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The work of people who steal things is bad, it brings shame to the family, causes poverty, destroys the family's reputation, and brings disgrace to the family that is seen on television.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.06,
+ "prompt_tokens": 116,
+ "completion_tokens": 43,
+ "cost": 0.000331
+}

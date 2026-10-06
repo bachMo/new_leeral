@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr. Tony Moll heɗii Tuberculosis (XDR-TB) mo ɗum hollata ko ɗum waawaa heɓde laaɓal e nder laabi ɗiɗi ɗi ɗum waɗata, e nder diiwaan KwaZulu-Natal, e Afrik Hirnaange.",
+ "provider": "Reka",
+ "latency_s": 1.88,
+ "prompt_tokens": 77,
+ "completion_tokens": 88,
+ "cost": 0.0003847096
+}

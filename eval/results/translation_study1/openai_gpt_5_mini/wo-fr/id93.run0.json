@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Il y a des reportages à la télévision qui montrent aussi les dégâts causés par les intempéries dans l'usine.",
+ "provider": "OpenAI",
+ "latency_s": 1.73,
+ "prompt_tokens": 54,
+ "completion_tokens": 44,
+ "cost": 0.0001015
+}

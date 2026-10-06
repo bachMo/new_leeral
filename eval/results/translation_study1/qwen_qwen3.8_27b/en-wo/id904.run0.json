@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Arkipelago bi nekk 120 km ci wet yoon, ci kaw Peninsula bi. Gu gën a mag mooy King George Island, fi nekk Villa Las Estrellas.",
+ "provider": "Darkbloom",
+ "latency_s": 1.67,
+ "prompt_tokens": 70,
+ "completion_tokens": 42,
+ "cost": 9.59e-05
+}

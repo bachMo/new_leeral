@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dans deux années les Américains et les soldats de la France libre ont libéré la France du joug allemand.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.51,
+ "prompt_tokens": 74,
+ "completion_tokens": 30,
+ "cost": 0.000224
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les dirigeants du gouvernement indien ont décidé de réduire les salaires des fonctionnaires et des employés du secteur public, certains d'entre eux recevant des réductions de salaire allant jusqu'à cinquante pour cent.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.53,
+ "prompt_tokens": 131,
+ "completion_tokens": 62,
+ "cost": 0.000441
+}

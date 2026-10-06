@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Haɓre nden, teddungalji mawɗi waɗi e ñalngu mum e hoore rewɓe mawɗe ɓe waɗi ndiyam haa no ɓe jaɓɓinay ɗe ngam ndeƴam.",
+ "provider": "OpenAI",
+ "latency_s": 1.19,
+ "prompt_tokens": 69,
+ "completion_tokens": 73,
+ "cost": 0.00016325
+}

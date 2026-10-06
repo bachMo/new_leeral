@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-wo",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci mboolem xaalis yu bari, benn jafe-jafe la muy yokkute. Waaye, su nu bëgguñu fiir ñaari fan yu yàgg, nu amul solo, nu war a gis seen bopp ak nu walluñu seen soppi-sopp bu défarñu yeneen.",
+ "provider": "OpenAI",
+ "latency_s": 1.66,
+ "prompt_tokens": 73,
+ "completion_tokens": 90,
+ "cost": 0.00019825
+}

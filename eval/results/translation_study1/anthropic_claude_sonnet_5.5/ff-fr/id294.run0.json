@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ils s'enfoncent dans les buissons pour ne pas être vus, afin de prendre le chemin de la maladie, car ils savent que cela mène à ce qu'ils réfléchissent, et ceux qui suivent le chemin ne tirent aucun profit de ce qu'ils ont fait.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.55,
+ "prompt_tokens": 126,
+ "completion_tokens": 105,
+ "reasoning_tokens": 0,
+ "cost": 0.001302
+}

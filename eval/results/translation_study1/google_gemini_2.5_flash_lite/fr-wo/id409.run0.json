@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci lu-ci gattal ci ñaari jàppale, Amerik yi ak doole yi ci France bu ñu génn ci jàppale, ñu jàppale bësu France te ñu génn ci Allemagn.",
+ "provider": "Google",
+ "latency_s": 0.95,
+ "prompt_tokens": 62,
+ "completion_tokens": 56,
+ "cost": 2.86e-05
+}

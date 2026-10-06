@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ministeriyu Ekonomii, Teneeme ak Njàlaayu Japon (METI) wax naa ne ay 27 aksidaañ yu amoonu benn amoon ci njàmbaar yi mën nañu gis.",
+ "provider": "OpenAI",
+ "latency_s": 1.67,
+ "prompt_tokens": 60,
+ "completion_tokens": 67,
+ "cost": 0.000149
+}

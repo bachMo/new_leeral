@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yoonu yii dañuy seet lii nekk ci nit ñi yu leen di bëgg lii ñuy def, ak lii nekk ci wàllu seeni dëkk yu leen di def walla du leen def lii.",
+ "provider": "Phala",
+ "latency_s": 2.5,
+ "prompt_tokens": 75,
+ "completion_tokens": 61,
+ "cost": 0.000125625
+}

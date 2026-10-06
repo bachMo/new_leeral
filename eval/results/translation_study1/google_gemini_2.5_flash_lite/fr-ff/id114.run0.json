@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nguurndam ngam famɗude ngam waɗugo laamuuji Indiya ngam waɗugo golle bana waɗugo golluɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe",
+ "provider": "Google",
+ "latency_s": 1.45,
+ "prompt_tokens": 86,
+ "completion_tokens": 399,
+ "cost": 0.0001682
+}

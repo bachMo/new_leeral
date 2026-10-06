@@ -35,3 +35,22 @@ GoogleService-Info.plist
 Thumbs.db
 .idea/
 .vscode/
+todo.txt
+context.txt
+
+# Bancs d'essai IA (eval/) : données réelles, jamais commitables (documents personnels, santé).
+# Seuls le code, les tests, les données ouvertes (FLORES-200) et les rapports agrégés restent suivis.
+eval/ordonnances/*
+!eval/ordonnances/EXEMPLE.truth.json
+!eval/ordonnances/.gitkeep
+eval/documents/
+eval/results/real/
+eval/.venv/
+eval/.mypy_cache/
+eval/.pytest_cache/
+eval/.ruff_cache/
+eval/__pycache__/
+
+# Sources brutes téléchargées pour construire le lexique (api/scripts/lexicon/) : jamais modifiées
+# ni versionnées. Le lexique construit (app/ai/real/data/) reste versionné.
+api/data/raw/

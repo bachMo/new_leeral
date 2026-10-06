@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Avant l'aube, ils sont partis et se sont déployés jusqu'à la ligne que nous avions fixée, avec plus de 800 000 soldats. Ils ont formé des groupes venant de Russie, et nous avons également reçu des soldats de Biélorussie et d'Ukraine, qui se sont positionnés sur le flanc gauche, près de la ville de Pologne. Pour empêcher toute avancée, ils ont déployé des troupes jusqu'au point de contact, où les forces russes et polonaises se sont affrontées.",
+ "provider": "DeepInfra",
+ "latency_s": 6.52,
+ "prompt_tokens": 186,
+ "completion_tokens": 125,
+ "cost": 0.000262275
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Other nominations include Best Picture, Director, Cinematography, Costume Design, Film Editing, Original Score, Production Design, Sound Editing, Sound Mixing and Visual Effects.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.98,
+ "prompt_tokens": 139,
+ "completion_tokens": 67,
+ "reasoning_tokens": 0,
+ "cost": 0.000948
+}

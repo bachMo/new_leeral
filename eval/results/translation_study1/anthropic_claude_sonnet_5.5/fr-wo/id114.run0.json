@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-wo",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tawaat bi dafa jébbal nguuru End ñu jël ay matukaay, ni yónni ay jàppkati sangaar ci ñenti gox yi ko metti, may junni ay moskit, te sotti garab yu rey juuyu (pestisid).",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 6.42,
+ "prompt_tokens": 135,
+ "completion_tokens": 95,
+ "reasoning_tokens": 0,
+ "cost": 0.00122
+}

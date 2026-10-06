@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci yoon yu am, yëngu-yëngu yu dëgër lañu am ci diggante benn-benn ci xelam xelam, ñu ngi dox ngir jëfandikoo trône bi.",
+ "provider": "Darkbloom",
+ "latency_s": 2.55,
+ "prompt_tokens": 73,
+ "completion_tokens": 59,
+ "cost": 0.00013345
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les îles Falkland ont leur propre livre des Falkland (FKP), dont la valeur est à parité avec la livre sterling britannique (GBP).",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.45,
+ "prompt_tokens": 114,
+ "completion_tokens": 54,
+ "reasoning_tokens": 0,
+ "cost": 0.000768
+}

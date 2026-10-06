@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La patelle de Nastugo est plus grande, avec un cratère nommé « Les Sept Sœurs », qui a un diamètre de 100 à 250 mètres (328 à 820 pieds).",
+ "provider": "Ionstream",
+ "latency_s": 1.76,
+ "prompt_tokens": 101,
+ "completion_tokens": 49,
+ "cost": 0.0001241693
+}

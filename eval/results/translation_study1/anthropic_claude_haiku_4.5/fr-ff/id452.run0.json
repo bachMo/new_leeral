@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndee jannde-ɗe ndee, debere mawɗe gollirɗe naftirde ko waɗi e jom-jom leydi nder ndee ko ɗum-ɗum ngam laawol gara gadel.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.17,
+ "prompt_tokens": 80,
+ "completion_tokens": 72,
+ "cost": 0.00044
+}

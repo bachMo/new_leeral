@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les mangroves de Sundarbans sont le plus grand écosystème de mangrove au monde, inscrit au patrimoine mondial de l'UNESCO. Elles se trouvent dans la partie est de l'Inde et dans le sud-ouest du Bangladesh, le long du delta du Gange-Brahmapoutre.",
+ "provider": "Reka",
+ "latency_s": 1.58,
+ "prompt_tokens": 90,
+ "completion_tokens": 66,
+ "cost": 0.000289332
+}

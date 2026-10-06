@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yii xalaat yi dañuy seet lu am ci ay nit ku ñuy def ñu bëgg li ñu bëgg, ak li nekk ci seen mbooloo ak seen jawu ngir def ñu def ay yëf wala bañ koo def.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.09,
+ "prompt_tokens": 90,
+ "completion_tokens": 93,
+ "reasoning_tokens": 0,
+ "cost": 0.00111
+}

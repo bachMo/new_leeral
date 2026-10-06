@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le livre des Sundarbans, situé dans la zone que l’UNESCO désigne comme patrimoine commun de l’humanité. La partie de la mangrove située en Inde est appelée parc national des Sundarbans.",
+ "provider": "Darkbloom",
+ "latency_s": 1.53,
+ "prompt_tokens": 94,
+ "completion_tokens": 45,
+ "cost": 0.0001037
+}

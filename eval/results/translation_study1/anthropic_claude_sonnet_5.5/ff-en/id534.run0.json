@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This appears to be a garbled or non-standard Fulfulde text. A best-effort translation is:\n\nWhere they can finish, they are working; what they can complete, they are working at greatly.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.58,
+ "prompt_tokens": 93,
+ "completion_tokens": 59,
+ "reasoning_tokens": 0,
+ "cost": 0.000776
+}

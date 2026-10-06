@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This year, when that thing happened, they spoke of a war that divided that city, that Palestine wanted that city divided, not a war that started in the East in 1967.",
+ "provider": "Google",
+ "latency_s": 1.09,
+ "prompt_tokens": 94,
+ "completion_tokens": 40,
+ "cost": 2.54e-05
+}

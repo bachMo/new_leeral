@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The duties of the people chosen to sit on the side, including the best film, the film's dog, the film's script, and the film's dog and its appearance on TV.",
+ "provider": "Wafer",
+ "latency_s": 1.92,
+ "prompt_tokens": 110,
+ "completion_tokens": 39,
+ "cost": 0.00017229
+}

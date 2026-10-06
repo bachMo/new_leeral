@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndee jannde-ɗe ndee, debere maɓɓe nataande takko-takko e jom-ɗe gila ngon-ɗe.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.98,
+ "prompt_tokens": 62,
+ "completion_tokens": 51,
+ "cost": 0.000317
+}

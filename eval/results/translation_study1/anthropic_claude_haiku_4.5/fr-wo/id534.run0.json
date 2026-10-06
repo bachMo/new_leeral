@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dina ko doon ngir ko jëm ci ndaw bu baax, lamu ko jëm ak réveyl bu limbante, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma ko jëm ci ndaw bu baax, ngir ma",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.8,
+ "prompt_tokens": 75,
+ "completion_tokens": 400,
+ "cost": 0.002075
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Bu ndawi fáttaléem la, tënki nit ñi laajoo, bépp bu bëgg a torob ñu nekk ci làkk yi, ci biir ci kawar bu ñu dóóru 1967 ci biir Waxtu Bu Moomu Ndajeer.",
+ "provider": "OpenAI",
+ "latency_s": 1.48,
+ "prompt_tokens": 64,
+ "completion_tokens": 84,
+ "cost": 0.000184
+}

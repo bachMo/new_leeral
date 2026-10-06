@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "en-wo",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tambaliwu Taiwan dafa dellu ginnaaw ca 15eelu xarnu ba, bi màngatkati Tubaab yi doon romb bind turu dun bi ne Ilha Formosa, walla dun bu rafet.",
+ "provider": "Google",
+ "latency_s": 6.41,
+ "prompt_tokens": 60,
+ "completion_tokens": 595,
+ "reasoning_tokens": 542,
+ "cost": 0.00726
+}

@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dinaay yi jàppale ci li waral nit ñi soppal ci li ñu bëgg ak li ci seen àddina tax ñu def walla bañ a def li ñu war.",
+ "provider": "Google",
+ "latency_s": 1.16,
+ "prompt_tokens": 66,
+ "completion_tokens": 46,
+ "cost": 2.5e-05
+}

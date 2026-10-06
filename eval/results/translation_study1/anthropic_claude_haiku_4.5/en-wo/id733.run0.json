@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans waa nag UNESCO World Heritage Site. Xaaj gu jëm ci Indian territory waa nag Sundarbans National Park.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.7,
+ "prompt_tokens": 69,
+ "completion_tokens": 39,
+ "cost": 0.000264
+}

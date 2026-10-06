@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kabaruuji telewisiyon nde hollirde fuuɗe pulli maako saba fabriki nde.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.0,
+ "prompt_tokens": 70,
+ "completion_tokens": 35,
+ "cost": 0.000245
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nangal wagonways lool ko dara ci parallel planks bu gara, yoonu ko jëm faraasin yi ñu jëm ci speed bu mag ak ñu jëm ci load bu mag ju nangal ci rout yi bu nangal ci waxtu wii.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.41,
+ "prompt_tokens": 75,
+ "completion_tokens": 74,
+ "cost": 0.000445
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The coastline of the bay and surrounding Peninsula with its sandy beaches stretches for 120 kilometers. Its main beach at the town of Lamdo Gorj has a connection to the village of Vila das Estrelas.",
+ "provider": "OpenAI",
+ "latency_s": 1.17,
+ "prompt_tokens": 110,
+ "completion_tokens": 60,
+ "cost": 0.0001475
+}

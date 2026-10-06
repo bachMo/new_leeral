@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Laawol ngol ko??ol on waɗi ton ɗon sakkitaama sahaa seɗɗa ngam jaɓɓugol e kabaruuji walliinde ndiwa ɗiwooɗo Audi TT mo wuurnoojo.\n\nCorrection: here is the proper version:\n\nLaawol ɗo koɗol on waɗi sakkitaama seɗɗa ngam walliinooɓe mbaawa ñaamaade ɗiwooɗo Audi TT ja'ooje on.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.91,
+ "prompt_tokens": 118,
+ "completion_tokens": 176,
+ "reasoning_tokens": 0,
+ "cost": 0.001996
+}

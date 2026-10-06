@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nguurka Falklands ɓurɗo laawɗude ko Falkland pound (FKP) mo mbaadi mum foti e mbaadi wuro go'o leɗɗe Angalteer (GBP).",
+ "provider": "Google",
+ "latency_s": 0.78,
+ "prompt_tokens": 63,
+ "completion_tokens": 47,
+ "cost": 2.51e-05
+}

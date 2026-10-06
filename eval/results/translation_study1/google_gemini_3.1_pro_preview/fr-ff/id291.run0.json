@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E wi'i kabaaru yaltuɗo oo, ɗerewol ngol haalay ko faati e luural keeri ɗi Filistiin ɗaɓɓata e dow keeri gonnooɗi ko adii hare Fuɗnaange Cakaari e hitaande 1967.",
+ "provider": "Google",
+ "latency_s": 9.08,
+ "prompt_tokens": 80,
+ "completion_tokens": 1019,
+ "reasoning_tokens": 947,
+ "cost": 0.012388
+}

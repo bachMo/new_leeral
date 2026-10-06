@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci jëm alal fukki, Amerikaankat ak Xosukaay Farañs yu Jëm ay doxal Farañs gu Koocciwul hala ay ngi taxawu Allemagne.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.33,
+ "prompt_tokens": 80,
+ "completion_tokens": 61,
+ "cost": 0.000385
+}

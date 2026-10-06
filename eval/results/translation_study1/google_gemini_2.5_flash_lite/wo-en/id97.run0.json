@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr. Tony Moll found that extensively drug-resistant tuberculosis (XDR-TB) was no match for the province of South Africa known as KwaZulu-Natal.",
+ "provider": "Google",
+ "latency_s": 0.52,
+ "prompt_tokens": 64,
+ "completion_tokens": 32,
+ "cost": 1.92e-05
+}

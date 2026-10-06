@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jom'en maande biɗɗe, Amerikaŋkoɓe e Farayse Jeeuɓe waɗi Faranse gila kuutorɗe haa jillinaade, haa waylirde Almaañ.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.52,
+ "prompt_tokens": 68,
+ "completion_tokens": 72,
+ "cost": 0.000428
+}

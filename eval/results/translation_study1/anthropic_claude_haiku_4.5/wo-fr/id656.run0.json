@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les conditions de vie difficiles qui existent chez certaines personnes les poussent à chercher des solutions ailleurs dans le monde, qu'elles soient bonnes ou mauvaises.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.33,
+ "prompt_tokens": 96,
+ "completion_tokens": 45,
+ "cost": 0.000321
+}

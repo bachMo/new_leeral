@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ñawu waylaama on hokki laawol Laamu Hindiya ngam nasta e hoodere ɗe ñawu on fiyi masin, ngam jeyaade ko ɓesdi: ƴetta ɓurɗi ngam ƴeewtugo e maɓɓude ɓurɗi, yeeso hoɓɓe ɓee, soosta kaaɗe pelle ɗiɗi ɗe ngonndi ngam mbaawɗi, e ɗon ndifa safaara ngam waaɗe ɓii mbaawɗi.\n\nSorry, that output is not reliable. Here is a cleaner version:\n\nÑawu pekkere on wallitii laamu Hindu on ngam jeyaade ko ɓesdi, ko wayi no yaadugo e ƴeewtugo e hooreeji ɓurɗi ɗe e ɓuuɓri, yeeso lesdi ɗi ñawu on fiyi masin, hokkugo ɗuuɗal njaaɓaaji sulfi, e ndiyugo safaara ngam waaɗe ɓii.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 8.27,
+ "prompt_tokens": 145,
+ "completion_tokens": 380,
+ "reasoning_tokens": 0,
+ "cost": 0.00409
+}

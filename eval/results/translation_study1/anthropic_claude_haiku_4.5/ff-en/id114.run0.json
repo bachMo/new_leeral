@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-en",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Indian government officials who were sent to investigate the matter found that many people had died, and some of them had stolen a lot of money from the treasury.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.69,
+ "prompt_tokens": 131,
+ "completion_tokens": 35,
+ "cost": 0.000306
+}

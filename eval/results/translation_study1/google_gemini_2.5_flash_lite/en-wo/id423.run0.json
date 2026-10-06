@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan bii ngi tàkkale ci jamono bu jiiw ci 15e xarnu bi, ci bii jamono la ñu ñooñu ñu génn ci bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-bët-",
+ "provider": "Google",
+ "latency_s": 1.75,
+ "prompt_tokens": 60,
+ "completion_tokens": 400,
+ "cost": 0.000166
+}

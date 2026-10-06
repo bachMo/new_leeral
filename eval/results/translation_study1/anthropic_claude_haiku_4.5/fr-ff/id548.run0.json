@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kono planeeji no waɗi jeyaama haa jiyaade, saa'u ko 800 000 soolduuji Armée Pulaaku Sowiyetaaji maa ngoni, haa kuutorta front Belaruus iyo Ukrain, caggal ko waɗi invasiyon leydi Pologne guuɗe, haa jigina Traité Riga, pacte non-agression Sowiyetaaji-Pologne, iyo traité kooɓe ɗi ɗi jeyaama, ko ɗi bilateral wala multilateral.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.84,
+ "prompt_tokens": 181,
+ "completion_tokens": 161,
+ "cost": 0.000986
+}

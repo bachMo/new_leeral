@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Bépp bunt buy yóbbu ci xur yi, yi ñu tudde \"Juróom-ñaar yi Jigéen\", dañu tollu ci 100 ba 250 meetar (328 ba 820 tànk) ci yaatuwaayu seen biir, lu ko gëna ndaw amul.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.7,
+ "prompt_tokens": 100,
+ "completion_tokens": 109,
+ "reasoning_tokens": 0,
+ "cost": 0.00129
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗee teoriyeeji heewi hol ko ko woni e ɓiɓɓe mawnde ko ko waɗi ɗum ko ɗum, e ko ko woni e ɗekkuɗe mawnde ko ko waɗi ɓe ko waɗi walla ko waɗi ko ko woni.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.55,
+ "prompt_tokens": 82,
+ "completion_tokens": 95,
+ "cost": 0.000557
+}

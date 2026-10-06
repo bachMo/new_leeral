@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndiyam ɗiɗi ɗe ɗiɗiɗi e 120 km e kawtal peninsul. Kurejo King-George, e wetu Villa Las Estrellas, ko woni tan inaawol.",
+ "provider": "OpenAI",
+ "latency_s": 1.7,
+ "prompt_tokens": 77,
+ "completion_tokens": 66,
+ "cost": 0.00015125
+}

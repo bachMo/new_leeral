@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "On peut le faire avec un réveil qui sonne, si on sait que cela va l'égaler progressivement et qu'il restera calme comme avant.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.62,
+ "prompt_tokens": 80,
+ "completion_tokens": 41,
+ "cost": 0.000285
+}

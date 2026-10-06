@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The largest body of water is the Peninsula, which has a wide expanse reaching 120 kilometers. That one, which is bigger than the expanse of Lake Gorj, has a lake dwelling place at Vila das Estrelas.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.28,
+ "prompt_tokens": 175,
+ "completion_tokens": 77,
+ "reasoning_tokens": 0,
+ "cost": 0.00112
+}

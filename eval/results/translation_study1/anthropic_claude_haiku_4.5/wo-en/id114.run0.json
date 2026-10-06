@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The chief who rules over this land must choose only honest and faithful advisors who will help him make good decisions in matters of state, and give him sincere counsel and honest advice.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.58,
+ "prompt_tokens": 104,
+ "completion_tokens": 40,
+ "cost": 0.000304
+}

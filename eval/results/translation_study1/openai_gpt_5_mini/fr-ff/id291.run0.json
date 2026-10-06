@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Woɗɓe wi'i e njuɓɓe, ɗum ena waɗata laawol e laawolol ngol leydi e makko biɓɓe Palestin heɓɓiraade ɗuum e leydi ɗiɗi ɗiɗi naatnata e kala waɗaama 1967 e leydi Majjuuɓe Ityoophiyaa.",
+ "provider": "OpenAI",
+ "latency_s": 1.3,
+ "prompt_tokens": 78,
+ "completion_tokens": 100,
+ "cost": 0.0002195
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans laa ko jot ci UNESCO ci heritage worldwide. Baaxal bu gox yi ci territoire bu Inde laa ko wax parc national bu Sundarbans.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.73,
+ "prompt_tokens": 82,
+ "completion_tokens": 46,
+ "cost": 0.000312
+}

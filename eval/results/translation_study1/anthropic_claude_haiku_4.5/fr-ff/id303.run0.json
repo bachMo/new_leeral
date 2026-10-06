@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Minisitere Japon dow ekonomi, komers e industri (METI) waawi faade ko innde 27 accidents jooni e aparey ɗee.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.64,
+ "prompt_tokens": 96,
+ "completion_tokens": 46,
+ "cost": 0.000326
+}

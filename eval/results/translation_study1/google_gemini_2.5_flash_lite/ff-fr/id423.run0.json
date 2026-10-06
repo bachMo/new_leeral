@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-fr",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La découverte de Taïwan remonte à 1500 ans, lorsque les Européens ont navigué et ont donné à cette île le nom d'Ilha Formosa, qui signifie île magnifique.",
+ "provider": "Google",
+ "latency_s": 0.61,
+ "prompt_tokens": 93,
+ "completion_tokens": 47,
+ "cost": 2.81e-05
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Falklands currency we have confirmed is the Falkland pound (FKP), which you should know is pegged to the British pound (GBP).",
+ "provider": "Reka",
+ "latency_s": 0.88,
+ "prompt_tokens": 86,
+ "completion_tokens": 31,
+ "cost": 0.0001369828
+}

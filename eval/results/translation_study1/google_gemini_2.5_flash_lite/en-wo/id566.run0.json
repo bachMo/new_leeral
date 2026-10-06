@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dii la mel ni wonal gi ci ay jikko ci lu bari. Waaye, bu ñu bëggoo ci wonal gu sax, kon war nañu jëflante ci sunu soxla yi, te war nañu leen defal.",
+ "provider": "Google",
+ "latency_s": 1.16,
+ "prompt_tokens": 66,
+ "completion_tokens": 59,
+ "cost": 3.02e-05
+}

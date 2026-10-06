@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndee kaasugal mawɗe, heewi nde jeeɗtinol semteende. Kono, soo amen njuɗɗi ko heewi semteende fof, amen maasna jaɓɓi ɗiɗi nde ɗee kaasugal nde amen waɗɓi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.76,
+ "prompt_tokens": 106,
+ "completion_tokens": 96,
+ "cost": 0.000586
+}

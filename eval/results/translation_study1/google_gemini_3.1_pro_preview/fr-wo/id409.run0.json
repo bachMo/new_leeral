@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-wo",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci lu matul ñaari ayu-bis, waa Aamerik ak Dooley Faraas gu Tembe ji goreeloon nañu bëj-saalumu Faraas te jëmoon Almaañ.",
+ "provider": "Google",
+ "latency_s": 7.17,
+ "prompt_tokens": 62,
+ "completion_tokens": 695,
+ "reasoning_tokens": 646,
+ "cost": 0.008464
+}

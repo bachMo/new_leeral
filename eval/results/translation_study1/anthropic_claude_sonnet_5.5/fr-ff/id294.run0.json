@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Waylooɓe ɓuɗɗugo ɓolle e ɗeen ɓalɗe ɗon ndaaree nde ɓurɗe ɗuuɗugo ko'ɗo, ngam ɗum ngam ko ɓe cuɓaaɗe mawɗo ɓolle nde tawtoreedhe fof.\n\nActually, let me give a cleaner version:\n\nƁeydaaɓe ɓaawo-ɓaawo ɓolle wuro ngam wartirgo ɓolle ɓee, ɓe kaaldaaɓe ɓoo, ndaaree nder ɓaleeri. Hakkiilo mawngo fof taa ɓe cuɓii.\n\nFinal:\n\nWuurooɓe yiɗaaɓe fiyugo e nder jarribaare ɓeydaare ngam haɗugo ɓeeɗɗi cuuɗi, haani ɓe ndaaree ko ɓuri nder hakkiilo ko rejaaɓe ngam jarribaare ndee ronnoraama, e munyal nde tiimi ngal ndaaraama.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 8.2,
+ "prompt_tokens": 128,
+ "completion_tokens": 385,
+ "reasoning_tokens": 0,
+ "cost": 0.004106
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-wo",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci jamono yooyu, xeex yu metti am na ci diggante ñu bare ci boroom sas yi ak buur yi, ñuy xeex ngir jël gàddaay bi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.58,
+ "prompt_tokens": 101,
+ "completion_tokens": 68,
+ "reasoning_tokens": 0,
+ "cost": 0.000882
+}

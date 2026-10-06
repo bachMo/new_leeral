@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-fr",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'histoire de Taïwan a commencé dans les années 1500, lorsque les Européens voyageant par la mer ont donné à l'île le nom d'Ilha Formosa, qui signifie belle île.",
+ "provider": "Google",
+ "latency_s": 6.58,
+ "prompt_tokens": 93,
+ "completion_tokens": 675,
+ "reasoning_tokens": 626,
+ "cost": 0.008286
+}

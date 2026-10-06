@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci ñaari ayoo rekk, kureel Amerik ak kureel Faray yi ñu libere, ñu libere benn bi ci kote yu suufu Faray, te ñu tànnale ko ci yoonu Almany.",
+ "provider": "Phala",
+ "latency_s": 6.3,
+ "prompt_tokens": 60,
+ "completion_tokens": 63,
+ "cost": 0.000127125
+}

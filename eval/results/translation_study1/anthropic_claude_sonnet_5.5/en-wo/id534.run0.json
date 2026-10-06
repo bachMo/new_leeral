@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Loolu mën nañu ko def ak anam bu yomb, boo jëfandikoo cër bu sàmmoonte bu dafa dundu ndax di la yee ba nga am xel te du la yee ci bu baax.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.69,
+ "prompt_tokens": 87,
+ "completion_tokens": 78,
+ "reasoning_tokens": 0,
+ "cost": 0.000954
+}

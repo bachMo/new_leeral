@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Hunduko cuuɗi ɗin fuu, ɗi ndiiwaama « Rewbe jeeɗiɖiɗe », yaajaa ɗum ngiɗi hakkunde metir 100 haa 250 ko woɗɗi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.49,
+ "prompt_tokens": 116,
+ "completion_tokens": 90,
+ "reasoning_tokens": 0,
+ "cost": 0.001132
+}

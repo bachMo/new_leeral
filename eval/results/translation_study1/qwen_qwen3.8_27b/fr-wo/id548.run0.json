@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Waaye plan yii dañu nekk ci anam gu yomb, ni benn waxtu, bu soldaay yu bari, lu ëpp 800 000, yu Armée rouge bu Sowiet Union, ñu àgg te ñu def front biélorusse ak ukrainien, bu ñu dugg ci yoon yi nekk ci wetu Pologne, te ñu yàq Traité de Paix de Riga, pacte de non-agression soviéto-polonais, ak yeneen konse international, lu nekk ci ñaari wala lu bari.",
+ "provider": "Ionstream",
+ "latency_s": 4.5,
+ "prompt_tokens": 157,
+ "completion_tokens": 141,
+ "cost": 0.0003453701
+}

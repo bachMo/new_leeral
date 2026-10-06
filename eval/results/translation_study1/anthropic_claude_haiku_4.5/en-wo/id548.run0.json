@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nangaa, yépp yi ndax ko jëm ci biir gis, benn jëm ci gis, sunu Soviet Union Red Army soldaat 800,000 gis ko jot ci Belarussian ak Ukrainian front, sunu Poland ìst gis ko jot ci Riga Peace Treaty, Soviet-Polish Non-Aggression Pact, ak yeneen traité yu international yi, yépp yi bilateral ak multilateral.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.74,
+ "prompt_tokens": 119,
+ "completion_tokens": 110,
+ "cost": 0.000669
+}

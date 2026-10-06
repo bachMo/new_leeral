@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ko on waɗi woni dow yimɓe, o ɗon ɗaɓɓude leydi ngal. Ammaa, so wonaa min nyamata tan nder waawugol jooni, min nyaamaa hittaajo lewruɗi e waɗtude fannuɗi ɗe e nder ɗe.",
+ "provider": "OpenAI",
+ "latency_s": 1.55,
+ "prompt_tokens": 79,
+ "completion_tokens": 87,
+ "cost": 0.00019375
+}

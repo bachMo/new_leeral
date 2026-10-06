@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Goxu yi nekk 120 km ci nort bu Presqu'île bi. Goxu bu mag la King George Island ak tuuru Villa Las Estrellas.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.75,
+ "prompt_tokens": 68,
+ "completion_tokens": 45,
+ "cost": 0.000293
+}

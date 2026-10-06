@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Falklands currency we confirm is the Falkland Pound (FKP) whose value is equal to the English Pound (GBP).",
+ "provider": "Google",
+ "latency_s": 0.5,
+ "prompt_tokens": 74,
+ "completion_tokens": 26,
+ "cost": 1.78e-05
+}

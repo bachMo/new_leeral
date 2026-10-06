@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "D'autres difficultés rencontrées lors de la surveillance visant à terminer la recherche d'un médicament pour traiter les autres parasites, les chercheurs doivent la surveiller attentivement, car ils savent que la surveillance est importante.\n\nHmm, I should give a cleaner translation:\n\nD'autres difficultés rencontrées lors du suivi visant à parachever la recherche d'un médicament contre les autres parasites doivent être surveillées de près par les chercheurs, car ils connaissent l'importance et les bienfaits de ce suivi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.09,
+ "prompt_tokens": 137,
+ "completion_tokens": 189,
+ "reasoning_tokens": 0,
+ "cost": 0.002164
+}

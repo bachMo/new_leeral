@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Television showed that white smoke is coming out from the chimney.",
+ "provider": "Google",
+ "latency_s": 5.34,
+ "prompt_tokens": 57,
+ "completion_tokens": 437,
+ "reasoning_tokens": 425,
+ "cost": 0.005358
+}

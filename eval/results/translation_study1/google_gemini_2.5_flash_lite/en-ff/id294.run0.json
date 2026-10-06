@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɓe ɓe wada golle e nder ñaawoore nde ɓeydaare nden, ɓe njiylirta ɓe no feewi e juuɗe warɓe, ko nde nde ƴeƴƴitaama e nde ɓe ƴeƴƴitaama no o waɗata.",
+ "provider": "Google",
+ "latency_s": 1.09,
+ "prompt_tokens": 61,
+ "completion_tokens": 81,
+ "cost": 3.85e-05
+}

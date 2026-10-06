@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "En deux semaines, les Américains et les Français ont libéré le sud de la France, puis ils ont pris la route de l'Allemagne.",
+ "provider": "Google",
+ "latency_s": 6.98,
+ "prompt_tokens": 82,
+ "completion_tokens": 679,
+ "reasoning_tokens": 648,
+ "cost": 0.008312
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kono planuuji ɗii njaltii e nder laawol, haa ɓuri 800 000 e ɓesngu Armée Rouge e nder Sojete, ngam ɓesngu ɗii ngartii e nder ɗemngal Belarus e Ukraine, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii e nder ɗemngal Pologne, ɗi ɓesngu ɗii ngartii",
+ "provider": "DeepInfra",
+ "latency_s": 9.34,
+ "prompt_tokens": 163,
+ "completion_tokens": 261,
+ "cost": 0.000513825
+}

@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-fr",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "En raison de la propagation, le gouvernement indien a pris des mesures pour capturer les porcs dans les zones les plus touchées, distribuer des milliers de moustiquaires et pulvériser des insecticides.",
+ "provider": "Google",
+ "latency_s": 8.41,
+ "prompt_tokens": 100,
+ "completion_tokens": 888,
+ "reasoning_tokens": 845,
+ "cost": 0.010856
+}

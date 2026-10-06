@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "en-ff",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Binndi ɗin, wano gundo feññinaango kon holliri, maa tukkito e luural keeri, ɗi Filistiin yiɗi yo tuume e keeri ko adii hare Fuɗnaange-Hakkundeere e hitaande 1967.",
+ "provider": "Google",
+ "latency_s": 8.55,
+ "prompt_tokens": 69,
+ "completion_tokens": 752,
+ "reasoning_tokens": 685,
+ "cost": 0.009162
+}

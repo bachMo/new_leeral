@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The archipelago is located 120 km north of the Peninsula. Its main island is King George Island and it also has the town Villa Las Estrellas.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.27,
+ "prompt_tokens": 82,
+ "completion_tokens": 37,
+ "cost": 0.000267
+}

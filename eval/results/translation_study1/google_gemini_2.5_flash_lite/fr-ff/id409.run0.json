@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder balɗe sappo e nayi tan, Ameriknaaɓe e konuuji Farayse ɓe ngolɗi ɓe ndonni funnaange Farayse, ɓe njippii haa Almaañ.",
+ "provider": "Google",
+ "latency_s": 0.89,
+ "prompt_tokens": 69,
+ "completion_tokens": 57,
+ "cost": 2.97e-05
+}

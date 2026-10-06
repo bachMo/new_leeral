@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le ministère de l'Entreprise, du Commerce et de l'Industrie (METI) de Sapoŋ a déclaré qu'il reconnaît qu'il y a eu 27 accidents survenus dans les entreprises.",
+ "provider": "OpenAI",
+ "latency_s": 1.72,
+ "prompt_tokens": 84,
+ "completion_tokens": 61,
+ "cost": 0.000143
+}

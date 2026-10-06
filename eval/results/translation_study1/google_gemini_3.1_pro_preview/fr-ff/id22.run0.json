@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-ff",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder cuɓe goɗɗe ɗen tawaama ɗe filmo ɓurɗo moƴƴude, gardiiɗo ɓurɗo moƴƴude, sinematogaraafi ɓurɗo moƴƴude, comci ɓurɗi moƴƴude, montaas ɓurɗo moƴƴude, jimɗi asliiji ɓurɗi moƴƴude, dekoor ɓurɗo moƴƴude, montaas daande ɓurɗo moƴƴude, miksaas ɓurɗo moƴƴude, e senariyo asliijo ɓurɗo moƴƴude.",
+ "provider": "Google",
+ "latency_s": 7.44,
+ "prompt_tokens": 94,
+ "completion_tokens": 738,
+ "reasoning_tokens": 583,
+ "cost": 0.009044
+}

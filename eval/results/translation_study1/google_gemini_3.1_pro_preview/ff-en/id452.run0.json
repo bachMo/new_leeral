@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "ff-en",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "During this time, a fierce conflict broke out among the leaders fighting for power.",
+ "provider": "Google",
+ "latency_s": 19.56,
+ "prompt_tokens": 68,
+ "completion_tokens": 430,
+ "reasoning_tokens": 414,
+ "cost": 0.005296
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Here the conversation is about what kind of people come, the ones who want to do certain things, who do those things there, and it is those fathers who are there, so that whatever they do, they do it separately.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.53,
+ "prompt_tokens": 132,
+ "completion_tokens": 59,
+ "reasoning_tokens": 0,
+ "cost": 0.000854
+}

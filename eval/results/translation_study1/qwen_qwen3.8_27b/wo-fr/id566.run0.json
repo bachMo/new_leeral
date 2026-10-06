@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Cela ressemble à un problème de compréhension dans de nombreux domaines. Cependant, si nous ne voulons pas de solutions périmées, nous devons examiner les difficultés et trouver des solutions.",
+ "provider": "Ionstream",
+ "latency_s": 1.64,
+ "prompt_tokens": 103,
+ "completion_tokens": 38,
+ "cost": 9.84979e-05
+}

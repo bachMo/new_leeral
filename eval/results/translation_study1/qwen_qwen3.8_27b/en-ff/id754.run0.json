@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kaalis ɓurɗo heewde e nder Falklands ko pound Falkland (FKP), nde nde woni ko pound Ingil (GBP) gooto.",
+ "provider": "Venice",
+ "latency_s": 1.66,
+ "prompt_tokens": 74,
+ "completion_tokens": 42,
+ "cost": 0.0001677
+}

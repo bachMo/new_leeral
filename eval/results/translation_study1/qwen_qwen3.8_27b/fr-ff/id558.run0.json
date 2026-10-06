@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Hay so tiiɗe ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe ɓernde ɗe",
+ "provider": "DeepInfra",
+ "latency_s": 14.75,
+ "prompt_tokens": 103,
+ "completion_tokens": 400,
+ "cost": 0.00076545
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La télévision ne fonctionne pas parce que le câble d'antenne est débranché de la prise.",
+ "provider": "OpenAI",
+ "latency_s": 0.88,
+ "prompt_tokens": 60,
+ "completion_tokens": 39,
+ "cost": 9.3e-05
+}

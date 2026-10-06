@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-en",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The epidemic caused the Indian government to take measures such as installing devices to detect mosquitoes in the areas where the disease is most prevalent, distributing thousands of mosquito nets, and spraying insecticide.",
+ "provider": "Google",
+ "latency_s": 6.14,
+ "prompt_tokens": 91,
+ "completion_tokens": 646,
+ "reasoning_tokens": 610,
+ "cost": 0.007934
+}

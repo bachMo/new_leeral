@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Yoonu yu telewi yi di wone xel bu leer di génn ci usine bi.",
+ "provider": "CoreWeave",
+ "latency_s": 1.52,
+ "prompt_tokens": 58,
+ "completion_tokens": 23,
+ "cost": 9.22e-05
+}

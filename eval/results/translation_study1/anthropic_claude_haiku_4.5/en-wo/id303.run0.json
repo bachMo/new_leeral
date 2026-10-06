@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Japon bu Minisiteer Economy, Trade and Industry (METI) waxul ne ko jëm 27 xarala bu ko jëm ci aparey yi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.75,
+ "prompt_tokens": 68,
+ "completion_tokens": 46,
+ "cost": 0.000298
+}

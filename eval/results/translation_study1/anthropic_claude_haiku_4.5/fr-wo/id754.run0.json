@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nghalat yu officiel bu Dunu Malwiin la li pound bu Dunu Malwiin (FKP) bu jëm ci pound sterling (GBP).",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.67,
+ "prompt_tokens": 85,
+ "completion_tokens": 46,
+ "cost": 0.000315
+}

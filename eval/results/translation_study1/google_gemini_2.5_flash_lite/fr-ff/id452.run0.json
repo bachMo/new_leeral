@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E wakkatiiji ɗi, kulol mawngol waɗii hakkunde yimɓe ɓurɓe heewde e leñol laamɓe, ɓe mbaɗiino haɓre ngam jappeere laamu.",
+ "provider": "Google",
+ "latency_s": 0.91,
+ "prompt_tokens": 67,
+ "completion_tokens": 58,
+ "cost": 2.99e-05
+}

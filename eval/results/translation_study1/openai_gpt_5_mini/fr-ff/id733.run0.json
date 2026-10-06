@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Sundarbans-en waɗiima waɗi site ndiyam mum UNESCO. Laamu leydi dow ɓe laawol nguurndam India maa waɗiika park ndiyam national Sundarbans.",
+ "provider": "OpenAI",
+ "latency_s": 1.41,
+ "prompt_tokens": 75,
+ "completion_tokens": 64,
+ "cost": 0.00014675
+}

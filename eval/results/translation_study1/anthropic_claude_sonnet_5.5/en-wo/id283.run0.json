@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-wo",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Mbedd mi accident bi amoon dañu ko tëj ci diir bu gàtt, ba jàmbaari ndimbal-ji yi di génne saagaakat bi ci Audi TT bu xonq bi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.53,
+ "prompt_tokens": 85,
+ "completion_tokens": 78,
+ "reasoning_tokens": 0,
+ "cost": 0.00095
+}

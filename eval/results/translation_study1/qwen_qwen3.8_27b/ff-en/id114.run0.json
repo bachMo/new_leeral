@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The decision caused the Indian government to remove the restrictions that were imposed on the most populous states, allowing them to spend more than ten billion rupees on education.",
+ "provider": "DekaLLM",
+ "latency_s": 1.62,
+ "prompt_tokens": 125,
+ "completion_tokens": 33,
+ "cost": 0.000105125
+}

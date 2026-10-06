@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwaan amoon na boppam ci biir asamaan ci xarnu 15e, bi mu gën a weesu, ñu ñëw nit ñu tollu ci géej yu Europ, ñu jot ndimbal dëgg bii «Ilha Formosa», kanaam jàmm.",
+ "provider": "OpenAI",
+ "latency_s": 1.22,
+ "prompt_tokens": 62,
+ "completion_tokens": 84,
+ "cost": 0.0001835
+}

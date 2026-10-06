@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E ɗeen sahaa, jaŋde mawɗe nde ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njokkondiri e ɓe njok",
+ "provider": "DekaLLM",
+ "latency_s": 5.11,
+ "prompt_tokens": 79,
+ "completion_tokens": 277,
+ "cost": 0.000834871
+}

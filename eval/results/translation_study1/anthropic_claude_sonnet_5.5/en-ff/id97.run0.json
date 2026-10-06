@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-ff",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndokteer Tony Moll tawi tiibi-bii (tuberkuloosi) ɗon ngaɗa hakkilanaade ɗum kaa mbaaw safrude no feewi, ngam ɗum \"Extremely Drug Resistant Tuberculosis (XDR-TB)\", nder nokkuure KwaZulu-Natal e leydi Afrik Worgo.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 5.22,
+ "prompt_tokens": 117,
+ "completion_tokens": 136,
+ "reasoning_tokens": 0,
+ "cost": 0.001594
+}

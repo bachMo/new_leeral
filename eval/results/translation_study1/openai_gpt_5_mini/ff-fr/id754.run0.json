@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-fr",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La monnaie officielle des Îles Falkland est la livre des Îles Falkland (FKP), qui a la même valeur et est liée à la livre sterling britannique (GBP).",
+ "provider": "OpenAI",
+ "latency_s": 1.22,
+ "prompt_tokens": 74,
+ "completion_tokens": 54,
+ "cost": 0.0001265
+}

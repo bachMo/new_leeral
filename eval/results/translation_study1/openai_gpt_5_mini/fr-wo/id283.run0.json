@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-wo",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Bokk bi mujj ci biir ndigal ji amoonee doon sëy jàppalante nañu ko ndimm ak njariñ yi ndimbal ci ñaari nit ñu gis nañu soppi rek mënees nañu soppi xàmmiñkatu Audi TT bu rojo.",
+ "provider": "OpenAI",
+ "latency_s": 5.45,
+ "prompt_tokens": 67,
+ "completion_tokens": 85,
+ "cost": 0.00018675
+}

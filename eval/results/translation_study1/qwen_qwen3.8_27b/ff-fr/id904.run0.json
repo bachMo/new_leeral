@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La plus grande ville de la péninsule est située à environ 120 kilomètres. La ville la plus grande de la région est Vila Estrelas, qui se trouve sur l'île de Gorj.",
+ "provider": "Alibaba",
+ "latency_s": 2.06,
+ "prompt_tokens": 134,
+ "completion_tokens": 45,
+ "cost": 0.0001717
+}

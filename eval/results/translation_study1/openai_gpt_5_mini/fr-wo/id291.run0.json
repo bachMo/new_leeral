@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-wo",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci làrmiñu bi, dokument bi dina jëfandikoo lu taxaw ci jambur gu Palestin am na laajoon ci kaw ñaari biir-gal gu amoon benn buñu teg ci garab gu Màdina-Ñuute 1967.",
+ "provider": "OpenAI",
+ "latency_s": 1.44,
+ "prompt_tokens": 72,
+ "completion_tokens": 82,
+ "cost": 0.000182
+}

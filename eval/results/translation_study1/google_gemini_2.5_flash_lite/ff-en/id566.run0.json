@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "We all have to face this kind of illness. But, if we want the disease to end, we must find what causes the problem, and then we must remove it.",
+ "provider": "Google",
+ "latency_s": 0.61,
+ "prompt_tokens": 86,
+ "completion_tokens": 35,
+ "cost": 2.26e-05
+}

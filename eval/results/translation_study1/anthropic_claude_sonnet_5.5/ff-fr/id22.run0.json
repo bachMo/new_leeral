@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les gens qu'ils ont choisis resteront à la maison, pour ne pas faire plus que les autres, ni le faire, ni se disputer, ni jouer avec eux à la télé.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.86,
+ "prompt_tokens": 149,
+ "completion_tokens": 66,
+ "reasoning_tokens": 0,
+ "cost": 0.000958
+}

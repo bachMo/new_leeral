@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jëkkër bi wax aju Senegaal na bokk ci ay yennga yu bari te ay jëfandikoo yu bari. Jëkkër bi wax aju Senegaal na bokk ci ay yennga yu bari te ay jëfandikoo yu bari. Ay jëfandikoo yu bari, ay moustiquaires yu bari ak ay pesticides bu bari.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.5,
+ "prompt_tokens": 99,
+ "completion_tokens": 105,
+ "cost": 0.000624
+}

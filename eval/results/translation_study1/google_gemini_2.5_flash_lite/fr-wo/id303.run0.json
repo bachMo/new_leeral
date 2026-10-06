@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-wo",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ministère bu Japon bu jëf ak njay ak njàngale (METI) dafa wax ne gisu na ci 27 ay lépp lu jëm ci lépp yi.",
+ "provider": "Google",
+ "latency_s": 0.83,
+ "prompt_tokens": 65,
+ "completion_tokens": 41,
+ "cost": 2.29e-05
+}

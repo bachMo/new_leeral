@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Gomɗe adɗe ko faati e Taïwan ɓooyɗe ko e teeminannde sappo e joyaɓere, tawi kadi yimɓe wurooji ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe ɓe",
+ "provider": "Google",
+ "latency_s": 1.56,
+ "prompt_tokens": 88,
+ "completion_tokens": 400,
+ "cost": 0.0001688
+}

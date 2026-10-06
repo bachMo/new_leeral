@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le conflit israélo-palestinien, notre solidarité envers ceux qui souffrent, doit s'étendre à tous les peuples opprimés, notamment le peuple palestinien qui demande notre solidarité dans les territoires occupés depuis la guerre de juin 1967 au Moyen-Orient.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.75,
+ "prompt_tokens": 110,
+ "completion_tokens": 79,
+ "cost": 0.000505
+}

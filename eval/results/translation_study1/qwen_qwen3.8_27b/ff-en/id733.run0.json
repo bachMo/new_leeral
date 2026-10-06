@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Sundarbans are the largest mangrove forest in the world, recognized by UNESCO. It is located in the Bay of Bengal, shared between India and Bangladesh.",
+ "provider": "Cloudflare",
+ "latency_s": 1.58,
+ "prompt_tokens": 90,
+ "completion_tokens": 34,
+ "cost": 0.0001493
+}

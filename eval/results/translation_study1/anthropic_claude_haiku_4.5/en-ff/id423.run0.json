@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwaan maɓɓi cuɓɓi hakkunde caraa 15 century, alaa e nder kaɓe Yuroopu mawɓe deeftere innde leydi e Ilha Formosa, wala leydi pulaar.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.7,
+ "prompt_tokens": 78,
+ "completion_tokens": 70,
+ "cost": 0.000428
+}

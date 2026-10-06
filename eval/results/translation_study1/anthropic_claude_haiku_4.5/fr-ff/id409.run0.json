@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndee yeeso maako, Amerikaŋkoobe e Mawɓe Farayse Jilleede maa jillinaade kuggal Farayse haa libeeriinaade, haa yowtaade Almaañ.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.19,
+ "prompt_tokens": 89,
+ "completion_tokens": 69,
+ "cost": 0.000434
+}

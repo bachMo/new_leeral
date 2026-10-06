@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le chef de village doit chercher à connaître les besoins des habitants et les aider à résoudre leurs problèmes en consultant les anciens et les conseillers du village.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.94,
+ "prompt_tokens": 104,
+ "completion_tokens": 46,
+ "cost": 0.000334
+}

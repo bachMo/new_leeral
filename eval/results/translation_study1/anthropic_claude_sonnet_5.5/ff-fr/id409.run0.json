@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Vers deux heures de l'après-midi, les gens des États-Unis d'Amérique et de France ont libéré la ville française de Gefe Horɗoore jusqu'à ce qu'ils s'emparent du pays allemand.\n\nHmm, let me give a cleaner version:\n\nVers deux heures de l'après-midi, les Américains et les Français ont libéré la ville française de Gefe Horɗoore, puis ils ont pris le territoire allemand.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.55,
+ "prompt_tokens": 133,
+ "completion_tokens": 157,
+ "reasoning_tokens": 0,
+ "cost": 0.001836
+}

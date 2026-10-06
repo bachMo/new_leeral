@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "en-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nóomi yuñu bari yu bees dañuy am nañu ci Best Picture, Director, Cinematography, Costume Design, Film-editing, Original Score, Production Design, Sound Editing, Sound Mixing ak Original Screenplay.",
+ "provider": "OpenAI",
+ "latency_s": 1.61,
+ "prompt_tokens": 68,
+ "completion_tokens": 66,
+ "cost": 0.000149
+}

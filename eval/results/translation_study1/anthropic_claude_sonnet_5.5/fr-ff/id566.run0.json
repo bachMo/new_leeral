@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E ko heewi, ɗum ko safaara maandaaji nafata tan. Kono, si menen mbaawaa tan ndaarugol safaara cakkitiiɗa, ɗum jooɗiino en ɗaɓɓitaade ko yaajii kuuɗe ɗen, ngam wonndude en moɗɗinɗe ɗe.\n\nPular (Fuuta Jaloo):\n\nNder ko heewi, ɗum safaara maandi tan. Kono, si menen mbi'aayi ko ɗum safaara poomaaɗi tan, no haani en yiɩ ɗaɓɓitaade ko hooɓe ko ɗum fawaare cuuɗi ɗin, ngam dartingol ɗi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 6.66,
+ "prompt_tokens": 137,
+ "completion_tokens": 257,
+ "reasoning_tokens": 0,
+ "cost": 0.002844
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗum waawi waɗeede no feewi so a huutoriima ɗaɗol ɗo ɗaɗi ɗo ɗaɗi, ngam a yaha e ɓanndu maa tawa a waɗaani ɗaɗol timmungol.",
+ "provider": "CoreWeave",
+ "latency_s": 2.08,
+ "prompt_tokens": 68,
+ "completion_tokens": 83,
+ "cost": 0.0002762
+}

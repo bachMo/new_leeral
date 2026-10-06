@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jant bu ngir xarala yi wax ci ndaw bu ay jëm yi ngi ay xool, a ngi tuddal ci ndaw bu ay soxla yi ngi ay xoolal xoole yi ci ndaw bu ay jëm yi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.48,
+ "prompt_tokens": 62,
+ "completion_tokens": 65,
+ "cost": 0.000387
+}

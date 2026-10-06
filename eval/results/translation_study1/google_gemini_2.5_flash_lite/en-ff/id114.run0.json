@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndaare nden waɗi laamu leydi Indiya waɗude golle ɗen bana waɗude yimɓe waddude kulle nder nokkuuje ɗe ɓuri heewde, hokkude cuuɗe ɗuuɗe ɗe kulle, e waddude dente.",
+ "provider": "Google",
+ "latency_s": 1.81,
+ "prompt_tokens": 66,
+ "completion_tokens": 75,
+ "cost": 3.66e-05
+}

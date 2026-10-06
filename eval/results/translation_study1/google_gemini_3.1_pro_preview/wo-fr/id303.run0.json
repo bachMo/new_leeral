@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le ministère de l'Économie, du Commerce et de l'Industrie (METI) du Japon a déclaré avoir eu connaissance de 27 accidents causés par ces appareils.",
+ "provider": "Google",
+ "latency_s": 8.98,
+ "prompt_tokens": 84,
+ "completion_tokens": 824,
+ "reasoning_tokens": 785,
+ "cost": 0.010056
+}

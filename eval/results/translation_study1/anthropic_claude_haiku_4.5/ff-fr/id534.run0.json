@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les paroles fausses sont mauvaises, et les paroles vraies sont aussi mauvaises.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.28,
+ "prompt_tokens": 71,
+ "completion_tokens": 26,
+ "cost": 0.000201
+}

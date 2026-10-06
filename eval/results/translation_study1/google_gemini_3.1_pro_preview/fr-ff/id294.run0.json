@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "fr-ff",
+ "sentence_id": 294,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Felluɓe jarribo ɓeydaango ngam haɓaade mborosaaji ɗii potnoo ko reeneede no feewi e juuɗe reenooɓe ladde, sabu jarribo ngoo ko tefoongo, nafoore mum kadi ko ƴeewtaande.",
+ "provider": "Google",
+ "latency_s": 7.34,
+ "prompt_tokens": 73,
+ "completion_tokens": 659,
+ "reasoning_tokens": 585,
+ "cost": 0.008054
+}

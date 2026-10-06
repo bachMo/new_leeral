@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "en-wo",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Téyori yi daa gis ci nit ku ci melni li ko tax a soppal li mu soppal ak li ci àddinaam ci li ko waral a def walla mu deful li mu waral.",
+ "provider": "Google",
+ "latency_s": 0.92,
+ "prompt_tokens": 63,
+ "completion_tokens": 50,
+ "cost": 2.63e-05
+}

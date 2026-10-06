@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dafa ko tey ni traitement yu jëm-jëmte bu bari cas. Nangaa, bu nu dëgg na ko dara ne soolu bu jëm-jëm, dina nu am na ko jënd ci gueul yu problèm yi, ak dina nu defaraat ko.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.81,
+ "prompt_tokens": 80,
+ "completion_tokens": 80,
+ "cost": 0.00048
+}

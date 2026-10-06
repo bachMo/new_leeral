@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "D'autres ateliers comprennent la littérature, la danse, le cinéma, les groupes West, la réalisation de films, la musique traditionnelle, l'artisanat, la création d'objets d'écoute, la fabrication d'instruments d'écoute et l'initiation à la musique traditionnelle.",
+ "provider": "OpenAI",
+ "latency_s": 1.53,
+ "prompt_tokens": 96,
+ "completion_tokens": 75,
+ "cost": 0.000174
+}

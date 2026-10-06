@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-ff",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Kuuɗe Falkland ngam ɗum ko kaalis laawol Falkland, innde mayru Falkland pound (FKP), nafoore mayru wontii huuɓtodinirde nafoore pound Britaniya (GBP) gooto.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.75,
+ "prompt_tokens": 103,
+ "completion_tokens": 89,
+ "reasoning_tokens": 0,
+ "cost": 0.001096
+}

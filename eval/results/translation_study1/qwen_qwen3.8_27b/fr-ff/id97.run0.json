@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-ff",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ganndo Tony Moll hollitii tuberkuloos mbaɗɗi (TB-MR) e nder leydi KwaZulu-Natal, e nder Afrik hirnaange.",
+ "provider": "Parasail",
+ "latency_s": 1.53,
+ "prompt_tokens": 82,
+ "completion_tokens": 48,
+ "cost": 0.00012528
+}

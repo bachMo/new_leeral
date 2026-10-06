@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Un homme riche, s'il n'a pas de sagesse, alors il perd tout ce qui enrichit sa maison, car la Palestine a perdu tous les territoires qu'elle possédait avant 1967.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.95,
+ "prompt_tokens": 115,
+ "completion_tokens": 53,
+ "cost": 0.00038
+}

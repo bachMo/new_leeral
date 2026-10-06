@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This can resemble a treatment for a serious illness in many ways. However, if we want a lasting cure, then we must see the root of the problems and we must eliminate them.",
+ "provider": "Google",
+ "latency_s": 5.67,
+ "prompt_tokens": 89,
+ "completion_tokens": 37,
+ "cost": 2.37e-05
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-en",
+ "sentence_id": 754,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Falkland Islands currency is the Falkland pound (FKP), whose value is set to be equal to the British pound (GBP).",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 3.16,
+ "prompt_tokens": 120,
+ "completion_tokens": 44,
+ "reasoning_tokens": 0,
+ "cost": 0.00068
+}

@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The length of the Peninsula's coastline is about 120 kilometers. It is longer than the coast of Lamdo Gorj, which has the Vila das Estrelas settlement.",
+ "provider": "Google",
+ "latency_s": 0.56,
+ "prompt_tokens": 111,
+ "completion_tokens": 38,
+ "cost": 2.63e-05
+}

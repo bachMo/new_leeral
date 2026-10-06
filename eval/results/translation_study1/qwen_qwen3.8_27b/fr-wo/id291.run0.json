@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "fr-wo",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci jëfandikoo xibaar yi ñu joxe, kàddug bi dina wax ci jafe-jafe bi nekk ci biddiw bi, ki Palestine di laaj ci anam gu aju ci biddiw yi nekkoon ci biir yoonu diggante-afrik bi ci 1967.",
+ "provider": "Chutes",
+ "latency_s": 3.08,
+ "prompt_tokens": 83,
+ "completion_tokens": 80,
+ "cost": 0.00019592
+}

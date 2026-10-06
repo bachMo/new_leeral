@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "fr-ff",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ngam waaway wad-de ɗum bondirɗum, kuwee nde a nastiri jaaɓaango sanjoowo hoore ɗum cuuɗi, ngam a hoolnoyta hakkiilo maa fuu a wilataa haa timmi.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 5.0,
+ "prompt_tokens": 115,
+ "completion_tokens": 95,
+ "reasoning_tokens": 0,
+ "cost": 0.00118
+}

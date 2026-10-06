@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan's discovery dates back 1500 years, when Europeans, following the sea, went to trade under the name of the island Ilha Formosa, meaning beautiful island.",
+ "provider": "Google",
+ "latency_s": 0.61,
+ "prompt_tokens": 93,
+ "completion_tokens": 38,
+ "cost": 2.45e-05
+}

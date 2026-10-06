@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-en",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "During the period when the government's policies were implemented, the number of people in the country increased.",
+ "provider": "Mancer 2",
+ "latency_s": 1.06,
+ "prompt_tokens": 82,
+ "completion_tokens": 21,
+ "cost": 6.75e-05
+}

@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "ff-fr",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "À cette époque, ils n'avaient pas tous les moyens pour construire une grande maison comme celle des riches.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.84,
+ "prompt_tokens": 86,
+ "completion_tokens": 31,
+ "cost": 0.000241
+}

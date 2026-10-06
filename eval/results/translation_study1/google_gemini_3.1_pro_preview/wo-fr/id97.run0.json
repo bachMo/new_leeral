@@ -1,0 +1,15 @@
+{
+ "model": "google/gemini-3.1-pro-preview",
+ "direction": "wo-fr",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "C'est le Dr Tony Moll qui a découvert la tuberculose ultra-résistante (TB-XDR) dans la région d'Afrique du Sud appelée KwaZulu-Natal.",
+ "provider": "Google",
+ "latency_s": 5.89,
+ "prompt_tokens": 64,
+ "completion_tokens": 528,
+ "reasoning_tokens": 491,
+ "cost": 0.006464
+}

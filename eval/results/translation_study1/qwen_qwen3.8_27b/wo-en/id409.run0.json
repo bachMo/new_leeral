@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The two American divisions and the Free French troops crossed into France and advanced into Germany.",
+ "provider": "Wafer",
+ "latency_s": 2.86,
+ "prompt_tokens": 72,
+ "completion_tokens": 18,
+ "cost": 8.0028e-05
+}

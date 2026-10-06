@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-en",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "This is similar to the beginning of a journey in many ways. However, if we do not want to repeat past mistakes, we must see the problems and find solutions to them.",
+ "provider": "DeepInfra",
+ "latency_s": 1.81,
+ "prompt_tokens": 103,
+ "completion_tokens": 37,
+ "cost": 8.4825e-05
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les deux ailes américaines et les troupes de la France libre ont attaqué la France et ont traversé l’Allemagne.",
+ "provider": "Darkbloom",
+ "latency_s": 1.09,
+ "prompt_tokens": 72,
+ "completion_tokens": 29,
+ "cost": 6.74e-05
+}

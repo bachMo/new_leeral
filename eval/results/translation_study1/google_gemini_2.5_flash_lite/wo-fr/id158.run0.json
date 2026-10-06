@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Toutes les portes de la bibliothèque, appelées « Les Sept Sœurs », mesurent entre 100 et 250 mètres de haut (328 à 820 pieds) de diamètre.",
+ "provider": "Google",
+ "latency_s": 0.7,
+ "prompt_tokens": 93,
+ "completion_tokens": 45,
+ "cost": 2.73e-05
+}

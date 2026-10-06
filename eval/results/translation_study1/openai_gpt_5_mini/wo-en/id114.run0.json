@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The market is why the leader of the group took on tasks like building small workshops that show people the elders in the neighborhoods; the market is large, providing some small amounts of support and occasional monetary assistance.",
+ "provider": "OpenAI",
+ "latency_s": 1.38,
+ "prompt_tokens": 91,
+ "completion_tokens": 59,
+ "cost": 0.00014075
+}

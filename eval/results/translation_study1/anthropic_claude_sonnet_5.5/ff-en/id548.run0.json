@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "But after dawn they arrived and broke the agreement they had made, because more than 800,000 soldiers from the Russian side entered the area and did what the soldiers of Belarus and Ukraine had done, after they entered the land border of Poland. Making a ban so that they would not return the peace they made a mistake between the Russians and the Poles.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.7,
+ "prompt_tokens": 240,
+ "completion_tokens": 109,
+ "reasoning_tokens": 0,
+ "cost": 0.00157
+}

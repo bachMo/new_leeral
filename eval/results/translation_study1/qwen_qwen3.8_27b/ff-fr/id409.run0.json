@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "À la fin des deux guerres mondiales, les États-Unis et la France ont dominé le monde, mais ils ont craint l'Allemagne.",
+ "provider": "DekaLLM",
+ "latency_s": 3.28,
+ "prompt_tokens": 100,
+ "completion_tokens": 34,
+ "cost": 0.0001069
+}

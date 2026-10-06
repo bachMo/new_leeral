@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "ff-en",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The woman was very angry because the people threw stones at her because of the driver of the Audi TT.",
+ "provider": "OpenAI",
+ "latency_s": 2.45,
+ "prompt_tokens": 75,
+ "completion_tokens": 39,
+ "cost": 9.675e-05
+}

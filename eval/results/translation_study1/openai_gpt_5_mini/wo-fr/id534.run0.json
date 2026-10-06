@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-fr",
+ "sentence_id": 534,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Tu peux le faire avec un réveil fort, quand tu sauras qu'il va t'amener doucement et sans te brusquer, tu l'utiliseras.",
+ "provider": "OpenAI",
+ "latency_s": 1.05,
+ "prompt_tokens": 68,
+ "completion_tokens": 50,
+ "cost": 0.000117
+}

@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ministeer leydi Japon ngam faggudu, njulaagu e sanne (METI) wi'i o anndii aksidaaji 27 ɗi njooɗii e ko waɗi e ɗum.",
+ "provider": "Google",
+ "latency_s": 1.33,
+ "prompt_tokens": 72,
+ "completion_tokens": 52,
+ "cost": 2.8e-05
+}

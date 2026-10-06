@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Le Dr Tony Moll a contracté la tuberculose multirésistante aux médicaments (XDR-TB) dans la province du KwaZulu-Natal, en Afrique du Sud.",
+ "provider": "Parasail",
+ "latency_s": 0.83,
+ "prompt_tokens": 89,
+ "completion_tokens": 41,
+ "cost": 0.00011156
+}

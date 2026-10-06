@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 566,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Cela ressemble à un traitement contre une maladie contagieuse à bien des égards. Cependant, si nous ne voulons pas d'une épidémie de courte durée, nous devons voir les racines du problème, et nous devons les éliminer.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.47,
+ "prompt_tokens": 132,
+ "completion_tokens": 84,
+ "reasoning_tokens": 0,
+ "cost": 0.001104
+}

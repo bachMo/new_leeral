@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Pat pellel nastugo cave mai... This looks like a description of cave entrances on Mars: \"Seven Sisters\" are caves on Mars. The text says: \"Pat pellel nastugo cave mai, ɗo mari inder 'The Seven Sisters', ɗo mari a qalla 100 yahugo 250 meters (328 yahugo 820 feet) je diameter.\"\n\nLikely the original: \"Their entrances are large holes (cave skylights), called 'The Seven Sisters', which are between 100 to 250 meters (328 to 820 feet) in diameter.\"\n\n**The cave entrance holes are large, called \"The Seven Sisters\", and are 100 to 250 meters (328 to 820 feet) in diameter.**\n\nOutput only the translation:\n\nThe big openings into the caves, which are called \"The Seven Sisters,\" are 100 to 250 meters (328 to 820 feet) in diameter.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.14,
+ "prompt_tokens": 136,
+ "completion_tokens": 300,
+ "reasoning_tokens": 0,
+ "cost": 0.003272
+}

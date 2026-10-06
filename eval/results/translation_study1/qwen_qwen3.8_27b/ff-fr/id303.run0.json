@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "ff-fr",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Les entreprises japonaises ont investi des capitaux et, selon le ministère japonais du Commerce, de l’Industrie et de l’Énergie (METI), elles ont créé 27 emplois directs et indirects.",
+ "provider": "DekaLLM",
+ "latency_s": 1.95,
+ "prompt_tokens": 104,
+ "completion_tokens": 47,
+ "cost": 0.000146096
+}

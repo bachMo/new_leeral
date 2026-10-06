@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-wo",
+ "sentence_id": 291,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ndax ci leeral bi, dokiman bi dina ko waxal ci njugulem na gara ci seet bi wu Palestine dina ko doxal ci baasil bu nag ci seet yi nu ngi am kaakam ba 1967 Yaram-Yaram Digal bi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.47,
+ "prompt_tokens": 85,
+ "completion_tokens": 75,
+ "cost": 0.00046
+}

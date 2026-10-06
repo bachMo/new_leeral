@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "ff-en",
+ "sentence_id": 548,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "But before dawn, they came and broke the barrier and brought it, because the soldiers were more than 800,000 from Russia's side and entered their camp, and they did it, the soldiers of Belarus and Ukraine, after they entered Portugal's side of the city of Poland. Making a ban, they chose a peaceful meeting and made a bridge between the people of Russia and the people of Poland.",
+ "provider": "Google",
+ "latency_s": 0.77,
+ "prompt_tokens": 157,
+ "completion_tokens": 87,
+ "cost": 5.05e-05
+}

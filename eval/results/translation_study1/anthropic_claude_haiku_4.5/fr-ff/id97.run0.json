@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dr Tony Moll woni ndee tuberculosis multiresistaŋce (TB-MR) e leydi Koofar-Afrika KwaZulu-Natal.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.66,
+ "prompt_tokens": 86,
+ "completion_tokens": 45,
+ "cost": 0.000311
+}

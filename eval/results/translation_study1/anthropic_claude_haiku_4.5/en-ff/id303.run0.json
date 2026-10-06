@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 303,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jaapoŋ Ministry of Economy, Trade and Industry (METI) yeeso ko'e naataa 27 accidents related to devices.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.42,
+ "prompt_tokens": 77,
+ "completion_tokens": 38,
+ "cost": 0.000267
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "wo-fr",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Dans les deux semaines, les Américains et les soldats de la France libre ont aidé l'ouest de la France et ont traversé vers l'Allemagne.\n\nHmm, let me reconsider: \"Ci ñaari ayubés dong\" — \"ayubés\" is likely \"semaines\" (from Arabic/ Wolof \"ayubés\" = week). \"dong\" = only. \"wallu nañu\" = have helped / liberated? \"sowwu France\" = west of France. \"jall ci almañ\" = crossed to Germany.\n\nSeulement en deux semaines, les Américains et les soldats de la France libre ont secouru l'ouest de la France et sont passés en Allemagne.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.66,
+ "prompt_tokens": 98,
+ "completion_tokens": 224,
+ "reasoning_tokens": 0,
+ "cost": 0.002436
+}

@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "wo-fr",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La route de Dakar est divisée en deux voies, ce qui nous permet de dépasser les véhicules pour gagner en vitesse et transporter davantage de marchandises sur des routes plus sûres.",
+ "provider": "Ionstream",
+ "latency_s": 2.2,
+ "prompt_tokens": 113,
+ "completion_tokens": 37,
+ "cost": 9.70409e-05
+}

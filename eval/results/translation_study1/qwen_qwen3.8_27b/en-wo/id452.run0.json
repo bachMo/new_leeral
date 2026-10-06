@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-wo",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ci yoon yii, yàllaay yu dëgër nañu am ci diggante ay baay yu bari yu doxoon ngir jëfandikoo trône bi.",
+ "provider": "DekaLLM",
+ "latency_s": 5.39,
+ "prompt_tokens": 56,
+ "completion_tokens": 48,
+ "cost": 0.000146744
+}

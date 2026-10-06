@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "fr-ff",
+ "sentence_id": 114,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Wadde ɗiɗi woni faamii ɓe yimɓe India waɗiima nder waɗde fow e waɗɗere heɓɓugo: ɓe yiɗiima naatnoyɓe naange leydi ɗee woni dow feere, ɓe weltoriima hay goɗɗe puccuɗe ɗiɗi e ɓe rufiima keeri nool.",
+ "provider": "OpenAI",
+ "latency_s": 2.08,
+ "prompt_tokens": 88,
+ "completion_tokens": 110,
+ "cost": 0.000242
+}

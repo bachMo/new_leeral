@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 158,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Jëm bu jëm ci njariñ yi, yoo ngi ko woowee \"The Seven Sisters\", dañu nekk ci jëm-jëm 100 ba 250 mèter (328 ba 820 feet) ci diamèter.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.91,
+ "prompt_tokens": 76,
+ "completion_tokens": 68,
+ "cost": 0.000416
+}

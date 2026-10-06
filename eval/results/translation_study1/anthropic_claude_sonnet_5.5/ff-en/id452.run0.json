@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-en",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "At that time, a fearsome conflict broke out among the elders fighting over power.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 7.25,
+ "prompt_tokens": 107,
+ "completion_tokens": 27,
+ "reasoning_tokens": 0,
+ "cost": 0.000484
+}

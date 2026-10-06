@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-en",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The road was blocked and they closed it so you know that the workers were taking out the driver who was in the red Audi TT.",
+ "provider": "Google",
+ "latency_s": 0.72,
+ "prompt_tokens": 72,
+ "completion_tokens": 27,
+ "cost": 1.8e-05
+}

@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "ff-fr",
+ "sentence_id": 93,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "La télévision montre un endroit blanc d'où sort quelque chose de la mer.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 2.36,
+ "prompt_tokens": 91,
+ "completion_tokens": 30,
+ "reasoning_tokens": 0,
+ "cost": 0.000482
+}

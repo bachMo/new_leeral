@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-wo",
+ "sentence_id": 22,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Nominasioŋ yi yeneen yi jëm ci Best Picture, Director, Cinematography, Costume Design, Film-editing, Original Score, Production Design, Sound Editing, Sound Mixing ak Original Screenplay.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.67,
+ "prompt_tokens": 77,
+ "completion_tokens": 54,
+ "cost": 0.000347
+}

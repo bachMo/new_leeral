@@ -1,0 +1,14 @@
+{
+ "model": "qwen/qwen3.8-27b",
+ "direction": "en-ff",
+ "sentence_id": 452,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "E nder ɗeen sahaaji, jaŋde mawnde nde ɓuri tiiɗde waɗii hakkunde ɓurɓe heewde e ɓe njokkondiri e taaro.",
+ "provider": "Mancer 2",
+ "latency_s": 2.69,
+ "prompt_tokens": 62,
+ "completion_tokens": 60,
+ "cost": 0.00016
+}

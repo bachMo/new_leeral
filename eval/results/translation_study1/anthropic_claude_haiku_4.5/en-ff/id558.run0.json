@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "en-ff",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Habere ko wagonwayje sifaa-ɓe taƴ wood-ɓe fof, amma ko ballal mawɓe ɗum-ɓe ko waawi ɗe jokka speeds-ɓe mawɗi haa ko jokka loads-ɓe mawɗi moƴ ko roads-ɓe ɗum-ɓe ɗe nder ɓernde ɗe.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 3.24,
+ "prompt_tokens": 84,
+ "completion_tokens": 126,
+ "cost": 0.000714
+}

@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 733,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "The Sundarbans are among the areas that UNESCO calls world heritage sites. The entire coast belonging to the country of India is what they call the Sundarbans national park.",
+ "provider": "OpenAI",
+ "latency_s": 1.16,
+ "prompt_tokens": 85,
+ "completion_tokens": 53,
+ "cost": 0.00012725
+}

@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "fr-ff",
+ "sentence_id": 97,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Doktoor Tony Moll hebbii yiyde tuberkulosis nde ɓuri heewde ko waɗata (TB-MR) e diiwaan Afrik worgo wiyeteende KwaZulu-Natal.",
+ "provider": "Google",
+ "latency_s": 0.77,
+ "prompt_tokens": 67,
+ "completion_tokens": 48,
+ "cost": 2.59e-05
+}

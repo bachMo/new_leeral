@@ -1,0 +1,15 @@
+{
+ "model": "anthropic/claude-sonnet-5.5",
+ "direction": "en-ff",
+ "sentence_id": 409,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ko ngam hojomaaji ɗiɗi tan, Amerikaajo'en e wallitooɓe Farayse Hesɗitiiɗe ɓe ndeeƩiti Farayse nayeejo, ɓe ngaddani Almaañ.",
+ "provider": "Claude Platform on AWS",
+ "latency_s": 4.31,
+ "prompt_tokens": 94,
+ "completion_tokens": 93,
+ "reasoning_tokens": 0,
+ "cost": 0.001118
+}

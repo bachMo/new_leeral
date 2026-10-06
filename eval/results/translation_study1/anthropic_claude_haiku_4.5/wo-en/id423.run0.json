@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-en",
+ "sentence_id": 423,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Taiwan is located in the northeastern part of the island that was previously called Formosa, or the beautiful island.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.28,
+ "prompt_tokens": 100,
+ "completion_tokens": 26,
+ "cost": 0.00023
+}

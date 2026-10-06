@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "fr-ff",
+ "sentence_id": 656,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Ɗiɗe ɗiɗi ƴoɓɓi hol ko nde mawɓe ina yidi waɗi ɗe ƴoɓɓi ƴoɗɗi, haa ko nde ɗiɗi ina mawɓe ɗo waɗi walla ina waɗi haa waɗi waɗi ɗiɗi.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 2.91,
+ "prompt_tokens": 97,
+ "completion_tokens": 121,
+ "cost": 0.000702
+}

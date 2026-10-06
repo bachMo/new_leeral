@@ -1,0 +1,14 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "direction": "wo-fr",
+ "sentence_id": 283,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'année dernière, ils ont dû vendre leur voiture de luxe car ils n'avaient pas assez d'argent pour payer les frais d'entretien de l'Audi TT qui était en panne.",
+ "provider": "Amazon Bedrock",
+ "latency_s": 1.98,
+ "prompt_tokens": 92,
+ "completion_tokens": 59,
+ "cost": 0.000387
+}

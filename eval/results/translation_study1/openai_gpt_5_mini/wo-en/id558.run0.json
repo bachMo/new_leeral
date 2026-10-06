@@ -1,0 +1,14 @@
+{
+ "model": "openai/gpt-5-mini",
+ "direction": "wo-en",
+ "sentence_id": 558,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "Because the paths of the corridors are two lanes that run alongside each other, we have placed the gates to close them so that we can have security and create many access points on the main road that are currently broader.",
+ "provider": "OpenAI",
+ "latency_s": 1.22,
+ "prompt_tokens": 96,
+ "completion_tokens": 61,
+ "cost": 0.000146
+}

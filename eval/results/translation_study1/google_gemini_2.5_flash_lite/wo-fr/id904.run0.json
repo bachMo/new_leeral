@@ -1,0 +1,14 @@
+{
+ "model": "google/gemini-2.5-flash-lite",
+ "direction": "wo-fr",
+ "sentence_id": 904,
+ "run": 0,
+ "ok": true,
+ "error": null,
+ "content": "L'archipel se trouve à 120 km de la péninsule. Le plus grand est l'île du roi George avec le campement de Villa Las Estrellas.",
+ "provider": "Google",
+ "latency_s": 0.58,
+ "prompt_tokens": 69,
+ "completion_tokens": 39,
+ "cost": 2.25e-05
+}
