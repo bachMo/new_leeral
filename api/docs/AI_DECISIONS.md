@@ -477,7 +477,46 @@ un document, la qualité a été jugée prioritaire sur le facteur 28 en coût.
 
 ---
 
-## 23. Ce qui n'a pas été transféré tel quel
+## 23. Catalogue fermé pour les moments de prise, mécanisme prêt mais vide
+
+**Décision (7 octobre 2026).** `real/safety/posology_phrases.py` (`localize_posology_phrase`) :
+même mécanisme que `safety/dates.py` pour les mois (décision 14) — substitution déterministe
+d'une phrase connue puis protection du résultat avant traduction — appliqué cette fois aux
+expressions de moment de prise (« avant le repas », « au coucher », « à jeun »...). Branché dans
+`Translator.localize()` (`app/ai/real/translation.py`, `_protect_known_phrases`), à côté des
+mois. Volontairement limité à des **expressions multi-mots spécifiques au contexte médical** —
+jamais un connecteur isolé comme « pendant » ou « jours », trop génériques et ambigus pour être
+substitués sans risque dans un document qui n'est pas une ordonnance (contrairement aux mois,
+sans ambiguïté possible hors contexte).
+
+**`TRANSLATED_TIMING` est livré vide** (`{Language.WOLOF: {}, Language.PULAAR: {}, Language.SERER:
+{}}`), à la différence du tableau des mois (décision 14, rempli en DRAFT). Tant qu'une entrée n'y
+est pas, `localize_posology_phrase` ne substitue rien : le comportement actuel (traduction par
+`claude-sonnet-5.5`, décision 22) continue de s'appliquer, sans régression. Un seul changement de
+comportement pour l'instant : le prompt de style (`ANALYZE_DOCUMENT`,
+`PRESCRIPTION_SAFETY_RULES`) interdit désormais explicitement les expressions idiomatiques et le
+jargon, pour faciliter la traduction en amont — indépendant du catalogue.
+
+**Raison du choix (vide plutôt que DRAFT comme les mois).** Une consigne de moment de prise mal
+traduite a un impact santé réel et direct si elle est fausse (« avant » devenu « après » le repas,
+par exemple), contrairement au nom d'un mois où l'impact d'une erreur est une confusion de date.
+Ma confiance dans une formulation wolof/pulaar/sérère que je rédigerais moi-même est plus faible
+ici qu'pour les mois, et l'enjeu plus grave si cette confiance est mal placée — décision prise
+avec l'utilisateur de ne pas répéter la posture DRAFT de la décision 14 à ce niveau de risque.
+**Remplir `TRANSLATED_TIMING` nécessite une relecture par un locuteur natif et, idéalement, un
+pharmacien avant tout usage en production** (même exigence que `pharmacology_rules.csv`,
+`reviewed_by` vide, décision 7).
+
+**Point 2 du même chantier (ancrer l'explication sur la notice officielle du médicament) : non
+traité, hors de portée d'une session de code.** Construire une base de notices (RCP/BDPM) vérifiée
+est un travail de sourcing de contenu médical structuré avec relecture professionnelle — exactement
+ce que la décision 3 exclut déjà délibérément du lexique (« la responsabilité la plus lourde à
+porter pour une petite équipe »). Fabriquer un substitut moi-même aurait produit du contenu qui
+ressemble à une notice validée sans en être une, plus dangereux que de ne rien livrer.
+
+---
+
+## 24. Ce qui n'a pas été transféré tel quel
 
 Décisions du dépôt d'étude qui ne s'appliquent plus ici, pour mémoire (ne pas les réintroduire
 par erreur en pensant combler un manque) :

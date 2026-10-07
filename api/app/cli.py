@@ -147,6 +147,9 @@ async def try_document(
     questions_fr: Sequence[str],
     audio_questions: Sequence[str],
     output: str | None,
+    *,
+    back_translate: bool = False,
+    check_pronunciation: bool = False,
 ) -> None:
     ai = build_ai_engine()
     target = Language(language)
@@ -174,7 +177,16 @@ async def try_document(
             medications=analysis.medications,
         )
         report.section(f"Explanation ({target.value})")
-        await _voice(ai, report, analysis.summary_fr, target, context, "explanation")
+        await _voice(
+            ai,
+            report,
+            analysis.summary_fr,
+            target,
+            context,
+            "explanation",
+            back_translate=back_translate,
+            check_pronunciation=check_pronunciation,
+        )
         if analysis.key_points:
             report.section(f"Key points ({target.value})")
             for point in analysis.key_points:
@@ -199,7 +211,16 @@ async def try_document(
             report.line(f"grounded: {reply.grounded} | {time.perf_counter() - started:.1f}s")
             if reply.source_quote:
                 report.line(f"source: {reply.source_quote}")
-            await _voice(ai, report, reply.text_fr, target, context, f"answer-{index}")
+            await _voice(
+                ai,
+                report,
+                reply.text_fr,
+                target,
+                context,
+                f"answer-{index}",
+                back_translate=back_translate,
+                check_pronunciation=check_pronunciation,
+            )
             history.extend(
                 (
                     ConversationTurn(role="user", text_fr=question_fr),
@@ -271,15 +292,25 @@ async def _voice(
     language: Language,
     context: DocumentContext,
     name: str,
+    *,
+    back_translate: bool = False,
+    check_pronunciation: bool = False,
 ) -> None:
     localized = await ai.localize(text_fr, language, protected_terms=context.protected_terms)
     report.line(f"{language.value}: {localized.text}")
     if not localized.complete:
         report.line("warning: some sentences could not be translated")
+    if back_translate:
+        back = await ai.to_french(localized.text, language)
+        report.line(f"back to french: {back}")
+        report.line(f"(original was): {text_fr}")
     audio = await ai.speak(localized.text, language)
     path = report.directory / f"{name}-{language.value}.{audio.extension}"
     await asyncio.to_thread(path.write_bytes, audio.content)
     report.line(f"audio: {path.name} ({audio.duration_s}s)")
+    if check_pronunciation:
+        heard = await ai.transcribe(audio.content, filename=path.name, language=language)
+        report.line(f"heard back by ASR: {heard.text}")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -318,6 +349,16 @@ def main(argv: list[str] | None = None) -> None:
     trial.add_argument("--question-fr", action="append", default=[], help="in French")
     trial.add_argument("--question-audio", action="append", default=[], help="voice note file")
     trial.add_argument("--output", help="folder for audio files and report.txt")
+    trial.add_argument(
+        "--back-translate",
+        action="store_true",
+        help="translate the spoken text back to French for a drift check (extra API calls)",
+    )
+    trial.add_argument(
+        "--check-pronunciation",
+        action="store_true",
+        help="transcribe the generated audio back (ASR) to spot-check numbers/names (extra calls)",
+    )
 
     args = parser.parse_args(argv)
     if args.command == "try-document":
@@ -338,6 +379,8 @@ def main(argv: list[str] | None = None) -> None:
             args.question_fr,
             args.question_audio,
             args.output,
+            back_translate=args.back_translate,
+            check_pronunciation=args.check_pronunciation,
         ),
     }
 

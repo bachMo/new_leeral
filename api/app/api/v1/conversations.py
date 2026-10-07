@@ -39,7 +39,17 @@ async def question_from_form(
 async def read_conversation(
     conversation_id: uuid.UUID, user: CurrentUser, service: ConversationServiceDep
 ) -> ConversationOut:
-    return ConversationOut.model_validate(await service.get(user, conversation_id))
+    conversation = await service.get(user, conversation_id)
+    document_ids = await service.documents_for(conversation.id)
+    return ConversationOut(
+        id=conversation.id,
+        kind=conversation.kind,
+        document_id=conversation.document_id,
+        document_ids=list(document_ids),
+        language=conversation.language,
+        last_message_at=conversation.last_message_at,
+        created_at=conversation.created_at,
+    )
 
 
 @router.get("/{conversation_id}/messages", response_model=list[MessageOut])
@@ -70,12 +80,13 @@ async def ask(
     text_language: Annotated[TextLanguage | None, Form()] = None,
     suggested_question_id: Annotated[uuid.UUID | None, Form()] = None,
     audio: Annotated[UploadFile | None, File()] = None,
+    document_id: Annotated[uuid.UUID | None, Form()] = None,
 ) -> ExchangeOut:
     conversation = await service.get(user, conversation_id)
     question = await question_from_form(
         container, text, text_language, suggested_question_id, audio
     )
-    exchange = await service.ask(user, conversation, question)
+    exchange = await service.ask(user, conversation, question, target_document_id=document_id)
     return ExchangeOut(
         question=presenter.message(exchange.question), answer=presenter.message(exchange.answer)
     )

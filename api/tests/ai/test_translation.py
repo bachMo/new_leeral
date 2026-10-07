@@ -2,8 +2,10 @@ import json
 import re
 
 import httpx
+import pytest
 
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
+from app.ai.real.safety import posology_phrases
 from app.ai.real.translation import Translator
 from app.ai.settings import AiSettings
 from app.core.languages import Language
@@ -38,6 +40,20 @@ async def test_month_name_is_protected_even_against_a_hostile_translator() -> No
 
     assert "oktoobar" in localized.text
     assert "octobre" not in localized.text
+    assert localized.complete
+
+
+async def test_posology_timing_phrase_is_protected_once_the_catalog_is_filled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setitem(
+        posology_phrases.TRANSLATED_TIMING[Language.WOLOF], "avant le repas", "bala lekk"
+    )
+
+    localized = await _translator().localize("Prends-le avant le repas.", Language.WOLOF)
+
+    assert "bala lekk" in localized.text
+    assert "repas" not in localized.text
     assert localized.complete
 
 

@@ -104,6 +104,7 @@ class WhatsAppSessionState(StrEnum):
     CHOOSING_LANGUAGE = "choosing_language"
     IDLE = "idle"
     DOCUMENT_QUESTION = "document_question"
+    CONFIRMING_QUESTION = "confirming_question"
 
 
 class WritingType(StrEnum):

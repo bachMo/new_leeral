@@ -262,6 +262,20 @@ class RealAiEngine:
             out["has_quote"] = result.source_quote is not None
             return result
 
+    async def confirm_question(self, question_fr: str) -> str:
+        with log_step(logger, "confirm_question", length=len(question_fr)) as out:
+            raw = await self._reasoner.complete_json(
+                prompts.CONFIRM_QUESTION.format(question=question_fr),
+                operation="confirm_question",
+                max_tokens=200,
+            )
+            rephrased = raw.get("rephrased_fr")
+            if not isinstance(rephrased, str) or not rephrased.strip():
+                raise AiOutputError("confirm_question without rephrased_fr")
+            result = rephrased.strip()
+            out["length"] = len(result)
+            return result
+
     async def interpret_writing_answer(self, field: WritingField, answer_fr: str) -> str | None:
         with log_step(
             logger, "interpret_writing_answer", field=field.key, length=len(answer_fr)

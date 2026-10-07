@@ -34,7 +34,9 @@ class ErrorCode(StrEnum):
     DOCUMENT_NOT_READY = "DOCUMENT_NOT_READY"
     AUDIO_UNREADABLE = "AUDIO_UNREADABLE"
     AUDIO_EMPTY = "AUDIO_EMPTY"
+    AUDIO_TOO_LONG = "AUDIO_TOO_LONG"
     QUESTION_EMPTY = "QUESTION_EMPTY"
+    QUESTION_TRANSLATION_FAILED = "QUESTION_TRANSLATION_FAILED"
 
     WRITING_NOT_COLLECTING = "WRITING_NOT_COLLECTING"
     WRITING_NO_PENDING_ANSWER = "WRITING_NO_PENDING_ANSWER"
@@ -95,7 +97,11 @@ ERROR_CATALOG: dict[ErrorCode, ErrorSpec] = {
     ErrorCode.DOCUMENT_NOT_READY: ErrorSpec(409, "Le document est encore en lecture.", True),
     ErrorCode.AUDIO_UNREADABLE: ErrorSpec(422, "Leeral n'a pas compris le message vocal."),
     ErrorCode.AUDIO_EMPTY: ErrorSpec(422, "Le message vocal est vide."),
+    ErrorCode.AUDIO_TOO_LONG: ErrorSpec(422, "Ce message vocal est trop long. Fais plus court."),
     ErrorCode.QUESTION_EMPTY: ErrorSpec(422, "Pose ta question à voix haute ou écris-la."),
+    ErrorCode.QUESTION_TRANSLATION_FAILED: ErrorSpec(
+        502, "Leeral n'a pas compris ta question dans cette langue. Écris-la en français.", True
+    ),
     ErrorCode.WRITING_NOT_COLLECTING: ErrorSpec(409, "Ce document est déjà terminé."),
     ErrorCode.WRITING_NO_PENDING_ANSWER: ErrorSpec(409, "Il n'y a pas de réponse à confirmer."),
     ErrorCode.PRACTICE_SESSION_CLOSED: ErrorSpec(409, "Cette séance est terminée."),

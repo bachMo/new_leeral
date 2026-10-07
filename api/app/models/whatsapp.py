@@ -58,4 +58,5 @@ class WhatsAppSession(Entity):
     active_conversation_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("conversations.id", ondelete="SET NULL")
     )
+    pending_question_fr: Mapped[str | None] = mapped_column(default=None)
     last_inbound_at: Mapped[datetime] = mapped_column(server_default=func.now())

@@ -141,6 +141,9 @@ class MockAiEngine:
         first = re.split(r"(?<=[.!?])\s+", context.document.summary_fr)[0]
         return Answer(text_fr=f"D'après le document : {first}", source_quote=None)
 
+    async def confirm_question(self, question_fr: str) -> str:
+        return f"Tu demandes : {question_fr}"
+
     async def interpret_writing_answer(self, field: WritingField, answer_fr: str) -> str | None:
         cleaned = answer_fr.strip().rstrip(".")
         return cleaned[:1].upper() + cleaned[1:] if cleaned else None

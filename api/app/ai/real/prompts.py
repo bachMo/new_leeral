@@ -112,8 +112,9 @@ Réponds uniquement par un objet JSON valide, sans texte autour, au format exact
 
 Règles :
 - "summary_fr" sera traduit puis lu à voix haute : phrases simples, tutoiement, pas de liste, \
-pas de sigle non expliqué. Commence par dire de quel document il s'agit et qui l'envoie, puis ce \
-qu'il faut faire et avant quand.
+pas de sigle non expliqué, pas d'expression idiomatique ni de jargon administratif ou technique \
+(une traduction automatique les rend mal). Commence par dire de quel document il s'agit et qui \
+l'envoie, puis ce qu'il faut faire et avant quand.
 - N'invente jamais une date, un montant, un nom ou une obligation qui n'est pas dans le texte.
 - N'ajoute aucun conseil, recommandation ou mise en garde qui ne figure pas explicitement dans \
 le texte. Si le document ne dit rien sur un point, n'en parle pas.
@@ -136,6 +137,14 @@ au maximum, tutoiement, mots de tous les jours. Ne rajoute aucune information.
 </explication>
 
 Réponds uniquement par un objet JSON valide : {{"summary_fr": "..."}}"""
+
+CONFIRM_QUESTION = """Reformule cette question en une phrase très courte, pour confirmer qu'on \
+l'a bien comprise avant d'y répondre. Commence par "Tu demandes" ou "Tu veux savoir". Ne réponds \
+pas à la question, reformule-la seulement, en gardant le sens exact.
+
+Question : {question}
+
+Réponds uniquement par un objet JSON valide : {{"rephrased_fr": "..."}}"""
 
 ANSWER_QUESTION = """Tu es Leeral. Tu réponds à une question sur un document, pour une personne \
 qui ne lit pas le français. Ta réponse sera traduite puis lue à voix haute.
@@ -177,6 +186,8 @@ PRESCRIPTION_SAFETY_RULES = """- C'est une ordonnance. Ne donne jamais une dose,
 prises ou une durée qui n'est pas écrit dans la liste des médicaments ci-dessus.
 - Pour une ligne marquée "à vérifier" ou "illisible", dis de demander au pharmacien.
 - Ne donne aucun avis médical : pour tout le reste, renvoie vers le pharmacien ou le médecin.
+- Phrases courtes, sans expression idiomatique ni jargon médical non expliqué : la réponse sera \
+traduite automatiquement.
 """
 
 INTERPRET_WRITING_ANSWER = """Tu aides une personne à remplir un document. On lui a posé la \

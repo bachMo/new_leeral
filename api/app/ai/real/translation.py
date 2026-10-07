@@ -9,6 +9,7 @@ from app.ai.errors import AiInputError, AiUnavailableError, TranslationError
 from app.ai.real import prompts
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
 from app.ai.real.safety.dates import localize_month_names
+from app.ai.real.safety.posology_phrases import localize_posology_phrase
 from app.ai.real.safety.protected_tokens import TokenMismatchError, protect, restore
 from app.core.languages import Language
 
@@ -33,6 +34,13 @@ def split_sentences(text: str) -> list[str]:
     return [sentence.strip() for sentence in _SENTENCE_BOUNDARY.split(text) if sentence.strip()]
 
 
+def _protect_known_phrases(sentence: str, language: Language) -> tuple[str, tuple[str, ...]]:
+    """Deterministic substitutions that must never reach the general translator unprotected."""
+    with_months, months = localize_month_names(sentence, language)
+    with_timing, timing = localize_posology_phrase(with_months, language)
+    return with_timing, (*months, *timing)
+
+
 class Translator:
     def __init__(
         self,
@@ -55,11 +63,11 @@ class Translator:
         sentences = split_sentences(text_fr)
         if not sentences:
             raise AiInputError("nothing to translate")
-        prepared = [localize_month_names(sentence, language) for sentence in sentences]
+        prepared = [_protect_known_phrases(sentence, language) for sentence in sentences]
         segments = await asyncio.gather(
             *(
-                self._translate_sentence(sentence, "fr", language, (*protected_terms, *months))
-                for sentence, months in prepared
+                self._translate_sentence(sentence, "fr", language, (*protected_terms, *extra))
+                for sentence, extra in prepared
             )
         )
         if all(segment.translated is None for segment in segments):

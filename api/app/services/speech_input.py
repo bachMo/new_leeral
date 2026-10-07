@@ -1,6 +1,7 @@
 from pathlib import PurePosixPath
 
 from app.ai.engine import AiEngine
+from app.ai.errors import TranslationError
 from app.core.errors import AppError, ErrorCode
 from app.core.languages import Language, TextLanguage
 from app.integrations.storage import FileStorage
@@ -31,6 +32,9 @@ class SpeechInput:
         if message.language is TextLanguage.FRENCH:
             message.text_fr = text
         else:
-            message.text_fr = await self._ai.to_french(text, Language(message.language.value))
+            try:
+                message.text_fr = await self._ai.to_french(text, Language(message.language.value))
+            except TranslationError as exc:
+                raise AppError(ErrorCode.QUESTION_TRANSLATION_FAILED) from exc
         message.status = MessageStatus.READY
         return message.text_fr
