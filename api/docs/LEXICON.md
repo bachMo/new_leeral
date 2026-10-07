@@ -74,6 +74,14 @@ Règle codée dans `app/ai/real/safety/lexicon.py` (`Lexicon.lookup`, `TRUSTED_S
 `verified` ne peut jamais produire une ligne `sure`.** Testé dans `tests/ai/test_lexicon.py` et
 `tests/ai/test_prescription_verification.py`.
 
+`Lexicon` retient aussi, par terme, l'ensemble des `kind` (`brand`/`dci`/`dci_core`) sous lesquels
+il apparaît avec un statut de confiance dans `lexicon_terms.csv`. `Lexicon.lookup(name,
+dci_only=True)` restreint la recherche (correspondance exacte et suggestion floue) aux termes dont
+au moins un `kind` est `dci` ou `dci_core` — utilisé par `verify_line` pour vérifier une DCI
+rapportée par le modèle de lecture (`MedicationReading.dci_read`) sans jamais la confondre avec une
+marque homonyme. Voir `AI_DECISIONS.md` décision 17 : cette DCI n'est acceptée que si elle est
+explicitement écrite sur l'ordonnance, jamais déduite de la marque.
+
 ---
 
 ## 4. Le pipeline

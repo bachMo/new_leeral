@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+import sys
 import time
 from collections.abc import Sequence
 from datetime import datetime
@@ -282,6 +283,11 @@ async def _voice(
 
 
 def main(argv: list[str] | None = None) -> None:
+    # Windows consoles default to a codepage (e.g. cp1252) that lacks wolof/pulaar letters
+    # such as "ŋ" : printing one would otherwise crash this CLI instead of just this letter.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(prog="leeral", description="Leeral administration")
     commands = parser.add_subparsers(dest="command", required=True)
 
@@ -318,7 +324,8 @@ def main(argv: list[str] | None = None) -> None:
         missing = [raw for raw in (*args.files, *args.question_audio) if not Path(raw).is_file()]
         if missing:
             raise SystemExit(f"file not found: {', '.join(missing)}")
-    configure_logging("WARNING", json_output=False)
+    diagnostic = args.command in {"try-document", "check-ai"}
+    configure_logging("INFO" if diagnostic else "WARNING", json_output=False)
     runners = {
         "seed-channel": lambda: seed_channel(args.display_number, args.language),
         "seed-words": lambda: seed_words(args.language),

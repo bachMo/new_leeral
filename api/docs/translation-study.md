@@ -259,3 +259,19 @@ Le choix ci-dessus est implémenté dans `app/ai/real/` :
   dialogue vocal (voir `AI_MODULE.md`).
 
 Tests : `tests/ai/test_protected_tokens.py`, `tests/ai/test_real_engine.py`.
+
+---
+
+## 9. Suite (7 octobre 2026) : bascule vers `anthropic/claude-sonnet-5.5`
+
+Le compromis coût/qualité de la section 6 a été revu après des erreurs réelles observées via
+`leeral try-document` sur `api/samples/facture.jpg`, absentes de l'échantillon FLORES-200 de
+cette étude : « 15 jours » → « 15 at » (15 années), « courant coupé » → « sa lékk bi » (non-sens).
+`claude-sonnet-5.5` — déjà le meilleur chrF de cette étude sur chaque paire (tableau 4.1), écarté
+à l'époque pour le coût (28×) et la latence (3,8×), jamais pour la qualité — corrige les deux sur
+reproduction directe. Devenu modèle **principal** (`gpt-5-mini` inchangé en secours).
+
+Un nouvel incident méthodologique (brouillon visible suivi de « Rewrite properly: » sur les
+phrases longues) a été trouvé et corrigé en validant ce changement — même famille que l'incident
+de troncature de la section 3. Détail complet, limites non résolues (pulaar toujours non
+validé par un locuteur natif) et raisonnement : `AI_DECISIONS.md`, décision 22.

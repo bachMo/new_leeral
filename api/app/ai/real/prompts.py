@@ -50,11 +50,22 @@ incertain, mets null pour ce champ et indique "legible": "partial" ou "no".
 - "page_cut_off": true si le haut ou le bas de la page n'apparaît pas dans la photo (la page \
 continue visiblement hors du cadre, il peut donc manquer une ligne de médicament). false si \
 toute la page est dans le cadre, même si certaines lignes sont illisibles.
+- "form" est la forme pharmaceutique (comprimé, sirop, gélule...) seulement si elle est écrite ; \
+sinon null. Ne la déduis jamais du nom du médicament.
+- "instructions" est une consigne particulière écrite sur la ligne, autre que le moment de prise \
+(par exemple "à jeun", "ne pas écraser") ; sinon null.
+- "dci_read" est la dénomination commune internationale (DCI) seulement si elle est écrite \
+explicitement sur l'ordonnance, en plus ou à la place du nom de marque ; sinon null. Ne déduis \
+jamais la DCI à partir du nom de marque : si seule la marque est écrite, laisse "dci_read" à null.
+- "line_position" est la position verticale approximative du milieu de cette ligne sur la page, \
+entre 0 (tout en haut) et 1 (tout en bas) ; une estimation grossière suffit, mets null si tu ne \
+peux vraiment pas estimer.
 
 Format exact :
 {"document_language": "fr|en|mixed|unknown", "page_cut_off": false,
- "medications": [{"raw": "ligne telle que lue", "name_read": "...", "strength": "...",
- "times_per_day": 3, "duration_days": 7, "timing": "...", "legible": "yes|partial|no"}]}"""
+ "medications": [{"raw": "ligne telle que lue", "name_read": "...", "dci_read": "...",
+ "strength": "...", "form": "...", "times_per_day": 3, "duration_days": 7, "timing": "...",
+ "instructions": "...", "line_position": 0.4, "legible": "yes|partial|no"}]}"""
 
 READ_PRESCRIPTION_TEXT = (
     READ_PRESCRIPTION.replace(
@@ -88,16 +99,33 @@ Réponds uniquement par un objet JSON valide, sans texte autour, au format exact
  "summary_fr": "explication orale en 4 à 8 phrases courtes",
  "key_points": [{{"kind": "action|date|amount|info", "tag": "un mot", "title_fr": "...",
    "detail_fr": "... ou null", "due_date": "AAAA-MM-JJ ou null", "amount_xof": entier ou null}}],
- "suggested_questions": ["question 1", "question 2", "question 3"]}}
+ "suggested_questions": ["question 1", "question 2", "question 3"],
+ "contract": null si ce n'est pas un contrat, sinon
+   {{"duration": "durée de l'engagement telle qu'écrite, ou null",
+    "auto_renewal": "condition de reconduction telle qu'écrite, ou null",
+    "termination": "condition de résiliation telle qu'écrite, ou null",
+    "penalties": ["pénalité telle qu'écrite", "..."],
+    "parties": ["partie au contrat telle qu'écrite", "..."],
+    "amounts": [{{"label": "à quoi correspond le montant", "amount_xof": entier ou null}}],
+    "vigilance_points": ["point auquel la personne doit prêter attention, décrit sans jugement",
+     "..."]}}}}
 
 Règles :
 - "summary_fr" sera traduit puis lu à voix haute : phrases simples, tutoiement, pas de liste, \
 pas de sigle non expliqué. Commence par dire de quel document il s'agit et qui l'envoie, puis ce \
 qu'il faut faire et avant quand.
 - N'invente jamais une date, un montant, un nom ou une obligation qui n'est pas dans le texte.
+- N'ajoute aucun conseil, recommandation ou mise en garde qui ne figure pas explicitement dans \
+le texte. Si le document ne dit rien sur un point, n'en parle pas.
 - 2 à 5 points clés, du plus important au moins important.
 - Les questions proposées sont celles que la personne se poserait, formulées à la première \
-personne, courtes."""
+personne, courtes.
+- Remplis "contract" uniquement si le document est un contrat ou un engagement avec des \
+conditions (durée, résiliation, pénalités...). Chaque champ reprend ce qui est écrit dans le \
+texte, jamais une valeur déduite ou habituelle pour ce type de contrat. Laisse à null ou vide \
+ce qui n'est pas écrit.
+- Pour "vigilance_points" : décris le fait sans jugement ni recommandation. Ne dis jamais à la \
+personne de signer, de ne pas signer, ou ce qu'elle devrait faire. Ne donne aucun avis juridique."""
 
 SIMPLIFY = """Réécris cette explication pour une personne qui a du mal à comprendre. \
 Garde seulement l'essentiel : ce que c'est, ce qu'il faut faire, avant quand. 3 phrases courtes \
@@ -201,6 +229,9 @@ translation. No explanation, no quotes, no notes. The text may contain markers o
 (medication names, numbers) that must not be altered. Copy each marker into your translation \
 EXACTLY as written, unchanged, in the equivalent position for its meaning in the sentence. Never \
 translate, reformat, remove, or duplicate a marker.
+Never write a draft, a correction, a rewrite, or any comment about your own answer — even if your \
+first attempt feels wrong. Output must be a single line with no line breaks: only the final \
+translation, nothing before it and nothing after it.
 
 Text:
 {text}"""

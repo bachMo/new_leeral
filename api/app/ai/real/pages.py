@@ -50,6 +50,33 @@ def prepare_image(image: bytes, *, max_side: int, max_bytes: int) -> tuple[bytes
     raise AiInputError("image remains too large after compression")
 
 
+DEFAULT_CROP_BAND_FRACTION = 0.12
+
+
+def crop_band(
+    image: bytes, position: float, *, band_fraction: float = DEFAULT_CROP_BAND_FRACTION
+) -> bytes:
+    """Crop a full-width horizontal band centered on a normalized vertical position.
+
+    `position` is 0 (top of the page) to 1 (bottom) — an approximate estimate from the reading
+    model, never an exact bounding box. See AI_DECISIONS.md.
+    """
+    try:
+        with Image.open(io.BytesIO(image)) as opened:
+            picture = ImageOps.exif_transpose(opened).convert("RGB")
+    except (UnidentifiedImageError, OSError) as exc:
+        raise AiInputError("image cannot be decoded") from exc
+    width, height = picture.size
+    clamped = max(0.0, min(1.0, position))
+    half_band = band_fraction / 2
+    top = max(0, int((clamped - half_band) * height))
+    bottom = min(height, max(top + 1, int((clamped + half_band) * height)))
+    cropped = picture.crop((0, top, width, bottom))
+    buffer = io.BytesIO()
+    cropped.save(buffer, format="JPEG", quality=85, optimize=True)
+    return buffer.getvalue()
+
+
 class PageReader:
     def __init__(
         self,

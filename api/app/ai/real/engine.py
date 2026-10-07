@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from collections.abc import Sequence
+from dataclasses import replace
 from datetime import date
 
 import httpx
@@ -26,7 +27,7 @@ from app.ai.quality import assess_quality
 from app.ai.real import analysis, dialogue, prescription, prompts, vocabulary, writing
 from app.ai.real.clients.kiriku import KirikuClient
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
-from app.ai.real.pages import PageReader
+from app.ai.real.pages import Classification, PageReader
 from app.ai.real.reasoning import Reasoner
 from app.ai.real.safety.lexicon import get_lexicon
 from app.ai.real.safety.pharmacology import get_pharmacology_rules
@@ -65,8 +66,18 @@ class RealAiEngine:
         )
         self._kiriku = kiriku
         self._pages = PageReader(openrouter, settings, reader_a, reader_b)
+        lexicon = get_lexicon(
+            fuzzy_threshold=settings.lexicon_fuzzy_threshold,
+            min_term_length=settings.lexicon_min_term_length,
+        )
         self._prescriptions = prescription.PrescriptionReader(
-            openrouter, self._pages, reader_a, reader_b, get_lexicon(), get_pharmacology_rules()
+            openrouter,
+            self._pages,
+            reader_a,
+            reader_b,
+            lexicon,
+            get_pharmacology_rules(),
+            name_match_threshold=settings.prescription_name_match_threshold,
         )
         self._reasoner = Reasoner(
             openrouter,
@@ -132,6 +143,7 @@ class RealAiEngine:
             (page for page in pages if page.image is not None or (page.text or "").strip()),
             None,
         )
+        classification: Classification | None = None
         if first_page is not None:
             classification = await self._pages.classify(first_page)
             if classification.document_type == PRESCRIPTION:
@@ -155,13 +167,28 @@ class RealAiEngine:
                 cut_off=cut_off,
                 page_texts=tuple(page_texts),
             )
-        return await analysis.analyze_text(
+        uncertain = (
+            classification is None
+            or not classification.confident
+            or classification.document_type == "unknown"
+        )
+        result = await analysis.analyze_text(
             self._reasoner,
             full_text,
             page_texts=tuple(page_texts),
             today=date.today(),
             cut_off=cut_off,
+            uncertain=uncertain,
         )
+        if classification is not None:
+            result = replace(
+                result,
+                extracted_data={
+                    **result.extracted_data,
+                    "classification": classification.model_dump(mode="json"),
+                },
+            )
+        return result
 
     async def simplify(self, document: DocumentContext) -> str:
         with log_step(logger, "simplify", is_prescription=document.is_prescription) as out:

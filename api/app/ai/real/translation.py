@@ -8,6 +8,7 @@ from app.ai.contracts import LocalizedText
 from app.ai.errors import AiInputError, AiUnavailableError, TranslationError
 from app.ai.real import prompts
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
+from app.ai.real.safety.dates import localize_month_names
 from app.ai.real.safety.protected_tokens import TokenMismatchError, protect, restore
 from app.core.languages import Language
 
@@ -54,10 +55,11 @@ class Translator:
         sentences = split_sentences(text_fr)
         if not sentences:
             raise AiInputError("nothing to translate")
+        prepared = [localize_month_names(sentence, language) for sentence in sentences]
         segments = await asyncio.gather(
             *(
-                self._translate_sentence(sentence, "fr", language, protected_terms)
-                for sentence in sentences
+                self._translate_sentence(sentence, "fr", language, (*protected_terms, *months))
+                for sentence, months in prepared
             )
         )
         if all(segment.translated is None for segment in segments):
@@ -114,6 +116,12 @@ class Translator:
                     if profile is self._fallback:
                         raise
                     raw = await self._call(self._fallback, protected.text, source, target_code)
+                if "\n" in raw:
+                    logger.warning(
+                        "translation_multiline_output",
+                        extra={"attempt": attempt, "target": target_code},
+                    )
+                    continue
                 try:
                     return _Segment(sentence, restore(raw, protected))
                 except TokenMismatchError as exc:

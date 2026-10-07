@@ -39,12 +39,12 @@ todo.txt
 context.txt
 
 # Bancs d'essai IA (eval/) : données réelles, jamais commitables (documents personnels, santé).
-# Seuls le code, les tests, les données ouvertes (FLORES-200) et les rapports agrégés restent suivis.
+# Seul le code (bancs d'essai, tests) reste suivi ; les sorties (eval/results/) restent locales.
 eval/ordonnances/*
 !eval/ordonnances/EXEMPLE.truth.json
 !eval/ordonnances/.gitkeep
 eval/documents/
-eval/results/real/
+eval/results/
 eval/.venv/
 eval/.mypy_cache/
 eval/.pytest_cache/

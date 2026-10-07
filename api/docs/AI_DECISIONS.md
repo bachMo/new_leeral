@@ -69,6 +69,17 @@ LANGUAGES` accepte `srr` en entrée, vérifié sans voix de sortie correspondant
 
 **Raison.** Concentration du périmètre sur les deux langues où KIRIKU offre à la fois ASR et TTS.
 
+**Vérifié empiriquement le 7 octobre 2026** (`leeral check-ai --language sr`, après avoir
+temporairement ajouté `Language.SERER: "srr"` à `_TTS_VOICES` et `Language.SERER` à
+`AVAILABLE_LANGUAGES` pour le test) : KIRIKU refuse la requête TTS avec `400 "Unsupported voice:
+srr. Use one of ['wolof', 'pulaar']."` — réponse directe du fournisseur, pas une supposition.
+Les deux changements ont été annulés après le test. **Ne pas retenter sans revérifier la
+documentation KIRIKU au moment voulu** : rien n'indique qu'une voix sérère arrivera, mais rien
+n'indique le contraire non plus — ce test date du 7 octobre 2026, pas une garantie permanente.
+La traduction (`anthropic/claude-sonnet-5.5`) a répondu sans erreur pour le sérère pendant ce
+test, mais sans aucune validation de qualité (aucun locuteur, aucune étude — voir décision 22) :
+ça ne veut rien dire de plus que « l'appel API n'a pas échoué ».
+
 ---
 
 ## 5. Le texte structuré est la source de vérité du document
@@ -142,6 +153,11 @@ sénégalais au moment de l'étude, seul le fulfulde du Nigéria (FLORES-200) a 
 **Raison.** Étude chiffrée sur 20 phrases FLORES-200 × 8 sens × 6 modèles — voir
 `translation-study.md` pour le détail complet, y compris l'incident méthodologique corrigé en
 cours d'étude (troncature de `gemini-3.1-pro-preview` par un budget de tokens trop court).
+
+**Supersedée par la décision 22** (7 octobre 2026) : `gemini-2.5-flash-lite` remplacé par
+`anthropic/claude-sonnet-5.5` comme modèle principal, suite à des erreurs de traduction réelles
+non révélées par cette étude générique. Conservé ici pour mémoire : le raisonnement sur le choix
+du fournisseur de secours (`gpt-5-mini`) et la réserve sur le pulaar restent valables.
 
 ---
 
@@ -229,7 +245,239 @@ incomplète, où l'incertitude doit rester invisible nulle part dans l'explicati
 
 ---
 
-## 14. Ce qui n'a pas été transféré tel quel
+## 14. Noms de mois traduits par dictionnaire figé, jamais par le traducteur
+
+**Décision (7 octobre 2026).** Les jetons protégés (`real/safety/protected_tokens.py`) ne
+couvrent que les nombres et les noms de médicaments : un nom de mois français (« octobre »)
+partait en texte libre vers le traducteur, comme n'importe quel mot. Observé sur une vraie facture
+(`eval/`, voir aussi `api/samples/facture.jpg`) : « 30 octobre 2026 » devient « 30 atum 2026 »
+(« atum » = année en wolof), avec un `translation_token_mismatch duplicated=[...]` sur le nombre
+voisin — le modèle de secours corrige le jeton numérique dupliqué mais pas le mois, puisque rien
+ne lui dit que ce mot doit rester inchangé.
+
+`real/safety/dates.py` (`localize_month_names`) remplace maintenant le nom du mois français par
+son équivalent dans la langue cible **avant** l'appel au traducteur, puis l'ajoute aux
+`protected_terms` de `Translator.localize` : le mot traduit est ensuite transformé en jeton comme
+un nom de médicament, jamais retouché par le LLM.
+
+**DRAFT, non relu par un locuteur natif.** Seul « oktoobar » (octobre, wolof) est confirmé,
+d'après l'exemple donné par l'utilisateur lui-même. Les 11 autres mois wolof, et les 12 mois
+pulaar et sérère, sont une hypothèse de travail (emprunt direct du français, même schéma
+qu'« oktoobar ») — même statut que `pharmacology_rules.csv` (`reviewed_by` vide, décision 7) :
+à faire valider avant de considérer ces noms fiables en production. Le sérère est inclus bien
+qu'il ne soit pas encore dans `AVAILABLE_LANGUAGES` (décision 4), pour ne pas avoir à refaire ce
+travail quand une voix TTS sérère sera disponible.
+
+**Raison.** Un dictionnaire figé élimine cette classe d'erreur quelle que soit la qualité du
+traducteur choisi (décision 9) : les noms de mois forment un vocabulaire fermé de 12 mots, pas un
+problème de traduction générale.
+
+---
+
+## 15. Le résumé et les points clés sont filtrés des phrases contenant un chiffre inventé
+
+**Décision (7 octobre 2026).** `analysis.py` ne vérifiait l'ancrage au texte source que pour les
+champs structurés (`main_amount_xof`, `main_due_date`, et les mêmes champs par point clé) —
+jamais pour le texte libre (`summary_fr`, `title_fr`/`detail_fr`). Observé en pratique : le LLM
+ajoute parfois une information plausible mais absente du document (règle d'or n°4). `analyze_text`
+découpe maintenant `summary_fr` en phrases (`translation.split_sentences`, déjà utilisé pour la
+traduction) et retire toute phrase contenant un chiffre absent du texte lu, même principe que
+`dialogue.numbers_are_grounded` pour les réponses ; un point clé dont le titre ou le détail
+contient un chiffre non ancré est retiré en entier plutôt que bricolé. Chaque filtrage est loggé
+(`leeral.ai.analysis`, `analysis_summary_ungrounded` / `analysis_key_point_ungrounded`) pour rester
+visible plutôt que silencieux (règle d'or n°6). Le prompt `ANALYZE_DOCUMENT` interdit en outre
+explicitement d'ajouter un conseil ou une mise en garde absente du texte.
+
+**Limite assumée.** Ce filtre ne détecte que les hallucinations contenant un chiffre. Un conseil
+inventé sans aucun nombre (« contacte le service client ») n'est pas détectable par ce moyen :
+seule une vérification par un second appel LLM le pourrait, ce qui a été écarté ici pour ne pas
+aggraver la latence déjà mesurée (décision 11, et le constat du 7 octobre 2026 sur la lenteur de
+l'analyse). À surveiller via `leeral try-document` plutôt que résolu.
+
+**Raison.** Même logique que `numbers_are_grounded` (décision existante pour `dialogue.py`) :
+un chiffre absent du document source est un signal fort et vérifiable sans appel modèle
+supplémentaire, contrairement à une hallucination purement qualitative.
+
+---
+
+## 16. Classification incertaine : question suggérée, jamais une réécriture silencieuse du type
+
+**Décision (7 octobre 2026).** Quand la classification (`real/pages.py`, `PageReader.classify`)
+n'est pas confiante ou renvoie `"unknown"`, le document n'est **pas** bloqué en attente d'une
+confirmation : il suit la voie générique comme avant, mais `analyze_text` (`real/analysis.py`)
+ajoute un point clé dédié (tag `"Incertain"`) et place « Quel est ce document ? » en tête des
+questions suggérées — le circuit déjà existant (`DocumentSuggestedQuestion` →
+`POST /conversations/{id}/messages` → `QuestionAnswerer`). La réponse de l'utilisateur reste
+conversationnelle : elle n'écrit jamais `doc_type`/`category` en retour, qui restent ceux déduits
+par le LLM.
+
+**Raison.** Pas de nouveau statut `Document` ni de route de confirmation pour un cas qui n'empêche
+pas de lire le document (contrairement à une ordonnance où le doute change la sécurité affichée) :
+le mécanisme question/réponse existant suffit à faire savoir à l'utilisateur que Leeral n'est pas
+sûr, sans le nouvel état intermédiaire qu'aurait demandé une réécriture fiable du type à partir
+d'une réponse vocale libre.
+
+---
+
+## 17. DCI lue seulement si écrite, jamais déduite de la marque
+
+**Décision (7 octobre 2026).** Le nouveau champ `dci_read` (`MedicationReading`,
+`real/prompts.py`) n'est rempli par le modèle que si la DCI apparaît explicitement sur
+l'ordonnance, en plus ou à la place de la marque — jamais déduite du nom de marque lu. Vérifié par
+`Lexicon.lookup(name, dci_only=True)` (`real/safety/lexicon.py`), qui restreint la recherche aux
+termes dont le `kind` (colonne déjà présente dans `lexicon_terms.csv`, voir `LEXICON.md` §4.3) est
+`dci` ou `dci_core` — `Lexicon` conservait `kind` seulement par statut avant cette décision (le
+premier `kind` rencontré pour un terme), ce qui aurait exclu à tort un terme comme « amoxicilline »
+(à la fois marque, DCI et cœur de DCI selon la ligne du CSV) ; `kind` est maintenant un ensemble
+par terme.
+
+**Raison.** Construire une table marque→DCI (déjà calculable depuis `lexicon_entries.csv`, le
+fichier intermédiaire du pipeline de construction, non livré) aurait donné une bien meilleure
+couverture — la plupart des ordonnances n'écrivent que la marque — mais au prix d'un nouveau
+pipeline de livraison et d'une relecture de `LEXICON.md`. Pour cette itération, lire uniquement ce
+qui est écrit reste strictement dans l'esprit de la règle d'or n°1 (rien d'inventé) : un champ
+souvent vide plutôt qu'une correspondance déduite, même fiable à 99 %.
+
+---
+
+## 18. Extraction de contrat via les points clés, pas une nouvelle table
+
+**Décision (7 octobre 2026).** Les contrats n'ont pas de pipeline de double lecture dédié comme
+les ordonnances : `ANALYZE_DOCUMENT` (`real/prompts.py`) gagne un champ JSON optionnel `"contract"`
+(durée, reconduction, résiliation, pénalités, parties, montants), rempli par le même appel LLM
+unique que tout document générique, uniquement quand le document en est un. `analyze_text`
+(`real/analysis.py`, `_contract_key_points`) transforme ces champs en `KeyPointDraft` avec des tags
+dédiés (`"Durée"`, `"Reconduction"`, `"Résiliation"`, `"Pénalité"`, `"Partie"`, `"Montant"`) —
+le même mécanisme déjà utilisé pour tout document générique (`DocumentKeyPoint`, audio générée
+automatiquement par `explanation_builder.py`). Pas de nouvelle table, pas de nouveau schéma de
+sortie.
+
+**Limite assumée.** Les montants sont vérifiés par `_amount_in_text` (règle d'or n°4), mais les
+champs texte libre (durée, résiliation, parties, pénalités) n'ont pas d'équivalent code pour
+vérifier leur présence mot pour mot dans le texte source — seule la consigne du prompt (« reprends
+ce qui est écrit, jamais une valeur déduite ») les protège. Documenté plutôt que caché, même
+posture que la décision 15 pour le résumé général.
+
+**Raison.** Un contrat n'a pas le même enjeu de sécurité qu'une posologie (règle d'or n°1) : pas de
+double lecture dédiée à justifier pour ce premier jet, et réutiliser `key_points` évite une
+nouvelle table, un nouveau schéma de sortie et un nouveau presenter pour une structure que l'app
+mobile/web n'a pas encore demandé d'afficher différemment.
+
+---
+
+## 19. Extrait d'image par ligne : position approximative, jamais une boîte englobante
+
+**Décision (7 octobre 2026).** Pour montrer à l'utilisateur où se trouve une ligne `to_check`/
+`unreadable` sur la photo, le modèle de lecture rapporte seulement une position verticale
+approximative du milieu de la ligne (`"line_position"`, 0 à 1, `READ_PRESCRIPTION`), jamais une
+boîte englobante précise. `app/ai/real/pages.py` (`crop_band`) découpe une bande horizontale
+pleine largeur autour de cette position (moyenne des deux lectures si les deux l'ont rapportée,
+`real/prescription.py`, `_line_position_estimate`) sur l'image d'origine — pas celle
+redimensionnée pour l'appel au modèle, puisque la position est normalisée (0-1), donc indépendante
+de la résolution. Découpe faite uniquement pour une ligne non `sure` (pas besoin de vérifier
+visuellement une ligne déjà confirmée) ; le résultat (`MedicationLine.image_extract`, bytes
+transitoires) est stocké par `document_processor.py` (jamais par `app/ai/`, qui ne touche pas au
+stockage) et seule la clé (`image_key`) est conservée en base.
+
+**Raison.** Même leçon que les décisions 12 et 13 : le grounding spatial précis (coordonnées
+pixel) est un point faible connu des modèles de vision généralistes non spécialisés en détection
+d'objets, contrairement à une estimation grossière de position qu'ils rapportent de façon plus
+fiable. Une bande large plutôt qu'un point précis absorbe l'imprécision de l'estimation.
+
+---
+
+## 20. Cohérence entre pages : un médicament incohérent sur deux pages n'est jamais `sure`
+
+**Décision (7 octobre 2026).** `real/prescription.py` (`_flag_cross_page_mismatches`), appelée en
+fin de `read_pages` une fois toutes les pages lues : si le même médicament (nom affiché après
+lexique) apparaît sur deux pages différentes avec un champ renseigné des deux côtés et différent
+(`strength`, `times_per_day`, `duration_days`, `timing` — l'absence d'un côté n'est pas un
+désaccord), les deux lignes repassent à `to_check` (jamais rétrogradées si déjà `unreadable`) avec
+`pharmacology_flags` complété par `"cross_page_mismatch"`. Les champs déjà masqués pour une ligne
+`to_check` (`prescription_text.py`) le restent automatiquement.
+
+**Raison.** Une reprise de photo dupliquée (même page photographiée deux fois avec un résultat de
+lecture légèrement différent) ou une vraie incohérence sur l'ordonnance ne doivent jamais aboutir à
+deux lignes `sure` contradictoires : règle d'or n°3 (l'incertitude est toujours visible), appliquée
+ici à travers les pages plutôt qu'à travers les deux modèles d'une même page.
+
+---
+
+## 21. Lecture de contrat : avertissement juridique systématique, jamais de conseil de signature
+
+**Décision (7 octobre 2026).** `ANALYZE_DOCUMENT` gagne `"vigilance_points"` dans le bloc
+`"contract"`, avec une règle explicite dans le prompt : ne jamais dire de signer ou de ne pas
+signer, ne donner aucun avis juridique, décrire seulement ce qui est écrit. `analysis.py`
+(`_contract_key_points`) ajoute en **premier** point clé, de façon déterministe (texte fixe, pas
+généré par le LLM, même principe que `CUT_OFF_WARNING`) : « Ceci n'est pas un avis juridique. Pour
+toute décision, demande à un professionnel du droit. » (tag `"Avis"`). Les points de vigilance
+suivent (tag `"Vigilance"`), vérifiés par `_is_grounded` comme les autres champs libres du contrat
+(décision 18).
+
+**Raison.** Un avertissement généré par le LLM pourrait être omis ou reformulé de façon à en
+atténuer la portée ; un texte fixe garantit qu'il est systématiquement présent dès qu'un contrat
+est détecté, cohérent avec la règle d'or n°5 (aucun avis juridique précis) et le principe déjà
+appliqué à `CONTRACT_DISCLAIMER` : jamais de responsabilité déléguée à la qualité d'une génération.
+
+---
+
+## 22. Changement de traducteur principal : `anthropic/claude-sonnet-5.5`
+
+**Décision (7 octobre 2026).** `TRANSLATOR_MODEL_PRIMARY` passe de `google/gemini-2.5-flash-lite`
+à `anthropic/claude-sonnet-5.5` (`reasoning_effort=minimal` — ce modèle refuse `"none"`, même
+incident déjà rencontré dans l'étude initiale et avec `meta/muse-glimmer-30b`). `gpt-5-mini`
+inchangé en secours (toujours deux fournisseurs différents). Déclenché par des erreurs réelles sur
+la facture de test (`api/samples/facture.jpg`), observées via `leeral try-document` et absentes de
+l'échantillon FLORES-200 de `translation-study.md` : « 15 jours » traduit en « 15 at » (15
+**années** en wolof) et « courant coupé » traduit en « sa lékk bi » (« ta nourriture », non-sens).
+`claude-sonnet-5.5` corrige les deux sur reproduction directe, et obtenait déjà le meilleur chrF de
+l'étude sur toutes les paires (décision 9, section 4) — simplement écarté à l'époque pour son coût
+(28× `gemini-2.5-flash-lite`) et sa latence (3,8×), pas pour sa qualité.
+
+**Deux défauts trouvés en testant ce changement, corrigés avant la bascule :**
+1. Sur la phrase la plus longue, `claude-sonnet-5.5` a renvoyé un premier essai suivi
+   littéralement du texte « Rewrite properly: » puis d'un second essai — les deux bouts partaient
+   dans l'audio final, sans qu'aucun jeton protégé ne soit perdu pour le détecter. Même famille
+   d'incident que la troncature de `gemini-3.1-pro-preview` (décision 9) : un modèle qui ne
+   respecte pas « output only the translation » sur les textes longs. Corrigé par une consigne
+   explicite ajoutée à `prompts.TRANSLATE` (interdiction de brouillon ou de commentaire sur sa
+   propre réponse) et un garde-fou dans `Translator._translate_sentence`
+   (`app/ai/real/translation.py`) : toute sortie contenant un retour à la ligne est traitée comme
+   un échec et relance la boucle de secours, exactement comme un jeton manquant ou dupliqué.
+2. Sans rapport avec le choix du modèle : la console Windows plantait (`UnicodeEncodeError`) sur
+   la lettre « ŋ », absente du codepage par défaut — touchait `leeral try-document`/`check-ai`
+   avec n'importe quel modèle produisant cette lettre. Corrigé dans `app/cli.py` (`sys.stdout`/
+   `sys.stderr` reconfigurés en UTF-8 au démarrage de `main()`).
+
+**Limite non résolue par ce changement.** La réserve de la décision 9 sur le pulaar reste entière
+— `claude-sonnet-5.5` n'a pas été testé contre un corpus de pulaar sénégalais validé, seulement
+contre le fulfulde du Nigéria (`translation-study.md`, section 2.2) et contre une seule facture en
+wolof. Aucune relecture par un locuteur natif (wolof ou pulaar) n'a encore eu lieu sur ce
+changement.
+
+**Le sérère n'a pas de statut « non résolu » ici : il n'a simplement jamais été évalué, par aucun
+traducteur, ancien ou nouveau.** `ensure_available()` (`app/core/languages.py`) empêche tout
+compte utilisateur d'avoir `language=sr` tant qu'aucune voix KIRIKU n'existe pour cette langue
+(décision 4) — `Translator.localize()` ne reçoit donc jamais le sérère en conditions réelles, et
+`leeral try-document`/`check-ai` ne l'acceptent même pas en argument (`--language` limité à
+`AVAILABLE_LANGUAGES`). `translation-study.md` n'a testé ni le sérère ni un proxy pour cette
+langue (contrairement au pulaar avec le fulfulde du Nigéria) : aucune mesure chrF, aucune
+comparaison de modèle n'existe sur le sérère, pour `claude-sonnet-5.5` comme pour
+`gemini-2.5-flash-lite` avant lui. Le tableau de mois en sérère (décision 14) est une
+extrapolation du schéma wolof/pulaar sans aucun mot confirmé par un locuteur, à la différence
+d'« oktoobar » en wolof. Le jour où une voix TTS sérère sera disponible, le choix du traducteur
+pour cette langue devra être étudié depuis zéro, pas supposé hérité de ce qui a été décidé ici
+pour le wolof et le pulaar.
+
+**Raison.** Le compromis coût/qualité de la décision 9 a été pris sur un échantillon générique
+(FLORES-200) qui ne représente pas le vocabulaire administratif réel des documents Leeral — le
+chrF le plus proche de Sonnet (`gpt-5-mini`, −5,2 points) n'empêchait pas des erreurs de sens
+franches sur ce vocabulaire précis. Face à des utilisateurs qui n'ont que l'audio pour comprendre
+un document, la qualité a été jugée prioritaire sur le facteur 28 en coût.
+
+---
+
+## 23. Ce qui n'a pas été transféré tel quel
 
 Décisions du dépôt d'étude qui ne s'appliquent plus ici, pour mémoire (ne pas les réintroduire
 par erreur en pensant combler un manque) :

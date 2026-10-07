@@ -1,6 +1,12 @@
 from datetime import date
 
-from app.ai.real.analysis import _amount_in_text, _date_in_text, _urgency_from_due_date
+from app.ai.real.analysis import (
+    _amount_in_text,
+    _date_in_text,
+    _grounded_summary,
+    _is_grounded,
+    _urgency_from_due_date,
+)
 from app.ai.real.dialogue import numbers_are_grounded
 from app.ai.real.speech import chunk_text
 
@@ -19,6 +25,26 @@ def test_amounts_and_dates_must_appear_in_the_document() -> None:
     assert _amount_in_text(99000, text) is None
     assert _date_in_text(date(2026, 10, 30), text) == date(2026, 10, 30)
     assert _date_in_text(date(2026, 11, 2), text) is None
+
+
+def test_sentence_with_an_invented_number_is_dropped_from_the_summary() -> None:
+    text = "Montant à payer : 12 500 F CFA avant le 30/10/2026."
+    summary = (
+        "C'est une facture. Tu dois payer 12 500 francs. "
+        "Il y a une pénalité de 5000 francs si tu es en retard."
+    )
+
+    grounded = _grounded_summary(summary, text)
+
+    assert "5000" not in grounded
+    assert "12 500" in grounded
+
+
+def test_key_point_text_must_be_grounded_too() -> None:
+    text = "Montant à payer : 12 500 F CFA."
+
+    assert _is_grounded("Montant 12 500 F CFA", text)
+    assert not _is_grounded("Pénalité de 5000 F CFA", text)
 
 
 def test_close_due_dates_become_urgent() -> None:

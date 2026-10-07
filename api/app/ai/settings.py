@@ -42,8 +42,8 @@ class AiSettings(BaseSettings):
     reader_max_image_bytes: int = 8_000_000
     reader_max_image_side: int = 2200
 
-    translator_model_primary: str = "google/gemini-2.5-flash-lite"
-    translator_model_primary_reasoning_effort: ReasoningEffort = "none"
+    translator_model_primary: str = "anthropic/claude-sonnet-5.5"
+    translator_model_primary_reasoning_effort: ReasoningEffort = "minimal"
     translator_model_fallback: str = "openai/gpt-5-mini"
     translator_model_fallback_reasoning_effort: ReasoningEffort = "minimal"
     translator_timeout_seconds: float = 45.0
@@ -65,6 +65,10 @@ class AiSettings(BaseSettings):
 
     min_page_text_chars: int = 40
     mp3_bitrate_kbps: int = 64
+
+    lexicon_fuzzy_threshold: float = 0.85
+    lexicon_min_term_length: int = 3
+    prescription_name_match_threshold: float = 0.6
 
 
 @lru_cache

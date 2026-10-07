@@ -19,14 +19,24 @@ def _posology(line: MedicationLine) -> str | None:
         parts.append(f"pendant {line.duration_days} jours")
     if line.timing:
         parts.append(line.timing)
+    if line.instructions:
+        parts.append(line.instructions)
     return ", ".join(parts) if parts else None
 
 
 def _line_label(line: MedicationLine) -> str:
     name = line.display_name or "ce médicament"
-    if line.status != "sure" or not line.strength:
+    if line.status != "sure":
         return name
-    return f"{name} {line.strength}"
+    label = name
+    if line.strength:
+        label += f" {line.strength}"
+    if line.form:
+        label += f", {line.form}"
+    dci = line.display_dci
+    if dci and dci.strip().lower() != name.strip().lower():
+        label += f" ({dci})"
+    return label
 
 
 CUT_OFF_WARNING = (
