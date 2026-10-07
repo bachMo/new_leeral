@@ -36,7 +36,7 @@ _random = random.SystemRandom()
 class Exercise:
     word: Word
     translation: WordTranslation
-    choices: tuple[Word, ...]
+    choices: tuple[tuple[Word, WordTranslation | None], ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -111,6 +111,13 @@ class LearningService:
             if (word := await self._words.get(word_id)) is not None:
                 words[word.id] = word
         translations = await self._words.translations_for(word_ids, user.language)
+        choice_sets = {
+            word_id: self._choices(words[word_id], pool) for word_id in word_ids if word_id in words
+        }
+        choice_translations = await self._words.translations_for(
+            list({choice.id for choices in choice_sets.values() for choice in choices}),
+            user.language,
+        )
         session = self._sessions.add(
             PracticeSession(
                 id=uuid.uuid4(), user_id=user.id, language=user.language, started_at=now
@@ -120,7 +127,9 @@ class LearningService:
             Exercise(
                 word=words[word_id],
                 translation=translations[word_id],
-                choices=self._choices(words[word_id], pool),
+                choices=tuple(
+                    (choice, choice_translations.get(choice.id)) for choice in choice_sets[word_id]
+                ),
             )
             for word_id in word_ids
             if word_id in translations and word_id in words

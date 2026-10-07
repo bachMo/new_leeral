@@ -40,6 +40,7 @@ class WritingOutputOut(Schema):
     id: uuid.UUID
     version: int
     kind: WritingOutputKind
+    content: str
     pdf_url: str
     readback_audio_url: str | None
     created_at: datetime

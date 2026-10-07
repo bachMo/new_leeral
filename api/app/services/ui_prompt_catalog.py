@@ -1,4 +1,5 @@
 from app.core.errors import ERROR_CATALOG
+from app.services.app_guide_prompts import APP_GUIDE_PROMPTS
 
 SCREEN_PROMPTS: dict[str, str] = {
     "screen.language": "Choisis ta langue.",
@@ -45,4 +46,4 @@ def prompt_catalog() -> dict[str, str]:
         for code, spec in ERROR_CATALOG.items()
         if spec.status_code < 500 or spec.retryable
     }
-    return SCREEN_PROMPTS | errors
+    return SCREEN_PROMPTS | APP_GUIDE_PROMPTS | errors

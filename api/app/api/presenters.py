@@ -175,6 +175,7 @@ class Presenter:
             id=output.id,
             version=output.version,
             kind=output.kind,
+            content=output.content,
             pdf_url=self._url(output.pdf_key, f"leeral-{output.kind.value}-v{output.version}.pdf"),
             readback_audio_url=self.url(output.readback_audio_key),
             created_at=output.created_at,
@@ -229,8 +230,15 @@ class Presenter:
                     meaning=exercise.translation.meaning,
                     meaning_audio_url=self._url(exercise.translation.audio_key),
                     choices=[
-                        ChoiceOut(word_id=choice.id, word_fr=choice.word_fr)
-                        for choice in exercise.choices
+                        ChoiceOut(
+                            word_id=choice.id,
+                            word_fr=choice.word_fr,
+                            meaning=translation.meaning if translation else None,
+                            meaning_audio_url=self.url(translation.audio_key)
+                            if translation
+                            else None,
+                        )
+                        for choice, translation in exercise.choices
                     ],
                 )
                 for exercise in practice.exercises

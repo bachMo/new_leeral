@@ -1,0 +1,84 @@
+{
+  "expo": {
+    "name": "Leeral",
+    "slug": "leeral",
+    "owner": "bach_johnson",
+    "scheme": "leeral",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F6F0E4",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "ios": {
+      "bundleIdentifier": "sn.newwave.leeral",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Leeral utilise la caméra pour photographier tes documents.",
+        "NSMicrophoneUsageDescription": "Leeral utilise le micro pour écouter tes questions.",
+        "NSPhotoLibraryUsageDescription": "Leeral ouvre tes photos pour lire un document."
+      }
+    },
+    "android": {
+      "package": "sn.newwave.leeral",
+      "adaptiveIcon": {
+        "backgroundColor": "#12233B",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-font",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Leeral utilise le micro pour écouter tes questions."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Leeral utilise la caméra pour photographier tes documents."
+        }
+      ],
+      "expo-sharing",
+      "expo-secure-store",
+      "expo-web-browser",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "backgroundColor": "#12233B"
+        }
+      ]
+    ],
+    "extra": {
+      "apiUrl": "https://5155-2001-4278-12-754d-f4e0-baad-ebf2-15cc.ngrok-free.app",
+      "supportWhatsApp": "15556389708",
+      "router": {},
+      "eas": {
+        "projectId": "3f145eee-066c-4bbf-ad19-69c9e7d2b487"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3f145eee-066c-4bbf-ad19-69c9e7d2b487"
+    }
+  }
+}

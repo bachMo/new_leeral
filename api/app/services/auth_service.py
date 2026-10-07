@@ -47,6 +47,7 @@ class OtpChallenge:
     phone_number: str
     expires_in: int
     resend_in: int
+    code_length: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,6 +115,7 @@ class AuthService:
             phone_number=phone_number,
             expires_in=int(ttl.total_seconds()),
             resend_in=self._settings.otp_resend_cooldown_seconds,
+            code_length=self._settings.otp_length,
         )
 
     async def verify_otp(

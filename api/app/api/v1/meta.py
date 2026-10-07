@@ -4,6 +4,7 @@ from app.api.deps import PresenterDep, Uow
 from app.core.languages import AVAILABLE_LANGUAGES, LANGUAGE_NAMES, Language
 from app.schemas.prompts import PromptOut
 from app.schemas.users import LanguageOut
+from app.services.ui_prompt_catalog import prompt_catalog
 from app.services.ui_prompt_service import UiPromptService
 
 router = APIRouter(tags=["meta"])
@@ -19,5 +20,12 @@ async def languages() -> list[LanguageOut]:
 
 @router.get("/prompts", response_model=list[PromptOut])
 async def prompts(language: Language, uow: Uow, presenter: PresenterDep) -> list[PromptOut]:
-    stored = await UiPromptService(uow.session).for_language(language)
-    return [presenter.prompt(prompt) for prompt in stored]
+    stored = {
+        prompt.key: prompt for prompt in await UiPromptService(uow.session).for_language(language)
+    }
+    return [
+        presenter.prompt(stored[key])
+        if key in stored and stored[key].text_fr == text_fr
+        else PromptOut(key=key, text_fr=text_fr, audio_url=None)
+        for key, text_fr in prompt_catalog().items()
+    ]

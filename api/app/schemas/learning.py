@@ -16,6 +16,8 @@ class LearningOverviewOut(Schema):
 class ChoiceOut(Schema):
     word_id: uuid.UUID
     word_fr: str
+    meaning: str | None
+    meaning_audio_url: str | None
 
 
 class ExerciseOut(Schema):

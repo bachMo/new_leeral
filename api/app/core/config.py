@@ -69,7 +69,7 @@ class Settings(BaseSettings):
 
     guest_document_ttl_hours: int = 24
     guest_inactivity_days: int = 30
-    subscription_reminder_days: int = 3
+    subscription_reminder_days: int = 2
     practice_session_size: int = 8
 
     @property
