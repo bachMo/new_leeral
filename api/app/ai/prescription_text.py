@@ -29,13 +29,22 @@ def _line_label(line: MedicationLine) -> str:
     return f"{name} {line.strength}"
 
 
-def explain_prescription(lines: Sequence[MedicationLine], *, simple: bool) -> str:
+CUT_OFF_WARNING = (
+    "Attention, une partie de l'ordonnance n'était pas dans la photo. "
+    "Il peut y avoir d'autres médicaments que Leeral n'a pas vus."
+)
+
+
+def explain_prescription(
+    lines: Sequence[MedicationLine], *, simple: bool, cut_off: bool = False
+) -> str:
     if not lines:
-        return (
+        base = (
             "Leeral n'a trouvé aucun médicament lisible sur cette ordonnance. "
             "Montre-la à ton pharmacien pour qu'il te la lise."
         )
-    sentences: list[str] = []
+        return f"{CUT_OFF_WARNING} {base}" if cut_off else base
+    sentences: list[str] = [CUT_OFF_WARNING] if cut_off else []
     if not simple:
         count = len(lines)
         sentences.append(
@@ -71,8 +80,19 @@ def explain_prescription(lines: Sequence[MedicationLine], *, simple: bool) -> st
     return " ".join(sentences)
 
 
-def prescription_key_points(lines: Sequence[MedicationLine]) -> tuple[KeyPointDraft, ...]:
+def prescription_key_points(
+    lines: Sequence[MedicationLine], *, cut_off: bool = False
+) -> tuple[KeyPointDraft, ...]:
     points: list[KeyPointDraft] = []
+    if cut_off:
+        points.append(
+            KeyPointDraft(
+                kind="info",
+                tag="Incomplet",
+                title_fr="Une partie de l'ordonnance manque",
+                detail_fr="Le haut ou le bas de la page n'était pas dans la photo.",
+            )
+        )
     for line in lines:
         if line.status == "unreadable":
             points.append(
@@ -96,7 +116,7 @@ def prescription_key_points(lines: Sequence[MedicationLine]) -> tuple[KeyPointDr
     return tuple(points)
 
 
-def prescription_context(lines: Sequence[MedicationLine]) -> str:
+def prescription_context(lines: Sequence[MedicationLine], *, cut_off: bool = False) -> str:
     labels = {"sure": "lu avec certitude", "to_check": "à vérifier", "unreadable": "illisible"}
     rows = []
     for line in lines:
@@ -105,4 +125,7 @@ def prescription_context(lines: Sequence[MedicationLine]) -> str:
             f"- {_line_label(line)} ({labels[line.status]})"
             + (f" : {posology}" if posology else "")
         )
-    return "Médicaments de l'ordonnance :\n" + "\n".join(rows)
+    header = "Médicaments de l'ordonnance"
+    if cut_off:
+        header += " (la page est coupée, cette liste peut être incomplète)"
+    return f"{header} :\n" + "\n".join(rows)

@@ -1,9 +1,6 @@
-import logging
 from typing import Any
 
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
-
-logger = logging.getLogger("leeral.ai.reasoning")
 
 _CHARS_PER_TOKEN = 4
 
@@ -29,7 +26,6 @@ class Reasoner:
         self, prompt: str, *, operation: str, max_tokens: int = 2000
     ) -> dict[str, Any]:
         profile = self._profile_for(prompt)
-        logger.info("llm_call", extra={"operation": operation, "model": profile.model})
         return await self._client.complete_json(
             profile, prompt, operation=operation, max_tokens=max_tokens
         )

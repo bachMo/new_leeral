@@ -80,6 +80,7 @@ class DocumentAnalysis:
     category: CategoryValue
     summary_fr: str
     full_text: str
+    cut_off: bool = False
     page_texts: tuple[str, ...] = ()
     issuer: str | None = None
     document_date: date | None = None

@@ -198,7 +198,38 @@ réintroduire sans un vrai détecteur de document validé (un cadrage mal détec
 
 ---
 
-## 13. Ce qui n'a pas été transféré tel quel
+## 13. Page coupée : signal jugé par le modèle de lecture, pas une heuristique locale
+
+**Décision (7 octobre 2026).** Détection d'une page partiellement hors cadre (haut ou bas de la
+page absent de la photo) confiée au modèle de lecture lui-même, jamais à une heuristique locale :
+champ `"page_cut_off"` ajouté au JSON de `READ_PRESCRIPTION`/`READ_PRESCRIPTION_TEXT`
+(`app/ai/real/prompts.py`), exigé **des deux modèles** avant d'être retenu
+(`app/ai/real/prescription.py`, fonction `page_cut_off`) — même logique de prudence que
+`both_legible`. Pour un document générique, marqueur texte `[page_coupee]` dans `TRANSCRIBE_PAGE`,
+lu par un seul modèle (`app/ai/real/engine.py`, `_analyze_document`) : pas de double lecture ici,
+le coût de doubler la transcription de **tout** document non-ordonnance pour ce seul signal
+n'étant pas justifié par le même enjeu de sécurité qu'une posologie.
+
+Une page signalée coupée **ne fait jamais disparaître les lignes déjà lues** : contrairement à un
+nom de médicament illisible (`legible`), qui invalide la ligne elle-même, une page coupée ne dit
+rien sur la fiabilité de ce qui a été lu, seulement sur ce qui pourrait manquer. Les informations
+visibles restent donc affichées, et un avertissement (`CUT_OFF_WARNING` dans
+`app/ai/prescription_text.py` et `app/ai/real/analysis.py`) est ajouté au début de l'explication
+parlée et comme point clé dédié (tag `"Incomplet"`), plutôt que de rejeter tout le document.
+
+**Raison.** Directement informé par la décision 12 : une heuristique locale par variance de pixels
+avait un taux de faux positifs d'environ 90 % sur de vraies ordonnances. Laisser le modèle de
+lecture juger (il voit le contenu, pas seulement les pixels du bord) évite de reproduire cette
+erreur, mais le signal mono-modèle du chemin générique n'a pas encore été mesuré contre `eval/` —
+à valider avant de le considérer pleinement fiable, même posture que `pharmacology_rules.csv`
+(DRAFT, voir décision 7). Rejeter tout le document aurait aussi été plus simple à coder, mais
+aurait privé l'utilisateur d'une information déjà lue avec certitude pour une simple question de
+cadrage, un coût jugé disproportionné par rapport au risque (contrairement à une posologie
+incomplète, où l'incertitude doit rester invisible nulle part dans l'explication).
+
+---
+
+## 14. Ce qui n'a pas été transféré tel quel
 
 Décisions du dépôt d'étude qui ne s'appliquent plus ici, pour mémoire (ne pas les réintroduire
 par erreur en pensant combler un manque) :

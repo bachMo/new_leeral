@@ -172,6 +172,7 @@ class DocumentProcessor:
                 file.ocr_text = text or None
         document.extracted_data = {
             **analysis.extracted_data,
+            "cut_off": analysis.cut_off,
             "key_points": [
                 {
                     **asdict(point),

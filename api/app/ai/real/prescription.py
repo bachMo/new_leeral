@@ -50,6 +50,7 @@ class MedicationReading(BaseModel):
 
 class PrescriptionReading(BaseModel):
     document_language: str = "unknown"
+    page_cut_off: bool = False
     medications: list[MedicationReading] = Field(default_factory=list)
 
 
@@ -66,6 +67,10 @@ def _same_value(first: str | int | None, second: str | int | None) -> bool:
 
 def _similarity(first: str | None, second: str | None) -> float:
     return difflib.SequenceMatcher(None, fold(first or ""), fold(second or "")).ratio()
+
+
+def page_cut_off(first: PrescriptionReading, second: PrescriptionReading) -> bool:
+    return first.page_cut_off and second.page_cut_off
 
 
 def align(
@@ -197,12 +202,14 @@ class PrescriptionReader:
         self._lexicon = lexicon
         self._pharmacology = pharmacology
 
-    async def read_pages(self, pages: Sequence[PageInput]) -> list[MedicationLine]:
+    async def read_pages(self, pages: Sequence[PageInput]) -> tuple[list[MedicationLine], bool]:
         lines: list[MedicationLine] = []
+        cut_off = False
         for page in pages:
             if page.image is None and not (page.text or "").strip():
                 continue
             first, second = await self._double_read(page)
+            cut_off = cut_off or page_cut_off(first, second)
             for first_line, second_line in align(first.medications, second.medications):
                 lines.append(
                     verify_line(
@@ -214,7 +221,7 @@ class PrescriptionReader:
                         pharmacology=self._pharmacology,
                     )
                 )
-        return lines
+        return lines, cut_off
 
     async def _double_read(
         self, page: PageInput

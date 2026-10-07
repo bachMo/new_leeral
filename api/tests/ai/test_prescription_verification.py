@@ -2,7 +2,13 @@ import pytest
 
 from app.ai.contracts import MedicationLine
 from app.ai.prescription_text import explain_prescription, prescription_key_points
-from app.ai.real.prescription import MedicationReading, align, verify_line
+from app.ai.real.prescription import (
+    MedicationReading,
+    PrescriptionReading,
+    align,
+    page_cut_off,
+    verify_line,
+)
 from app.ai.real.safety.lexicon import Lexicon, get_lexicon
 from app.ai.real.safety.pharmacology import PharmacologyRules, get_pharmacology_rules
 
@@ -131,3 +137,26 @@ def test_explanation_never_states_a_dose_for_lines_to_check(
 
     assert "fois par jour" not in explanation
     assert "pharmacien" in explanation
+
+
+def test_page_cut_off_requires_both_models_to_agree() -> None:
+    cut = PrescriptionReading.model_validate({"page_cut_off": True})
+    not_cut = PrescriptionReading.model_validate({"page_cut_off": False})
+
+    assert page_cut_off(cut, cut) is True
+    assert page_cut_off(cut, not_cut) is False
+    assert page_cut_off(not_cut, not_cut) is False
+
+
+def test_cut_off_warning_is_added_without_dropping_readable_lines(
+    lexicon: Lexicon, rules: PharmacologyRules
+) -> None:
+    line = verify(reading(), reading(), lexicon, rules)
+
+    explanation = explain_prescription([line], simple=False, cut_off=True)
+    points = prescription_key_points([line], cut_off=True)
+
+    assert line.status == "sure"
+    assert "Amoxicilline" in explanation
+    assert "n'était pas dans la photo" in explanation
+    assert points[0].tag == "Incomplet"

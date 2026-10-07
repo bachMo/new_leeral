@@ -23,10 +23,16 @@ def photo() -> bytes:
 
 class FakeProviders:
     def __init__(
-        self, document_type: str = "invoice", answer: str = "Avant le 30/10/2026."
+        self,
+        document_type: str = "invoice",
+        answer: str = "Avant le 30/10/2026.",
+        page_cut_off: bool = False,
+        transcribe_cut_off: bool = False,
     ) -> None:
         self.document_type = document_type
         self.answer = answer
+        self.page_cut_off = page_cut_off
+        self.transcribe_cut_off = transcribe_cut_off
         self.calls: list[str] = []
 
     def __call__(self, request: httpx.Request) -> httpx.Response:
@@ -50,7 +56,8 @@ class FakeProviders:
             )
         if prompt.startswith("Recopie"):
             self.calls.append("transcribe")
-            return self._reply(INVOICE_TEXT)
+            text = f"[page_coupee]\n{INVOICE_TEXT}" if self.transcribe_cut_off else INVOICE_TEXT
+            return self._reply(text)
         if prompt.startswith(
             ("Tu lis la photo d'une ordonnance", "Tu lis le texte d'une ordonnance")
         ):
@@ -63,7 +70,8 @@ class FakeProviders:
                 "duration_days": 5,
                 "legible": "yes",
             }
-            return self._reply(f"```json\n{json.dumps({'medications': [line]})}\n```")
+            body = {"medications": [line], "page_cut_off": self.page_cut_off}
+            return self._reply(f"```json\n{json.dumps(body)}\n```")
         if prompt.startswith("Translate"):
             self.calls.append("translate")
             text = prompt.split("Text:\n", 1)[1]
@@ -134,6 +142,31 @@ async def test_prescription_goes_through_double_reading() -> None:
     assert providers.calls.count("read") == 2
     assert analysis.medications[0].status == "sure"
     assert "Doliprane 500 mg : 3 fois par jour, pendant 5 jours." in analysis.summary_fr
+
+
+async def test_prescription_cut_off_page_keeps_medications_and_warns() -> None:
+    providers = FakeProviders(document_type="prescription", page_cut_off=True)
+
+    analysis = await engine(providers).analyze_document(
+        [PageInput(position=0, mime_type="image/jpeg", image=photo())]
+    )
+
+    assert analysis.cut_off is True
+    assert analysis.medications[0].status == "sure"
+    assert "n'était pas dans la photo" in analysis.summary_fr
+
+
+async def test_generic_document_cut_off_is_flagged_but_still_analyzed() -> None:
+    providers = FakeProviders(transcribe_cut_off=True)
+
+    analysis = await engine(providers).analyze_document(
+        [PageInput(position=0, mime_type="image/jpeg", image=photo())]
+    )
+
+    assert "analyze" in providers.calls
+    assert analysis.cut_off is True
+    assert "n'était pas dans la photo" in analysis.summary_fr
+    assert analysis.main_amount_xof == 12500
 
 
 async def test_text_prescription_never_reaches_the_free_summary() -> None:

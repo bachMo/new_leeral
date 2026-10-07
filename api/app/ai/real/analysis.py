@@ -142,8 +142,16 @@ def _urgency_from_due_date(due: date | None, today: date, declared: UrgencyValue
     return declared
 
 
+CUT_OFF_WARNING = "Attention, une partie de ce document n'était pas dans la photo."
+
+
 async def analyze_text(
-    reasoner: Reasoner, text: str, *, page_texts: tuple[str, ...], today: date
+    reasoner: Reasoner,
+    text: str,
+    *,
+    page_texts: tuple[str, ...],
+    today: date,
+    cut_off: bool = False,
 ) -> DocumentAnalysis:
     clipped = text[:MAX_DOCUMENT_CHARS]
     raw = await reasoner.complete_json(
@@ -169,13 +177,27 @@ async def analyze_text(
         for point in parsed.key_points[:5]
         if point.title_fr.strip()
     )
+    if cut_off:
+        key_points = (
+            KeyPointDraft(
+                kind="info",
+                tag="Incomplet",
+                title_fr="Une partie du document manque",
+                detail_fr="Le haut ou le bas de la page n'était pas dans la photo.",
+            ),
+            *key_points,
+        )
+    summary_fr = parsed.summary_fr.strip()
+    if cut_off:
+        summary_fr = f"{CUT_OFF_WARNING} {summary_fr}"
     return DocumentAnalysis(
         readable=True,
         doc_type=parsed.doc_type,
         title=parsed.title.strip()[:120] or "Document",
         category=parsed.category,
-        summary_fr=parsed.summary_fr.strip(),
+        summary_fr=summary_fr,
         full_text=text,
+        cut_off=cut_off,
         page_texts=page_texts,
         issuer=parsed.issuer,
         document_date=_date_in_text(parsed.document_date, clipped),

@@ -1,8 +1,13 @@
 import json
 import logging
 import sys
+import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Any
+
+from app.core.errors import AppError
 
 request_id_var: ContextVar[str | None] = ContextVar("request_id", default=None)
 
@@ -58,3 +63,31 @@ def mask_phone(phone_number: str | None) -> str:
     if not phone_number:
         return "-"
     return f"{phone_number[:4]}***{phone_number[-2:]}"
+
+
+def _elapsed_ms(started: float) -> int:
+    return int((time.perf_counter() - started) * 1000)
+
+
+@contextmanager
+def log_step(logger: logging.Logger, step: str, **entry: Any) -> Iterator[dict[str, Any]]:
+    """Log one entry line and one exit line (duration + outcome) around a pipeline step.
+
+    Never pass document content, transcripts or phone numbers as `entry`/output fields —
+    counts, lengths, booleans and codes only (see api/docs/AI_MODULE.md).
+    """
+    output: dict[str, Any] = {}
+    started = time.perf_counter()
+    logger.info(f"{step}_started", extra=entry)
+    try:
+        yield output
+    except AppError as exc:
+        logger.warning(
+            f"{step}_failed",
+            extra={**entry, "duration_ms": _elapsed_ms(started), "code": exc.code.value},
+        )
+        raise
+    except Exception:
+        logger.exception(f"{step}_failed", extra={**entry, "duration_ms": _elapsed_ms(started)})
+        raise
+    logger.info(f"{step}_finished", extra={**entry, **output, "duration_ms": _elapsed_ms(started)})

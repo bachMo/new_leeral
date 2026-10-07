@@ -32,6 +32,8 @@ CLASSIFY_TEXT = (
 TRANSCRIBE_PAGE = """Recopie fidèlement tout le texte lisible de cette photo de document, \
 dans l'ordre de lecture, ligne par ligne. N'invente rien, ne corrige rien, ne résume rien. \
 Écris [illisible] à la place d'un passage que tu ne peux pas lire. \
+Si le haut ou le bas de la page n'apparaît pas dans la photo (la page continue visiblement \
+hors du cadre), écris [page_coupee] sur une ligne à part, à l'endroit où le contenu manque. \
 Réponds uniquement avec le texte recopié."""
 
 READ_PRESCRIPTION = """Tu lis la photo d'une ordonnance médicale. Réponds uniquement par un \
@@ -45,9 +47,12 @@ incertain, mets null pour ce champ et indique "legible": "partial" ou "no".
 - "times_per_day" est un entier (prises par jour). "duration_days" est un entier (jours).
 - "strength" est le dosage lu avec son unité, par exemple "500 mg".
 - "legible": "yes" seulement si TOUTE la ligne est lisible sans aucun doute.
+- "page_cut_off": true si le haut ou le bas de la page n'apparaît pas dans la photo (la page \
+continue visiblement hors du cadre, il peut donc manquer une ligne de médicament). false si \
+toute la page est dans le cadre, même si certaines lignes sont illisibles.
 
 Format exact :
-{"document_language": "fr|en|mixed|unknown",
+{"document_language": "fr|en|mixed|unknown", "page_cut_off": false,
  "medications": [{"raw": "ligne telle que lue", "name_read": "...", "strength": "...",
  "times_per_day": 3, "duration_days": 7, "timing": "...", "legible": "yes|partial|no"}]}"""
 
