@@ -88,6 +88,29 @@ pytest tests/ai
 
 `check-ai` appelle une fois chaque capacité avec les vraies clés : traduction, voix, retour en français, analyse. `tests/ai/test_real_engine.py` fait tourner `RealAiEngine` contre de fausses réponses HTTP : c'est l'endroit où ajouter un cas quand tu modifies un prompt ou un parseur.
 
+### Tester la qualité sur un vrai document
+
+`try-document` fait passer un fichier par exactement le même pipeline que l'application et WhatsApp, sans base de données, sans Redis, sans R2 et sans WhatsApp. Il suffit du `.env` avec les clés KIRIKU et OpenRouter.
+
+```powershell
+leeral try-document C:\chemin\facture.jpg --language wo --question "Kañ laa wara fey ?"
+leeral try-document page1.jpg page2.jpg --language ff --question-fr "Combien je dois payer ?"
+leeral try-document ordonnance.jpg --question-audio question.ogg
+```
+
+| Option | Rôle |
+|---|---|
+| `files` | une ou plusieurs photos, un PDF ou un DOCX (un seul document) |
+| `--language` | `wo` (par défaut) ou `ff` |
+| `--question` | question écrite en wolof ou en pulaar, traduite comme dans l'app (répétable) |
+| `--question-fr` | question en français, pour tester seulement le LLM (répétable) |
+| `--question-audio` | note vocale (`.ogg`, `.mp3`, `.wav`…), transcrite par KIRIKU (répétable) |
+| `--output` | dossier de sortie, par défaut `api/var/try/<date>` |
+
+Le terminal affiche le contrôle de la photo, l'analyse en français (type, montant, date, résumé, points clés, lignes d'ordonnance avec leur statut), la traduction de l'explication et des points clés, puis chaque question avec sa réponse et `grounded`. Les MP3 et un `report.txt` sont enregistrés dans le dossier de sortie : garde les rapports pour comparer avant et après une modification de prompt.
+
+`api/var/` n'est jamais versionné. Les ordonnances réelles et leurs rapports restent sur ta machine.
+
 - **Changer un modèle** : seulement le `.env` (`READER_MODEL_A`, `TRANSLATOR_MODEL_PRIMARY`, `LLM_MODEL_SHORT`…).
 - **Changer un prompt** : `app/ai/real/prompts.py`. Garde le format JSON demandé, il est validé dans le module correspondant.
 - **Mettre à jour le lexique** : remplace `app/ai/real/data/lexicon_terms.csv` par la sortie de ton script de construction (colonnes `term`, `kind`, `status`).

@@ -21,6 +21,13 @@ INVOICE_LINES = (
     "En cas de retard, des frais de 1 000 F CFA seront ajoutes.",
 )
 
+LETTER_ANSWERS = {
+    "full_name": "Je m'appelle Awa Diop.",
+    "address": "J'habite aux Parcelles Assainies, unité 14, à Dakar.",
+    "recipient": "C'est pour le maire de la commune des Parcelles Assainies.",
+    "request": "Je demande un certificat de résidence.",
+    "reason": "J'en ai besoin pour inscrire mon fils à l'école.",
+}
 
 def invoice_photo() -> bytes:
     image = Image.new("RGB", (1240, 1754), "white")
@@ -176,13 +183,21 @@ class SmokeTest:
                 "POST",
                 f"/writings/{writing['id']}/answers",
                 202,
-                data={"text": f"Réponse pour {step['field_key']}", "text_language": "fr"},
+                data={"text": LETTER_ANSWERS[step["field_key"]], "text_language": "fr"},
             )
-            self.wait_for_message(writing["conversation_id"], reply["id"])
+            heard = self.wait_for_message(writing["conversation_id"], reply["id"])
+            writing = self.call("GET", f"/writings/{writing['id']}")
+            understood = writing["steps"][writing["current_step"]]["understood_value"]
+            if understood is None:
+                if step["required"]:
+                    raise AssertionError(f"{step['field_key']} not understood: {heard['text_fr']}")
+                writing = self.call("POST", f"/writings/{writing['id']}/skip")
+                print("skipped", step["field_key"])
+                continue
             writing = self.call(
                 "POST", f"/writings/{writing['id']}/confirm", json={"accepted": True}
             )
-            print("confirmed", step["field_key"])
+            print("confirmed", step["field_key"], "→", understood)
         writing = self.wait_for(
             f"/writings/{writing['id']}", lambda item: item["status"] in {"ready", "failed"}
         )
