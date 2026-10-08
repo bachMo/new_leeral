@@ -34,7 +34,8 @@ class Settings(BaseSettings):
     otp_ttl_minutes: int = 10
     otp_max_attempts: int = 5
     otp_resend_cooldown_seconds: int = 60
-    otp_delivery: Literal["whatsapp", "console"] = "whatsapp"
+    otp_delivery: Literal["whatsapp", "console", "demo"] = "whatsapp"
+    otp_demo_code: SecretStr = SecretStr("")
     default_phone_region: str = "SN"
 
     storage_backend: Literal["r2", "local"] = "r2"

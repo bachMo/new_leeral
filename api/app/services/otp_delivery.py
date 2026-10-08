@@ -40,7 +40,17 @@ class ConsoleOtpDelivery:
         )
 
 
+class DemoOtpDelivery:
+    async def deliver(self, phone_number: str, code: str) -> None:
+        logger.info("demo_otp_issued", extra={"phone": mask_phone(phone_number)})
+
+
 def build_otp_delivery(settings: Settings, client: WhatsAppClient) -> OtpDelivery:
+    if settings.otp_delivery == "demo":
+        code = settings.otp_demo_code.get_secret_value()
+        if not code.isdigit() or len(code) != settings.otp_length:
+            raise RuntimeError("OTP_DEMO_CODE must contain exactly OTP_LENGTH digits")
+        return DemoOtpDelivery()
     if settings.otp_delivery == "console":
         if settings.environment == "production":
             raise RuntimeError("OTP_DELIVERY=console is not allowed in production")

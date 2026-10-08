@@ -99,7 +99,7 @@ class AuthService:
             remaining = int((cooldown - (now - latest.created_at)).total_seconds()) + 1
             raise AppError(ErrorCode.OTP_RESEND_TOO_SOON, fields={"resend_in": remaining})
 
-        code = generate_numeric_code(self._settings.otp_length)
+        code = self._new_code()
         ttl = timedelta(minutes=self._settings.otp_ttl_minutes)
         self._otps.add(
             OtpCode(
@@ -176,6 +176,11 @@ class AuthService:
         if session is not None and session.revoked_at is None:
             session.revoked_at = utcnow()
         await self._uow.commit()
+
+    def _new_code(self) -> str:
+        if self._settings.otp_delivery == "demo":
+            return self._settings.otp_demo_code.get_secret_value()
+        return generate_numeric_code(self._settings.otp_length)
 
     async def _consume_otp(self, phone_number: str, code: str) -> None:
         otp = await self._otps.latest_for(phone_number)

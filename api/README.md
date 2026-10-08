@@ -63,9 +63,24 @@ copy ..\.env.example ..\.env
 
 Python 3.12 ou 3.13 est requis : la 3.11 est trop ancienne pour le code, et certaines dépendances n'ont pas encore de version Windows pour la 3.14.
 
+### Base de données
+
+L'API crée elle-même ses tables avec Alembic. Il faut donc une base **vide**. Si tu as déjà exécuté l'ancien script SQL dans pgAdmin, supprime cette base puis recrée-la (outil de requête connecté à la base `postgres`) :
+
+```sql
+DROP DATABASE IF EXISTS leeral;
+CREATE DATABASE leeral;
+```
+
+Puis mets le mot de passe dans `DATABASE_URL` du `.env` et lance :
+
+```powershell
+alembic upgrade head
+```
+
 ### Configuration (`.env`)
 
-Le fichier `.env` est à la racine du dépôt (`new_leeral/.env`), à côté de `.env.example`. Un `api/.env` est aussi lu s'il existe, et ses valeurs priment. Les commandes peuvent être lancées depuis n'importe quel dossier.
+Le fichier `.env` est à la racine du dépôt (`new_leeral/.env`), à côté de `.env.example`. Un `api/.env` est aussi lu s'il existe, et ses valeurs priment.
 
 Valeurs à remplir toi-même :
 
@@ -77,26 +92,13 @@ Valeurs à remplir toi-même :
 | `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 (régénérées), puis `STORAGE_BACKEND=r2` |
 | `ASR_*`, `TTS_*`, `OPENROUTER_API_KEY` | clés KIRIKU et OpenRouter, puis `AI_PROVIDER=real` |
 
-Pour démarrer sans aucune clé : `AI_PROVIDER=mock`, `STORAGE_BACKEND=local`, `OTP_DELIVERY=console` (le code de connexion s'affiche dans le terminal de l'API). Sous Windows, préfère `127.0.0.1` à `localhost` dans `DATABASE_URL` et `REDIS_URL`.
+Pour démarrer sans aucune clé : `AI_PROVIDER=mock`, `STORAGE_BACKEND=local`, `OTP_DELIVERY=console` (le code de connexion s'affiche dans le terminal de l'API).
 
-### Base de données
-
-L'API crée elle-même ses tables avec Alembic. Il faut donc une base **vide**. Si une base `leeral` existe déjà avec d'autres tables, supprime-la puis recrée-la (outil de requête de pgAdmin connecté à la base `postgres`) :
-
-```sql
-DROP DATABASE IF EXISTS leeral;
-CREATE DATABASE leeral;
-```
-
-Puis :
-
-```powershell
-alembic upgrade head
-```
+Pour une démo publique sans envoi de SMS ni de modèle WhatsApp payant : `OTP_DELIVERY=demo` et `OTP_DEMO_CODE` (autant de chiffres que `OTP_LENGTH`). Ce code fixe fonctionne pour tous les numéros : à réserver à la démo.
 
 ## Lancer
 
-Redis doit tourner (`redis-server`). Ensuite, deux terminaux, environnement activé dans chacun :
+Deux terminaux, environnement activé dans chacun :
 
 ```powershell
 uvicorn app.main:app --reload --port 8000
@@ -116,7 +118,7 @@ leeral seed-words
 leeral sync-prompts
 ```
 
-`seed-words` crée le vocabulaire de base et sa traduction audio. `sync-prompts` génère les consignes vocales des écrans et des erreurs. Relance les deux après le passage à `AI_PROVIDER=real` (`sync-prompts --force`).
+`seed-words` crée le vocabulaire de base et sa traduction audio. `sync-prompts` génère les consignes vocales des écrans de l'application (`app.*`), de WhatsApp et des erreurs. `GET /prompts` renvoie toujours le texte de chaque consigne, et son audio dès qu'il est généré. Relance les deux après le passage à `AI_PROVIDER=real` (`sync-prompts --force`).
 
 ### Vérifier que tout marche
 
@@ -124,7 +126,7 @@ leeral sync-prompts
 python scripts/smoke_test.py
 ```
 
-Le script parcourt l'application de bout en bout : invité, photo d'une facture, explication simple, question, création du compte (il demande le code OTP affiché dans le terminal de l'API), PDF, lettre, séance d'apprentissage, paiement simulé.
+Le script parcourt l'application de bout en bout : invité, photo d'une facture, explication simple, question, création du compte (il demande le code OTP), PDF, lettre, séance d'apprentissage, paiement simulé.
 
 ```powershell
 leeral check-ai --language wo
@@ -143,6 +145,7 @@ ruff check . ; mypy app ; pytest
 | Écrire pour moi | `GET /writings/types`, `POST /writings`, `GET /writings/{id}`, `POST /writings/{id}/answers`, `POST /writings/{id}/confirm`, `POST /writings/{id}/skip` |
 | Apprendre | `GET /learning/overview`, `GET /learning/words`, `POST /learning/sessions`, `POST /learning/sessions/{id}/answers`, `POST /learning/sessions/{id}/finish` |
 | Leeral+ | `GET /billing/plans`, `POST /billing/checkout`, `GET /billing/payments/{token}`, `POST /billing/payments/{token}/simulate` |
+| Voix | `POST /speech/transcriptions` (multipart `audio`) : texte entendu et sa traduction en français |
 | WhatsApp | `GET` et `POST /webhooks/whatsapp` |
 
 Un invité qui vérifie son numéro avec son jeton d'invité dans l'en-tête `Authorization` garde ses documents : la même ligne `users` devient un compte, et ses fichiers passent de `tmp/` à `users/` dans R2.
