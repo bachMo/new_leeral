@@ -27,7 +27,8 @@ class AiSettings(BaseSettings):
     tts_max_retries: int = 2
     tts_max_input_chars: int = 500
     tts_concurrency: int = 3
-    tts_speed: float | None = None
+    tts_speed_wolof: float | None = None
+    tts_speed_pulaar: float | None = None
 
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_api_key: SecretStr = SecretStr("")

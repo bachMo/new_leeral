@@ -10,9 +10,11 @@ in for the real one). Creates its own throwaway guest/account users and deletes 
 """
 
 import asyncio
+import sys
 import uuid
 from datetime import timedelta
 
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.audio import silent_wav
@@ -49,6 +51,9 @@ class _NoopStorage:
 
     async def delete_prefix(self, prefix: str) -> None:
         return None
+
+    def signed_url(self, key: str, *, filename: str | None = None) -> str:
+        return ""
 
 
 def _check(label: str, condition: bool) -> bool:
@@ -142,7 +147,7 @@ async def _check_account_rules(
         ok &= _check("compte : document_id inconnu rejeté", False)
     except NotFoundError:
         ok &= _check("compte : document_id inconnu rejeté", True)
-    return ok
+    return ok, conv_f
 
 
 async def _check_audio_cap(
@@ -159,13 +164,16 @@ async def _check_audio_cap(
 
 
 async def _cleanup(session: AsyncSession, user_ids: list[uuid.UUID]) -> None:
-    await session.execute(Conversation.__table__.delete().where(Conversation.user_id.in_(user_ids)))
-    await session.execute(Document.__table__.delete().where(Document.user_id.in_(user_ids)))
-    await session.execute(User.__table__.delete().where(User.id.in_(user_ids)))
+    await session.execute(delete(Conversation).where(Conversation.user_id.in_(user_ids)))
+    await session.execute(delete(Document).where(Document.user_id.in_(user_ids)))
+    await session.execute(delete(User).where(User.id.in_(user_ids)))
     await session.commit()
 
 
 async def main() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     settings = get_settings()
     async with get_session_factory()() as session:
         uow = UnitOfWork(session, _NoopJobQueue())
@@ -174,9 +182,8 @@ async def main() -> None:
         account = await _user(session, is_guest=False)
         try:
             guest_ok = await _check_guest_rules(session, service, settings, guest)
-            account_ok = await _check_account_rules(session, service, account)
-            conv_f = await service.open_for_document(account, (await _ready_document(session, account)).id)
-            audio_ok = await _check_audio_cap(service, settings, account, conv_f)
+            account_ok, conversation = await _check_account_rules(session, service, account)
+            audio_ok = await _check_audio_cap(service, settings, account, conversation)
             all_ok = guest_ok and account_ok and audio_ok
         finally:
             await _cleanup(session, [guest.id, account.id])
