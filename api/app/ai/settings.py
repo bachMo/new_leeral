@@ -43,6 +43,19 @@ class AiSettings(BaseSettings):
     reader_max_image_bytes: int = 8_000_000
     reader_max_image_side: int = 2200
 
+    # Déclassification volontairement séparée des modèles de lecture ci-dessus : classifier un
+    # document (type + langue) n'a pas besoin du même niveau de prudence qu'une double lecture
+    # d'ordonnance, et `reader_model_b` a un raisonnement obligatoire qui coûte ~16s à chaque
+    # appel (AI_DECISIONS.md, décision 6) — payé une fois en trop pour une simple classification
+    # si on réutilise les modèles de lecture ici. Voir décision sur la latence.
+    classifier_model_a: str = "qwen/qwen3.8-27b"
+    classifier_model_a_reasoning_effort: ReasoningEffort = "none"
+    classifier_model_b: str = "google/gemini-2.5-flash-lite"
+    classifier_model_b_reasoning_effort: ReasoningEffort = "none"
+    classifier_http_provider: str = ""
+    classifier_timeout_seconds: float = 30.0
+    classifier_max_retries: int = 2
+
     translator_model_primary: str = "anthropic/claude-sonnet-5.5"
     translator_model_primary_reasoning_effort: ReasoningEffort = "minimal"
     translator_model_fallback: str = "openai/gpt-5-mini"

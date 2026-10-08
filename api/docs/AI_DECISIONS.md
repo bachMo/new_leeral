@@ -516,7 +516,73 @@ ressemble à une notice validée sans en être une, plus dangereux que de ne rie
 
 ---
 
-## 24. Ce qui n'a pas été transféré tel quel
+## 24. Classification découplée de la double lecture, pour la latence
+
+**Décision (8 octobre 2026).** `real/pages.py` (`PageReader`) utilisait jusqu'ici `reader_a`/
+`reader_b` (décision 6 : `qwen/qwen3.8-27b` + `meta/muse-glimmer-30b`) à la fois pour classifier
+le document (type + langue) **et** pour la double lecture d'ordonnance — deux rôles au niveau
+d'enjeu très différent partageant le même coût. `muse-glimmer-30b` a un raisonnement obligatoire
+non désactivable (décision 6), mesuré à environ 16 s par appel ; pour une ordonnance, ce coût
+était payé deux fois de suite (classification, puis lecture), mesuré à ~72 s en moyenne sur
+l'échantillon `eval/` (contre ~57 s pour un document générique, un seul passage).
+
+Nouveau couple dédié à la classification, sans rapport avec les modèles de lecture :
+`classifier_model_a` (`qwen/qwen3.8-27b`, inchangé) + `classifier_model_b`
+(`google/gemini-2.5-flash-lite`, repris du traducteur — décision 9, déjà éprouvé dans ce pipeline,
+jamais de raisonnement forcé observé). `reader_a`/`reader_b` restent inchangés pour la double
+lecture d'ordonnance elle-même : **la règle d'or de sécurité n'est pas touchée**, seul le rôle de
+classification change de modèles.
+
+**Mesuré après coup** (`leeral try-document`, logs `ai_http_request_finished`) : classification
+~3,7 s (contre ~16 s), lecture de prescription inchangée (~7 s, bornée par le même couple qu'avant
+— la variance mesurée vient du réseau/de la charge du fournisseur, pas du changement). Une
+ordonnance testée est passée de ~72 s à **11,3 s** pour `analyze_document` ; une facture
+photographiée de ~57 s à **23 s**.
+
+**Deuxième changement, même logique** : `PageReader.classify()` ne double plus la classification
+pour une page dont le texte est déjà extrait (PDF/DOCX, `page.image is None`) — l'ambiguïté y est
+structurellement plus faible qu'une photo (pas de flou, pas de cadrage), un seul modèle suffit.
+Un seul appel au lieu de deux sur ce chemin.
+
+**Effet de bord corrigé en même temps, sans rapport avec le modèle** : `PageReader.prepare()`
+appelait `prepare_image` (redimensionnement/recompression PIL, CPU) de façon synchrone dans une
+méthode `async`, bloquant la boucle d'événements pendant le calcul — incohérent avec le reste du
+module, qui passe déjà ce genre d'appel par `asyncio.to_thread` (`check_image`, `build_pages`).
+Sans effet sur la latence d'un document seul, mais affecte la capacité du serveur réel à traiter
+plusieurs requêtes en même temps. Corrigé (`prepare`/`content` passés en `async`).
+
+**Raison.** Le coût d'un modèle à raisonnement obligatoire n'a de sens que là où l'enjeu sécurité
+le justifie (lecture de posologie) — le reproduire pour une simple classification de type de
+document n'apportait rien, même logique que la décision 13 (coût proportionné à l'enjeu).
+
+---
+
+## 25. Synthèse vocale : `TTS_CONCURRENCY` relevé de 1 à 4
+
+**Décision (8 octobre 2026).** `.env` avait `TTS_CONCURRENCY=1`, forçant `SpeechSynthesizer.speak`
+(`real/speech.py`) à synthétiser les morceaux d'un texte découpé (> `tts_max_input_chars`, 500
+caractères) **en séquence** malgré un code déjà écrit pour le faire en parallèle
+(`asyncio.gather` + `Semaphore`) — KIRIKU autorise jusqu'à 15 requêtes concurrentes par clé.
+Relevé à **4**.
+
+**Mesuré** (texte répété, isolé de tout autre appel) :
+- 3 morceaux (~1000 caractères) : 8,7 s (séquentiel) contre 8,4 s (parallèle) — **gain négligeable**.
+- 5 morceaux (~2000 caractères) : **30,8 s (séquentiel) contre 6,3 s (parallèle)** — gain net
+  d'environ 5×.
+
+L'effet n'est donc significatif qu'à partir d'un nombre de morceaux suffisant (au moins 4-5, donc
+un texte de plus de 1500 caractères environ — un résumé long avec plusieurs points clés, pas une
+phrase courte). Sur un texte court, ne pas s'attendre à un gain visible : le changement est sans
+risque dans tous les cas (aucune régression de qualité, le découpage par phrase est inchangé) mais
+son bénéfice dépend de la longueur du texte à lire.
+
+**Raison.** `TTS_CONCURRENCY=1` neutralisait un mécanisme de parallélisation déjà écrit et déjà
+sûr, sans qu'aucune trace dans ce dépôt n'indique que ce `1` était un choix délibéré (quota,
+incident de stabilité) plutôt qu'un réglage jamais revisité.
+
+---
+
+## 26. Ce qui n'a pas été transféré tel quel
 
 Décisions du dépôt d'étude qui ne s'appliquent plus ici, pour mémoire (ne pas les réintroduire
 par erreur en pensant combler un manque) :

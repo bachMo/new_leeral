@@ -82,39 +82,47 @@ class PageReader:
         self,
         client: OpenRouterClient,
         settings: AiSettings,
-        model_a: ModelProfile,
-        model_b: ModelProfile,
+        transcribe_model: ModelProfile,
+        classifier_a: ModelProfile,
+        classifier_b: ModelProfile,
     ) -> None:
         self._client = client
         self._settings = settings
-        self._model_a = model_a
-        self._model_b = model_b
+        self._transcribe_model = transcribe_model
+        self._classifier_a = classifier_a
+        self._classifier_b = classifier_b
 
-    def prepare(self, page: PageInput) -> list[dict[str, Any]]:
+    async def prepare(self, page: PageInput) -> list[dict[str, Any]]:
         if page.image is None:
             raise AiInputError("page has no image")
-        image, mime_type = prepare_image(
+        image, mime_type = await asyncio.to_thread(
+            prepare_image,
             page.image,
             max_side=self._settings.reader_max_image_side,
             max_bytes=self._settings.reader_max_image_bytes,
         )
         return [image_part(image, mime_type)]
 
-    def content(
+    async def content(
         self, page: PageInput, *, image_prompt: str, text_prompt: str
     ) -> list[dict[str, Any]]:
         if page.image is not None:
-            return [text_part(image_prompt), *self.prepare(page)]
+            return [text_part(image_prompt), *await self.prepare(page)]
         text = (page.text or "")[:MAX_TEXT_PAGE_CHARS]
         return [text_part(text_prompt.format(text=text))]
 
     async def classify(self, page: PageInput) -> Classification:
-        content = self.content(
+        content = await self.content(
             page, image_prompt=prompts.CLASSIFY_IMAGE, text_prompt=prompts.CLASSIFY_TEXT
         )
+        if page.image is None:
+            # Text already extracted (PDF/DOCX) carries far less ambiguity than a photo (no
+            # blur, no framing) — a single fast model is enough, the second opinion is reserved
+            # for where doubt is real. See AI_DECISIONS.md, latency decision.
+            return await self._classify_once(self._classifier_a, content)
         results = await asyncio.gather(
-            self._classify_once(self._model_a, content),
-            self._classify_once(self._model_b, content),
+            self._classify_once(self._classifier_a, content),
+            self._classify_once(self._classifier_b, content),
             return_exceptions=True,
         )
         readings = [result for result in results if isinstance(result, Classification)]
@@ -136,9 +144,9 @@ class PageReader:
         )
 
     async def transcribe(self, page: PageInput) -> str:
-        content = [text_part(prompts.TRANSCRIBE_PAGE), *self.prepare(page)]
+        content = [text_part(prompts.TRANSCRIBE_PAGE), *await self.prepare(page)]
         text = await self._client.complete(
-            self._model_a, content, operation="transcribe_page", max_tokens=4000
+            self._transcribe_model, content, operation="transcribe_page", max_tokens=4000
         )
         return text.strip()
 

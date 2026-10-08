@@ -318,7 +318,7 @@ class PrescriptionReader:
     async def _double_read(
         self, page: PageInput
     ) -> tuple[PrescriptionReading, PrescriptionReading]:
-        content = self._pages.content(
+        content = await self._pages.content(
             page,
             image_prompt=prompts.READ_PRESCRIPTION,
             text_prompt=prompts.READ_PRESCRIPTION_TEXT,

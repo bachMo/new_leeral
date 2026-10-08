@@ -64,8 +64,22 @@ class RealAiEngine:
             settings.reader_max_retries,
             settings.reader_http_provider or None,
         )
+        classifier_a = ModelProfile(
+            settings.classifier_model_a,
+            settings.classifier_model_a_reasoning_effort,
+            settings.classifier_timeout_seconds,
+            settings.classifier_max_retries,
+            settings.classifier_http_provider or None,
+        )
+        classifier_b = ModelProfile(
+            settings.classifier_model_b,
+            settings.classifier_model_b_reasoning_effort,
+            settings.classifier_timeout_seconds,
+            settings.classifier_max_retries,
+            settings.classifier_http_provider or None,
+        )
         self._kiriku = kiriku
-        self._pages = PageReader(openrouter, settings, reader_a, reader_b)
+        self._pages = PageReader(openrouter, settings, reader_a, classifier_a, classifier_b)
         lexicon = get_lexicon(
             fuzzy_threshold=settings.lexicon_fuzzy_threshold,
             min_term_length=settings.lexicon_min_term_length,
