@@ -79,10 +79,20 @@ class WhatsAppClient:
         )
 
     async def send_audio(
-        self, phone_number_id: str, to: str, content: bytes, mime_type: str, filename: str
+        self,
+        phone_number_id: str,
+        to: str,
+        content: bytes,
+        mime_type: str,
+        filename: str,
+        *,
+        voice: bool = False,
     ) -> str:
         media_id = await self.upload_media(phone_number_id, content, mime_type, filename)
-        return await self._send(phone_number_id, to, {"type": "audio", "audio": {"id": media_id}})
+        audio: dict[str, Any] = {"id": media_id}
+        if voice:
+            audio["voice"] = True
+        return await self._send(phone_number_id, to, {"type": "audio", "audio": audio})
 
     async def send_document(
         self,
