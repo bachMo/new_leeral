@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     LOCAL_STORAGE_PATH=/app/var/storage
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libglib2.0-0 curl \
+    && apt-get install -y --no-install-recommends libglib2.0-0 curl ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --uid 1000 leeral

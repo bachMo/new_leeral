@@ -8,6 +8,7 @@ from app.core.languages import Language
 from app.core.logging import mask_phone
 from app.integrations.storage import FileStorage
 from app.integrations.whatsapp.client import ReplyButton, WhatsAppClient, WhatsAppError
+from app.integrations.whatsapp.voice import as_voice_note
 from app.models import WhatsAppChannel, WhatsAppMessage
 from app.models.enums import WhatsAppDirection, WhatsAppMessageStatus, WhatsAppMessageType
 from app.repositories.system import UiPromptRepository
@@ -50,12 +51,17 @@ class WhatsAppOutbox:
         )
 
     async def audio(self, key: str, *, caption: str | None = None) -> WhatsAppMessage | None:
-        content = await self._storage.get(key)
+        outgoing = await as_voice_note(await self._storage.get(key))
         return await self._deliver(
             WhatsAppMessageType.AUDIO,
             caption,
             lambda: self._client.send_audio(
-                self._channel.phone_number_id, self._recipient, content, "audio/mpeg", "leeral.mp3"
+                self._channel.phone_number_id,
+                self._recipient,
+                outgoing.content,
+                outgoing.mime_type,
+                outgoing.filename,
+                voice=outgoing.voice,
             ),
             media_key=key,
         )
