@@ -114,18 +114,22 @@ class Presenter:
             ],
         )
 
-    @staticmethod
-    def prescription_line(line: PrescriptionLine) -> PrescriptionLineOut:
+    def prescription_line(self, line: PrescriptionLine) -> PrescriptionLineOut:
         return PrescriptionLineOut(
             position=line.position,
             status=line.status,
             name=line.lexicon_name or line.name_read,
             name_read=line.name_read,
             suggestion=line.lexicon_suggestion,
+            dci=line.dci_lexicon or line.dci_read,
             strength=line.strength,
+            form=line.form,
             times_per_day=line.times_per_day,
             duration_days=line.duration_days,
             timing=line.timing,
+            instructions=line.instructions,
+            raw=line.raw_read,
+            image_url=self.url(line.image_key),
         )
 
     def message(self, message: Message) -> MessageOut:

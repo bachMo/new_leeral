@@ -5,6 +5,7 @@ from enum import StrEnum
 from pathlib import PurePath
 
 import docx
+import mutagen
 import pymupdf
 
 from app.ai.contracts import PageInput
@@ -68,6 +69,19 @@ def detect_audio(content: bytes) -> DetectedFile:
     if content[:2] in {b"\xff\xf1", b"\xff\xf9"}:
         return DetectedFile(FileKind.AUDIO, "audio/aac", "aac")
     raise AppError(ErrorCode.AUDIO_UNREADABLE)
+
+
+def audio_duration_seconds(content: bytes) -> float | None:
+    """Best-effort duration probe. Returns None for a format mutagen can't parse, rather than
+    failing the upload on a marginal/corrupt file — the duration check becomes a no-op then."""
+    try:
+        probed = mutagen.File(io.BytesIO(content))
+    except Exception:  # mutagen raises many different exception types per format
+        return None
+    if probed is None or probed.info is None:
+        return None
+    length = probed.info.length
+    return float(length) if isinstance(length, int | float) and length > 0 else None
 
 
 def _is_docx(content: bytes) -> bool:

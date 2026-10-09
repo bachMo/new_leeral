@@ -1,0 +1,190 @@
+{
+ "source": "FLORES-200 devtest (Meta/NLLB Team, CC-BY-SA-4.0)",
+ "source_url": "https://github.com/facebookresearch/flores/blob/main/flores200/README.md",
+ "note_ff": "ff = fuv_Latn = Fulfulde du Nigeria (FLORES-200 n'a pas de code dedie pour le pulaar senegalais / Futa Tooro). Variete proche mais distincte.",
+ "sampled_at": "2026-10-05",
+ "seed": 20261005,
+ "n": 20,
+ "items": [
+  {
+   "id": 22,
+   "en": "The other nominations include Best Picture, Director, Cinematography, Costume Design, Film-editing, Original Score, Production Design, Sound Editing, Sound Mixing and Original Screenplay.",
+   "fr": "Parmi les autres nominations figurent celles du meilleur film, du meilleur réalisateur, de la meilleure cinématographie, des meilleurs costumes, du meilleur montage, de la meilleure musique originale, des meilleurs décors, du meilleur montage sonore, du meilleur mixage et du meilleur scénario original.",
+   "wo": "Yenneen tànneef yi bokk na ci Nataal bi gën, Njiit, Sinematogarafi, West yi, defarub film, misik piire, njureef defar, Defar ab deglu, Boole ay deglu ak Ekaraan piire.",
+   "ff": "Luttuɗum himɓe ɓe zaɓi man wonnan ha gefe, hoto fim je ɓuri wooɗugo, kare fim, wo’utungo tsari fim, wo’ungo kara fim be fijerde man ha tv.",
+   "domain": "wikinews",
+   "topic": "entertainment"
+  },
+  {
+   "id": 93,
+   "en": "Television reports show white smoke coming from the plant.",
+   "fr": "Les reportages télévisés montrent de la fumée blanche provenant de l'usine.",
+   "wo": "Amna ay reportage ci télé bi yuy wane saxaar su weer yu bawoo ci usine bi.",
+   "ff": "Telabijin Holli do viyugo churde danejum do vurta daga awol mai.",
+   "domain": "wikinews",
+   "topic": "Disaster"
+  },
+  {
+   "id": 97,
+   "en": "Dr. Tony Moll discovered the Extremely Drug Resistant Tuberculosis (XDR-TB) in the South African region KwaZulu-Natal.",
+   "fr": "Le Dr Tony Moll a découvert la tuberculose multirésistante (TB-MR) dans la région sud-africaine du KwaZulu-Natal.",
+   "wo": "Dr Tony Moll mo gis tuberculose bu garab (TB-XDR) mënalul dara ci diwaanu Afrique du sud bi ñuy woowe KwaZulu-Natal.",
+   "ff": "Dr. Tony Moll hefti nyawu tuberculosis je lekki ɗuɗai magugo (XDR_TB) ha hedi KwaZulu-Natal ha South Africa.",
+   "domain": "wikinews",
+   "topic": "Health"
+  },
+  {
+   "id": 114,
+   "en": "The outbreak has prompted the Indian government to undertake such measures as deployment of pig catchers in seriously affected areas, distributing thousands of mosquito curtains and spraying pesticides.",
+   "fr": "L’épidémie a incité le gouvernement indien à prendre des mesures telles que le déploiement de collecteurs de porcs dans les zones gravement touchées, la distribution de milliers de moustiquaires et la pulvérisation de pesticides.",
+   "wo": "Mbas mi moo tax nguuru indo gi jël y dogal yu melni tekk ay jumtukaay yuy wone maam xuux yi ci bërëb yi mbas mi gëna bare, joxe ay junniy sànke ak wasaare posan.",
+   "ff": "Yaɗugo waɗi gomnati India hosi matakai je nangugo ɓe nangata aladu ha pellelji je ɓuri ɗuɗugo, ɓeɗo senda labule chufi dubu bo ɓe ɗo pesa lekki peshi.",
+   "domain": "wikinews",
+   "topic": "Health"
+  },
+  {
+   "id": 158,
+   "en": "All of the cave entrances, which were named \"The Seven Sisters\", are at least 100 to 250 meters (328 to 820 feet) in diameter.",
+   "fr": "Toutes les entrées des grottes, qui ont été baptisées « Les sept sœurs », ont un diamètre d’au moins 100 à 250 mètres.",
+   "wo": "Buntu kaaf yépp, yuñu tuddeewoon “The Seven Sisters\", ci 100 jàpp 250 meetar lañu toll gën gaa neew (328 jàpp 820 tànk) ci yaatuwaay.",
+   "ff": "Pat pellel nastugo cave mai, ɗo mari inder “The Seven Sisters”, ɗo mari a qalla 100 yahugo 250 meters (328 yahugo 820 feet) je diameter.",
+   "domain": "wikinews",
+   "topic": "science"
+  },
+  {
+   "id": 283,
+   "en": "The road where the crash happened was temporarily closed while emergency services freed the driver from the red Audi TT.",
+   "fr": "La voie où l'accident a eu lieu a été temporairement barrée pour permettre aux services de secours d'extraire le conducteur de l'Audi TT rouge. ",
+   "wo": "Yoon bi jëye ji amee tëjandi nañu ko binga xame ni wallukat yi ñingi done guéné dawalkat bi nekkoon ci Audi TT bu xonk bi.",
+   "ff": "Daatal ha hatsaru fe’ii do himɓe yidata fe'anuu maɓɓi ngam be itta direba man daga Audi TT bodewa.",
+   "domain": "wikinews",
+   "topic": "accident"
+  },
+  {
+   "id": 291,
+   "en": "The document, according to the leak, will refer to the borders dispute, which Palestine wants based on the borders before the 1967 Mideast War.",
+   "fr": "D'après la fuite, le document portera sur le différend à la frontière que la Palestine revendique sur la base des frontières existantes avant la guerre du Moyen-Orient de 1967.",
+   "wo": "Wayndare bi, sunu sukandikoo si li ci rëcc, dina juñju xeex yuy am ci forñceer yi, bi Palestine bëg sunu sukkandikoo ci foroñceer yi laata Geeru Moyen Orient ci atum 1967.",
+   "ff": "Biindi man, no kuje man wurti, ɗon wolwa hala haɓre baabal sendata wuro man, je Palestin yiɗi do baabal sendata wuro man bako haɓre cakka fuuna je 1967.",
+   "domain": "wikinews",
+   "topic": "Politics"
+  },
+  {
+   "id": 294,
+   "en": "Shooters in the supplementary pest control trial were to be closely supervised by rangers, as the trial was monitored and its effectiveness evaluated.",
+   "fr": "Les tireurs de l’essai supplémentaire de lutte contre les parasites devaient être étroitement surveillés par des rangers, car l’essai était contrôlé et son efficacité évaluée.",
+   "wo": "Yeneen ñaq yiñ doon saytu ngir mottali wutum garab guy faay yeneen parasite yi, ranger yi dañu ko wara saytu bu baax, ndax dañu xayma saytu gi ak baaxaayam.",
+   "ff": "Be fidata ha der howube be canji atugo nyawo fondi do lara dum ha kombi be hakkilitta ha be fondata do lar abo do mari amfani tabe wadi.",
+   "domain": "wikinews",
+   "topic": "Policy"
+  },
+  {
+   "id": 303,
+   "en": "Japan's Ministry of Economy, Trade and Industry (METI) said that it had been aware of 27 accidents related to the devices.",
+   "fr": "Le ministère japonais de l'économie, du commerce et de l'industrie (METI) a déclaré qu'il avait eu connaissance de 27 accidents liés à ces appareils.",
+   "wo": "Ministeer bi yor wàllum Koom-koom Njaay ak Indistiri (METI) bu Sapoŋ wax na ni xàmoon na lu toll ci 27 aksidaŋ yu jooge ci jumtukaay yi.",
+   "ff": "Ma’aikata Japan’s je tattalin arziki, je Fillu be Yahdu (METI) wi'i yo'o ɓe ɗon aandi cewa wodi hasari je be wadi 27 je hauti be ordoji.",
+   "domain": "wikinews",
+   "topic": "Science and technology"
+  },
+  {
+   "id": 409,
+   "en": "In just two weeks the Americans and Free French forces had liberated southern France and were turning towards Germany.",
+   "fr": "En à peine deux semaines, les Américains et les Forces de la France Libre avaient libéré le sud de la France et se dirigeaient vers l'Allemagne.",
+   "wo": "Ci ñaari ayubés dong Americains yi ak soldaru Free French wallu nañu sowwu France té jall ci almañ.",
+   "ff": "Ha nder aseere ɗiɗi himɓe leddi Amerika be Faransa maɓɓiti wuro Faransa je gefe horɗoore sai ɓe nangi lawol Jamani.",
+   "domain": "wikibooks",
+   "topic": "World_War_II/Liberation_of_Western_Europe"
+  },
+  {
+   "id": 423,
+   "en": "Taiwan beginning start way back in 15th century where European sailors passing by record the island’s name as Ilha Formosa, or beautiful island.",
+   "fr": "Les premières informations concernant Taïwan remontent au XVe siècle, tandis que des navigateurs européens passant par là en firent mention sous le nom d’Ilha Formosa, ou « belle île ».",
+   "wo": "TaIwan mu tambale ci ndorteelu 15eelu siyeekal bi fa marin yu bawoo Orop jaaree ñu arësistere turu Iil bi ci Ilha Formosa, wala iil bu rafet.",
+   "ff": "Fuɗɗorde Taiwan fe’i tun yake duuɓi 1500, de himɓe Urop tokkata heri ndiyam ɓe yadu yecci dow inde danneere man Ilha Fomosa ko danneere boɗɗum.",
+   "domain": "wikibooks",
+   "topic": "Geography, Taiwan"
+  },
+  {
+   "id": 452,
+   "en": "During these periods fierce warfare took place between many nobles fighting for the throne.",
+   "fr": "Durant ces périodes, des luttes féroces ont eu lieu entre de nombreux membres de la noblesse qui se battaient pour le trône.",
+   "wo": "ci waxtu yoyu xeex ju meti amon na diganté borom alal yu beurri di xeex ngir neek njit.",
+   "ff": "Ha nder wakkiti ɗo on habre kulniiɗum fe'i caka mauɓe haɓata gam laamu.",
+   "domain": "wikibooks",
+   "topic": "ancient china/government"
+  },
+  {
+   "id": 534,
+   "en": "This can be easily done by using a relatively quiet alarm clock to bring you to consciousness without fully waking you.",
+   "fr": "Cela peut être fait facilement en utilisant un réveil relativement silencieux, afin de vous faire reprendre conscience sans vous réveiller complètement.",
+   "wo": "Mën nga ko defee ak réveil bu woyof, boo xam ni dina la ko yëgal ndank te dula tanqal dila la yee.",
+   "ff": "Do wawan tima be kwaidon , ko wawan upmina mah be kwaidon.",
+   "domain": "wikibooks",
+   "topic": "Lucid Dreaming/Induction"
+  },
+  {
+   "id": 548,
+   "en": "However, these plans were rendered obsolete nearly overnight, when over 800,000 soldiers from the Soviet's Union Red Army entered and created the Belarussian and Ukrainian fronts after invading the eastern regions of Poland in violation of the Riga Peace Treaty, the Soviet-Polish Non-Aggression Pact, and other international treaties, both bilateral and multilateral.",
+   "fr": "Mais ces plans sont devenus obsolètes presque du jour au lendemain, quand plus de 800 000 soldats de l’Armée rouge de l’Union soviétique sont arrivés et ont créé le front biélorusse et ukrainien après avoir envahi les régions est de la Pologne, violant ainsi le Traité de Paix de Riga, le pacte de non-agression soviéto-polonais, ainsi que d’autres traités internationaux, qu’ils soient bilatéraux ou multilatéraux.",
+   "wo": "Kon, mëbeet yi xéwwinañu ci guddi gi, bi lutollook 800 000 soldaru Soviet Union Red Army dugguséé té amal kurelu Belarussian ak Ukrainian ginnaw biñu nango dëkk yi ci pénku Poland ci gnakka wag Riga Peace Treaty, Soviet-Polish Non-Aggression Pact, ak yénééni and ci réew yi , yepp ñaari boor ak boor yu bari.",
+   "ff": "Amma bako fajira ɓe arti ɓe fasiti hala tsari ɓe waddi man, gam soja ɓuri adadu 800,000 diga gefe Roshiya en nasti pellel man ɓe waɗi ɗum je soja Belarus en be Ukren ɓawo de ɓe nasti gefe lettugal je wuro Poland. Waɗugo banning ma wata ɓe filti hala jonde jam ɓe waɗi chaka himɓe Roshiya be himɓe Poland.",
+   "domain": "wikibooks",
+   "topic": "World_War_II/Battle_of_Poland"
+  },
+  {
+   "id": 558,
+   "en": "Although wagonways merely consisted of parallel planks of wood, they allowed horses pulling them to achieve greater speeds and pull larger loads than on the slightly more rough roads of the day.",
+   "fr": "Bien que les voies pour wagons fussent simplement constituées de planches de bois parallèles, elles permettaient aux chevaux qui les tiraient d'atteindre de plus grandes vitesses et de tirer des charges plus importantes que sur les routes légèrement plus accidentées de la journée.",
+   "wo": "Doonte yoonu saxaar yi ñaari band yu jàkkarloo la, danoo may nanu fas yi di leen xëcc ngir nu am gaawaay te yóbbu yab yu gëna bare cii yoon yixawa gën dëggr yu tey.",
+   "ff": "Kodayeke (wagonways) bedi katako, be dou acsha pupcshi do dasa heba be yawa dasu go kare duddum .",
+   "domain": "wikibooks",
+   "topic": "History_of_Rail_Transport/Early_Rail_Transportation"
+  },
+  {
+   "id": 566,
+   "en": "This is just like symptomatic treatment in many cases. However, if we do not only want a temporary solution, then we should find the root of the problems, and we should deactivate them.",
+   "fr": "Dans de nombreux cas, il s’agit d’un traitement symptomatique. Cependant, si nous ne voulons pas seulement une solution temporaire, nous devons trouver la racine des problèmes et les désactiver.",
+   "wo": "Lii dafay niroog fajum màndarga jangoro ci anam yu bare.Donte, su nu bëggul saafara gu yàggul, kon war nanu gis reeni jafe jafe gi, te danu leena wara dindi.",
+   "ff": "Do fu en jo“iniran liikol nyau majum no be watta on. Amma, toh en yida lekki labbina, sai en tefa ko waddata matsalaji mai, sai en nyifa dum.",
+   "domain": "wikibooks",
+   "topic": "Environmental_theory_and_collection_of_ideas/Environmentalism_and_survival"
+  },
+  {
+   "id": 656,
+   "en": "These theories look at what it is about certain people that make them want the things that they do and what things in their environment will make them do or not do certain things.",
+   "fr": "Ces théories examinent ce qui pousse certaines personnes à vouloir les choses qu’elles font et ce qui, dans leur environnement, les pousse à faire ou à ne pas faire certaines choses.",
+   "wo": "Xaalaat yii degnuy xol lann mo nekk ci yen ci ay nitt yilen tax beug lignuy deff ak lan ci aduna bi mo meuna taax ngu deff wala bagna deff yenn yii.",
+   "ff": "Haalaji do do lara dume on ha himbe fere je watta be be yida kujeji je be watta bo kujeji toi on ha babal be woni watta be be wada ko ta be wada kujeji fere.",
+   "domain": "wikibooks",
+   "topic": "Managing Groups & Teams/Motivation"
+  },
+  {
+   "id": 733,
+   "en": "The Sundarbans has been declared a UNESCO World Heritage Site. The part of the forest within Indian territory is called Sundarbans National Park.",
+   "fr": "Les Sundarbans ont été déclarés site du patrimoine mondial de l'UNESCO. La partie de la forêt située sur le territoire indien est appelée parc national des Sundarbans.",
+   "wo": "Sundarbans bookna ci barab yi UNESCO di woowe barab yu ànduna bi yépp bokk. Wàllu àll bi bokk ci réewum Inde lañuy woowe park national bu Sundarbans yi.",
+   "ff": "Sundarbans man warti babal asli duniyaru je UNESCO. sera ladde man je woni der India be do dyona dum babal suitare leddi je Sundarbans.",
+   "domain": "wikivoyage",
+   "topic": "Travel, Geography"
+  },
+  {
+   "id": 754,
+   "en": "The official Falklands currency is the Falkland pound (FKP) whose value is set equivalent to that of one British pound (GBP).",
+   "fr": "La monnaie officielle des Îles Malouines est la livre des Îles Malouines (FKP) dont la valeur est équivalente à une livre sterling (GBP).",
+   "wo": "Xaalisu Falklands bu nu dëggal mooy poun bu Flakland (FKP) nga xam nenjëgam danu ko def mu tolloog pound bu Angalteer (GBP).",
+   "ff": "Aalaaji chede Falkland tigi to poni Falkland on (FKP) ko darja maga watta to fotata be poni gotel British (GBP).",
+   "domain": "wikivoyage",
+   "topic": "Travel, Economy"
+  },
+  {
+   "id": 904,
+   "en": "The archipelago lies 120 km north of the Peninsula. The largest is King George Island with the settlement of Villa Las Estrellas.",
+   "fr": "L’archipel se trouve à 120 km au nord de la péninsule. L’île du Roi-George, avec le village de Villa Las Estrellas, est la plus grande.",
+   "wo": "Archipel bi mu ngi nekk ci 120 km ci kaw Peninsil bi. Bi ci gëna rey mooy King George Island ak sampug Villa Las Estrellas.",
+   "ff": "Maunugo pellel ndiyam je soɓɓiire Peninsula je mari danŋeere ɗuɗɗum yottan kilomita guda 120. Kanju on je ɓuri maunugo ha danŋeere je Lamɗo Gorj ɗum mari pellel joɗugo je Vila je Estrelas.",
+   "domain": "wikivoyage",
+   "topic": "Antartica, Travel"
+  }
+ ]
+}

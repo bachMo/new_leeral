@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from datetime import date
 from typing import Any
 
@@ -8,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.ai.contracts import DocumentContext
 from app.ai.engine import AiEngine
 from app.core.languages import Language
+from app.core.logging import log_step
 from app.integrations.storage import FileStorage
 from app.models import (
     Document,
@@ -19,6 +21,8 @@ from app.models import (
 from app.models.enums import ExplanationVariant, KeyPointKind
 from app.services import storage_keys
 from app.services.narrator import Narrator
+
+logger = logging.getLogger("leeral.explanations")
 
 _PARALLEL_ITEMS = 4
 
@@ -39,38 +43,42 @@ class ExplanationBuilder:
         language: Language,
         variant: ExplanationVariant,
     ) -> DocumentExplanation:
-        text_fr = (
-            context.summary_fr
-            if variant is ExplanationVariant.STANDARD
-            else await self._ai.simplify(context)
-        )
-        localized, audio = await self._narrator.voice(
-            text_fr, language, protected_terms=context.protected_terms
-        )
-        audio_key = storage_keys.document_audio(
-            user, document.id, f"explanation-{language.value}-{variant.value}"
-        )
-        await self._storage.put(audio_key, audio.content, audio.mime_type)
-        await session.execute(
-            delete(DocumentExplanation).where(
-                DocumentExplanation.document_id == document.id,
-                DocumentExplanation.language == language,
-                DocumentExplanation.variant == variant,
+        with log_step(
+            logger, "explanation_built", language=language.value, variant=variant.value
+        ) as out:
+            text_fr = (
+                context.summary_fr
+                if variant is ExplanationVariant.STANDARD
+                else await self._ai.simplify(context)
             )
-        )
-        explanation = DocumentExplanation(
-            document_id=document.id,
-            language=language,
-            variant=variant,
-            text=localized.text,
-            text_fr=text_fr,
-            audio_key=audio_key,
-            audio_duration_s=audio.duration_s,
-        )
-        session.add(explanation)
-        if variant is ExplanationVariant.STANDARD:
-            await self._build_companions(session, user, document, context, language)
-        return explanation
+            localized, audio = await self._narrator.voice(
+                text_fr, language, protected_terms=context.protected_terms
+            )
+            audio_key = storage_keys.document_audio(
+                user, document.id, f"explanation-{language.value}-{variant.value}"
+            )
+            await self._storage.put(audio_key, audio.content, audio.mime_type)
+            await session.execute(
+                delete(DocumentExplanation).where(
+                    DocumentExplanation.document_id == document.id,
+                    DocumentExplanation.language == language,
+                    DocumentExplanation.variant == variant,
+                )
+            )
+            explanation = DocumentExplanation(
+                document_id=document.id,
+                language=language,
+                variant=variant,
+                text=localized.text,
+                text_fr=text_fr,
+                audio_key=audio_key,
+                audio_duration_s=audio.duration_s,
+            )
+            session.add(explanation)
+            if variant is ExplanationVariant.STANDARD:
+                await self._build_companions(session, user, document, context, language)
+            out["audio_duration_s"] = audio.duration_s
+            return explanation
 
     async def _build_companions(
         self,

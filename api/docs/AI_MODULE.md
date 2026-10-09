@@ -118,3 +118,13 @@ Le terminal affiche le contrôle de la photo, l'analyse en français (type, mont
 - **Suivre les coûts** : chaque tâche écrit sa durée, ses appels et son coût OpenRouter dans `ai_jobs`.
 
 Jamais de contenu de document, de transcription ni de numéro de téléphone dans les journaux. Les ordonnances de `eval/` restent hors de ce dépôt.
+
+## Pour aller plus loin
+
+- `AI_DECISIONS.md` : pourquoi chaque modèle, seuil et garde-fou a été choisi ainsi (règles d'or,
+  journal de décisions).
+- `LEXICON.md` : comment le lexique de médicaments (`real/data/lexicon_terms.csv`) est construit
+  et vérifié.
+- `translation-study.md`, `llm-study.md` : les études chiffrées derrière le choix des modèles de
+  traduction et de LLM.
+- `../../eval/` : bancs d'essai, jeu de test (ordonnances réelles, non commitées) et rapports.

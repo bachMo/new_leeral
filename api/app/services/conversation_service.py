@@ -1,7 +1,7 @@
 import uuid
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.core.clock import utcnow
 from app.core.config import Settings
@@ -22,8 +22,12 @@ from app.models.enums import (
 from app.repositories.conversations import ConversationRepository, MessageRepository
 from app.repositories.documents import DocumentRepository
 from app.services import storage_keys
-from app.services.media import IncomingFile, detect_audio
+from app.services.media import IncomingFile, audio_duration_seconds, detect_audio
 from app.workers.jobs import Job
+
+
+def is_guest_session_expired(last_message_at: datetime, ttl_hours: int) -> bool:
+    return utcnow() - last_message_at > timedelta(hours=ttl_hours)
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,14 +65,19 @@ class ConversationService:
     async def open_for_document(
         self, user: User, document_id: uuid.UUID, *, source: Channel = Channel.APP
     ) -> Conversation:
-        existing = await self._conversations.for_document(user.id, document_id)
-        if existing is not None:
-            return existing
         document = await self._documents.owned(user.id, document_id)
         if document is None:
             raise NotFoundError("document")
         if document.status is not DocumentStatus.READY:
             raise AppError(ErrorCode.DOCUMENT_NOT_READY)
+
+        conversation = await self._existing_conversation(user, document_id, source)
+        if conversation is not None:
+            await self._conversations.attach_document(conversation.id, document.id)
+            conversation.document_id = document.id
+            await self._uow.commit()
+            return conversation
+
         explanation = await self._documents.explanation(
             document.id, user.language, ExplanationVariant.STANDARD
         )
@@ -84,6 +93,7 @@ class ConversationService:
             )
         )
         await self._uow.session.flush()
+        await self._conversations.attach_document(conversation.id, document.id)
         if explanation is not None:
             self._messages.add(
                 Message(
@@ -102,11 +112,31 @@ class ConversationService:
         await self._uow.commit()
         return conversation
 
+    async def _existing_conversation(
+        self, user: User, document_id: uuid.UUID, source: Channel
+    ) -> Conversation | None:
+        """Guests get one conversation per document, dropped after `guest_session_ttl_hours` of
+        inactivity (a fresh upload of the *same* document then starts over rather than resuming a
+        stale thread). Accounts keep a single ongoing conversation per channel, which every new
+        document joins (see AI_DECISIONS.md for the full rule and why `document_id` is kept as the
+        "current/default document" pointer rather than dropped)."""
+        if user.is_guest:
+            existing = await self._conversations.for_document(user.id, document_id)
+            if existing is None or is_guest_session_expired(
+                existing.last_message_at, self._settings.guest_session_ttl_hours
+            ):
+                return None
+            return existing
+        return await self._conversations.active_for_account(user.id, source)
+
     async def get(self, user: User, conversation_id: uuid.UUID) -> Conversation:
         conversation = await self._conversations.owned(user.id, conversation_id)
         if conversation is None:
             raise NotFoundError("conversation")
         return conversation
+
+    async def documents_for(self, conversation_id: uuid.UUID) -> Sequence[uuid.UUID]:
+        return await self._conversations.documents_for(conversation_id)
 
     async def messages(
         self, user: User, conversation_id: uuid.UUID, *, after: datetime | None, limit: int
@@ -121,7 +151,13 @@ class ConversationService:
         question: Question,
         *,
         whatsapp_message_id: uuid.UUID | None = None,
+        target_document_id: uuid.UUID | None = None,
     ) -> Exchange:
+        if target_document_id is not None and target_document_id != conversation.document_id:
+            known = await self._conversations.documents_for(conversation.id)
+            if target_document_id not in known:
+                raise NotFoundError("document")
+            conversation.document_id = target_document_id
         asked = await self.build_user_message(user, conversation, question)
         asked.whatsapp_message_id = whatsapp_message_id
         answer = self._messages.add(
@@ -148,6 +184,9 @@ class ConversationService:
             if len(question.audio.content) > self._settings.max_audio_bytes:
                 raise AppError(ErrorCode.FILE_TOO_LARGE)
             detected = detect_audio(question.audio.content)
+            duration = audio_duration_seconds(question.audio.content)
+            if duration is not None and duration > self._settings.max_question_audio_seconds:
+                raise AppError(ErrorCode.AUDIO_TOO_LONG)
             key = storage_keys.message_media(user, conversation.id, detected.extension)
             await self._storage.put(key, question.audio.content, detected.mime_type)
             message.content_type = ContentType.AUDIO

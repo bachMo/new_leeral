@@ -54,12 +54,23 @@ class MedicationLine:
     times_per_day: int | None
     duration_days: int | None
     timing: str | None
+    dci_read: str | None = None
+    dci_lexicon: str | None = None
+    form: str | None = None
+    instructions: str | None = None
+    raw_read: str | None = None
+    image_extract: bytes | None = None
+    image_key: str | None = None
     field_statuses: dict[str, LineStatusValue] = field(default_factory=dict)
     pharmacology_flags: tuple[str, ...] = ()
 
     @property
     def display_name(self) -> str | None:
         return self.lexicon_name or self.name_read
+
+    @property
+    def display_dci(self) -> str | None:
+        return self.dci_lexicon or self.dci_read
 
 
 @dataclass(frozen=True, slots=True)
@@ -80,6 +91,7 @@ class DocumentAnalysis:
     category: CategoryValue
     summary_fr: str
     full_text: str
+    cut_off: bool = False
     page_texts: tuple[str, ...] = ()
     issuer: str | None = None
     document_date: date | None = None
