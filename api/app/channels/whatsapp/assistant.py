@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import uuid
 from collections.abc import Sequence
@@ -8,7 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.ai.contracts import PRESCRIPTION
 from app.ai.engine import AiEngine
-from app.ai.errors import TranslationError
+from app.ai.errors import AiError, TranslationError
+from app.channels.whatsapp.language_choice import named_language
 from app.channels.whatsapp.outbox import WhatsAppOutbox
 from app.core.clock import utcnow
 from app.core.config import Settings
@@ -18,6 +20,7 @@ from app.core.phone import normalize_phone_number
 from app.db.unit_of_work import UnitOfWork
 from app.integrations.storage import FileStorage
 from app.integrations.whatsapp.client import ReplyButton, WhatsAppClient, WhatsAppError
+from app.integrations.whatsapp.voice import audio_duration
 from app.models import (
     Conversation,
     Document,
@@ -61,7 +64,12 @@ WELCOME_TEXT = (
     "Bismillah e Leeral ! Neldam natal fiilde winndaande e farayseere, "
     "mi firanoyte ɗum e ɗemngal maa."
 )
+WELCOME_PROMPT = "whatsapp.choose_language"
+WELCOME_LANGUAGES = (Language.WOLOF, Language.PULAAR)
+LANGUAGE_NAME_MAX_SECONDS = 4.0
 MEDIA_TYPES = frozenset({WhatsAppMessageType.IMAGE, WhatsAppMessageType.DOCUMENT})
+SPEECH_TYPES = frozenset({WhatsAppMessageType.AUDIO, WhatsAppMessageType.TEXT})
+REPLY_TYPES = frozenset({WhatsAppMessageType.INTERACTIVE, WhatsAppMessageType.BUTTON})
 PENDING_MEDIA_WINDOW = timedelta(hours=1)
 CONFIRM_YES_REPLY = "confirm:yes"
 CONFIRM_NO_REPLY = "confirm:no"
@@ -207,37 +215,73 @@ class WhatsAppAssistant:
         *,
         is_new: bool,
     ) -> None:
-        reply = (inbound.body_text or "").strip().lower()
-        if inbound.type in {WhatsAppMessageType.INTERACTIVE, WhatsAppMessageType.BUTTON}:
-            if reply.startswith(LANGUAGE_REPLY_PREFIX):
-                await self._choose_language(uow, outbox, user, wa_session, reply)
-                return
-            if reply in RENEW_REPLIES:
-                await outbox.prompt("whatsapp.renew", user.language)
-                return
-            if wa_session.state is WhatsAppSessionState.CONFIRMING_QUESTION:
-                await self._confirm_question(uow, outbox, user, channel, wa_session, reply)
-                return
-        is_media = inbound.type in MEDIA_TYPES
-        if is_media:
-            await self._collect_later(uow, outbox, user, inbound)
-        if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
-            if is_new:
-                await outbox.text(WELCOME_TEXT)
-            if is_new or not is_media:
-                await self._ask_language(outbox, wa_session)
+        if inbound.type in REPLY_TYPES and await self._reply(
+            uow, outbox, user, channel, wa_session, inbound
+        ):
             return
-        if is_new and not is_media:
+        if inbound.type in MEDIA_TYPES:
+            await self._receive_media(uow, outbox, user, wa_session, inbound, is_new=is_new)
+            return
+        audio: bytes | None = None
+        if inbound.type is WhatsAppMessageType.AUDIO:
+            audio = await self._download_audio(outbox, user, inbound)
+            if audio is None:
+                return
+        if inbound.type in SPEECH_TYPES:
+            named = await self._named_language(user, wa_session, inbound.body_text, audio)
+            if named is not None:
+                await self._choose_language(uow, outbox, user, wa_session, named)
+                return
+        if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
+            if is_new or audio is not None:
+                await self._welcome(outbox)
+            await self._ask_language(outbox, wa_session)
+            return
+        if is_new:
             await outbox.prompt("whatsapp.welcome", user.language)
+        reply = (inbound.body_text or "").strip().lower()
         if inbound.type is WhatsAppMessageType.TEXT and reply in LANGUAGE_KEYWORDS:
             await self._ask_language(outbox, wa_session)
             return
-        if is_media:
-            return
-        if inbound.type in {WhatsAppMessageType.AUDIO, WhatsAppMessageType.TEXT}:
-            await self._receive_question(uow, outbox, user, channel, wa_session, inbound)
+        if inbound.type in SPEECH_TYPES:
+            await self._receive_question(uow, outbox, user, channel, wa_session, inbound, audio)
             return
         await outbox.prompt("whatsapp.unsupported", user.language)
+
+    async def _receive_media(
+        self,
+        uow: UnitOfWork,
+        outbox: WhatsAppOutbox,
+        user: User,
+        wa_session: WhatsAppSession,
+        inbound: WhatsAppMessage,
+        *,
+        is_new: bool,
+    ) -> None:
+        await self._collect_later(uow, outbox, user, inbound)
+        if is_new and wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
+            await self._welcome(outbox)
+            await self._ask_language(outbox, wa_session)
+
+    async def _reply(
+        self,
+        uow: UnitOfWork,
+        outbox: WhatsAppOutbox,
+        user: User,
+        channel: WhatsAppChannel,
+        wa_session: WhatsAppSession,
+        inbound: WhatsAppMessage,
+    ) -> bool:
+        reply = (inbound.body_text or "").strip().lower()
+        if reply.startswith(LANGUAGE_REPLY_PREFIX):
+            await self._choose_language(uow, outbox, user, wa_session, _button_language(reply))
+        elif reply in RENEW_REPLIES:
+            await outbox.prompt("whatsapp.renew", user.language)
+        elif wa_session.state is WhatsAppSessionState.CONFIRMING_QUESTION:
+            await self._confirm_question(uow, outbox, user, channel, wa_session, reply)
+        else:
+            return False
+        return True
 
     async def _choose_language(
         self,
@@ -245,12 +289,9 @@ class WhatsAppAssistant:
         outbox: WhatsAppOutbox,
         user: User,
         wa_session: WhatsAppSession,
-        reply: str,
+        language: Language | None,
     ) -> None:
-        code = reply.removeprefix(LANGUAGE_REPLY_PREFIX)
-        try:
-            language = Language(code)
-        except ValueError:
+        if language is None:
             await self._ask_language(outbox, wa_session)
             return
         if language not in AVAILABLE_LANGUAGES:
@@ -258,12 +299,74 @@ class WhatsAppAssistant:
             await self._ask_language(outbox, wa_session)
             return
         user.language = language
-        wa_session.state = WhatsAppSessionState.IDLE
+        if wa_session.state is not WhatsAppSessionState.DOCUMENT_QUESTION:
+            wa_session.state = WhatsAppSessionState.IDLE
+        if wa_session.active_conversation_id is not None:
+            conversation = await uow.session.get(Conversation, wa_session.active_conversation_id)
+            if conversation is not None:
+                conversation.language = language
         pending = await self._pending_media(uow.session, user.id)
         if pending:
             self._schedule_collect(uow, user, pending[-1], immediately=True)
             return
         await outbox.prompt("whatsapp.welcome", language)
+
+    async def _welcome(self, outbox: WhatsAppOutbox) -> None:
+        keys = [
+            key
+            for language in WELCOME_LANGUAGES
+            if (key := await outbox.prompt_audio_key(WELCOME_PROMPT, language)) is not None
+        ]
+        if keys:
+            await outbox.audio(keys[0], *keys[1:])
+            return
+        await outbox.text(WELCOME_TEXT)
+
+    async def _named_language(
+        self,
+        user: User,
+        wa_session: WhatsAppSession,
+        text: str | None,
+        audio: bytes | None,
+    ) -> Language | None:
+        if audio is None:
+            return named_language(text or "")
+        duration = await audio_duration(audio)
+        if duration is None or duration > LANGUAGE_NAME_MAX_SECONDS:
+            return None
+        languages = (
+            WELCOME_LANGUAGES
+            if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE
+            else (user.language,)
+        )
+        transcripts = await asyncio.gather(
+            *(self._transcribe_quietly(audio, language) for language in languages)
+        )
+        for transcript in transcripts:
+            named = named_language(transcript)
+            if named is not None:
+                return named
+        return None
+
+    async def _transcribe_quietly(self, audio: bytes, language: Language) -> str:
+        try:
+            transcript = await self._ai.transcribe(audio, filename="voice.ogg", language=language)
+        except AiError as exc:
+            logger.info("language_name_not_transcribed", extra={"code": exc.code})
+            return ""
+        return transcript.text
+
+    async def _download_audio(
+        self, outbox: WhatsAppOutbox, user: User, inbound: WhatsAppMessage
+    ) -> bytes | None:
+        if inbound.wa_media_id is None:
+            return None
+        try:
+            media = await self._client.download_media(inbound.wa_media_id)
+        except WhatsAppError:
+            await outbox.prompt("error.audio_unreadable", user.language)
+            return None
+        return media.content
 
     async def _ask_language(self, outbox: WhatsAppOutbox, wa_session: WhatsAppSession) -> None:
         wa_session.state = WhatsAppSessionState.CHOOSING_LANGUAGE
@@ -373,21 +476,11 @@ class WhatsAppAssistant:
         channel: WhatsAppChannel,
         wa_session: WhatsAppSession,
         inbound: WhatsAppMessage,
+        audio: bytes | None,
     ) -> None:
         language = user.language
         conversation = await self._active_conversation(uow, user, channel, wa_session)
         await uow.commit()
-        audio: bytes | None = None
-        if inbound.type is WhatsAppMessageType.AUDIO:
-            if inbound.wa_media_id is None:
-                return
-            try:
-                media = await self._client.download_media(inbound.wa_media_id)
-            except WhatsAppError:
-                await outbox.prompt("error.audio_unreadable", language)
-                return
-            audio = media.content
-
         if await self._is_prescription_conversation(uow, conversation):
             try:
                 question_fr = await self._resolve_question_fr(inbound.body_text, audio, language)
@@ -546,6 +639,13 @@ class WhatsAppAssistant:
 
 def _wa_id(user: User) -> str:
     return (user.phone_number or "").removeprefix("+")
+
+
+def _button_language(reply: str) -> Language | None:
+    try:
+        return Language(reply.removeprefix(LANGUAGE_REPLY_PREFIX))
+    except ValueError:
+        return None
 
 
 def _error_prompt(code: str | None) -> str:

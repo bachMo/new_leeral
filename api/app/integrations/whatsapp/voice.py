@@ -95,3 +95,35 @@ async def _encode(ffmpeg: str, inputs: list[Path]) -> bytes:
     if process.returncode != 0 or not ogg:
         raise VoiceNoteError(error.decode(errors="replace")[-200:].strip() or "empty output")
     return ogg
+
+
+async def audio_duration(audio: bytes) -> float | None:
+    ffprobe = shutil.which("ffprobe")
+    if ffprobe is None or not audio:
+        return None
+    with tempfile.TemporaryDirectory(prefix="leeral-probe-") as workdir:
+        path = Path(workdir) / "audio"
+        path.write_bytes(audio)
+        process = await asyncio.create_subprocess_exec(
+            ffprobe,
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            str(path),
+            stdin=asyncio.subprocess.DEVNULL,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+        try:
+            output, _ = await asyncio.wait_for(process.communicate(), VOICE_TIMEOUT_SECONDS)
+        except TimeoutError:
+            process.kill()
+            await process.wait()
+            return None
+    try:
+        return float(output)
+    except ValueError:
+        return None

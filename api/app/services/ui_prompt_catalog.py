@@ -29,6 +29,11 @@ SCREEN_PROMPTS: dict[str, str] = {
         "Leeral plus coûte 500 francs par mois. Tu peux écrire 5 documents par mois "
         "et réviser sans limite."
     ),
+    "whatsapp.choose_language": (
+        "Bienvenue sur Leeral ! Je t'explique à voix haute les documents écrits en français. "
+        "Pour choisir ta langue, appuie sur un bouton, ou envoie-moi un vocal "
+        "où tu dis seulement le nom de ta langue : wolof ou pulaar."
+    ),
     "whatsapp.welcome": (
         "Bonjour, je suis Leeral. Envoie-moi la photo d'un document en français, "
         "je te l'explique dans ta langue."
