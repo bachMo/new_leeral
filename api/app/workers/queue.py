@@ -9,7 +9,9 @@ logger = logging.getLogger("leeral.queue")
 
 
 class JobQueue(Protocol):
-    async def enqueue(self, job: Job, *, key: str | None = None, **kwargs: Any) -> None: ...
+    async def enqueue(
+        self, job: Job, *, key: str | None = None, defer_by: float | None = None, **kwargs: Any
+    ) -> None: ...
 
 
 class ArqJobQueue:
@@ -20,8 +22,12 @@ class ArqJobQueue:
     async def connect(cls, redis_url: str) -> "ArqJobQueue":
         return cls(await create_pool(RedisSettings.from_dsn(redis_url)))
 
-    async def enqueue(self, job: Job, *, key: str | None = None, **kwargs: Any) -> None:
-        enqueued = await self._pool.enqueue_job(job.value, _job_id=key, **kwargs)
+    async def enqueue(
+        self, job: Job, *, key: str | None = None, defer_by: float | None = None, **kwargs: Any
+    ) -> None:
+        enqueued = await self._pool.enqueue_job(
+            job.value, _job_id=key, _defer_by=defer_by, **kwargs
+        )
         if enqueued is None:
             logger.info("job_already_queued", extra={"job": job.value, "key": key})
 

@@ -32,7 +32,9 @@ from app.workers.jobs import Job
 
 
 class _NoopJobQueue:
-    async def enqueue(self, job: Job, *, key: str | None = None, **kwargs: object) -> None:
+    async def enqueue(
+        self, job: Job, *, key: str | None = None, defer_by: float | None = None, **kwargs: object
+    ) -> None:
         return None
 
 

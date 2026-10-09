@@ -1,5 +1,7 @@
 import logging
 import uuid
+from collections.abc import Sequence
+from datetime import timedelta
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -31,6 +33,8 @@ from app.models.enums import (
     DocumentStatus,
     ExplanationVariant,
     MessageStatus,
+    WhatsAppDirection,
+    WhatsAppMessageStatus,
     WhatsAppMessageType,
     WhatsAppSessionState,
 )
@@ -40,6 +44,7 @@ from app.repositories.users import UserRepository
 from app.services.conversation_service import ConversationService, Question
 from app.services.document_service import DocumentService
 from app.services.media import IncomingFile, safe_filename
+from app.workers.jobs import Job
 from app.workers.queue import JobQueue
 
 logger = logging.getLogger("leeral.whatsapp")
@@ -48,6 +53,16 @@ LANGUAGE_REPLY_PREFIX = "lang:"
 RENEW_REPLIES = frozenset({"renew", "renouveler"})
 LANGUAGE_KEYWORDS = frozenset({"langue", "language", "làkk", "lakk", "demngal"})
 LANGUAGE_QUESTION = "Choisis ta langue / Tànnal sa làkk / Suubo ɗemngal maa"
+WELCOME_TEXT = (
+    "Bienvenue sur Leeral ! Envoie-moi la photo ou le PDF d'un document en français, "
+    "je te l'explique à voix haute dans ta langue.\n\n"
+    "Dalal ak jàmm ci Leeral ! Yónne ma nataalu ab kayit ci farañse, "
+    "ma firi la ko ci sa làkk.\n\n"
+    "Bismillah e Leeral ! Neldam natal fiilde winndaande e farayseere, "
+    "mi firanoyte ɗum e ɗemngal maa."
+)
+MEDIA_TYPES = frozenset({WhatsAppMessageType.IMAGE, WhatsAppMessageType.DOCUMENT})
+PENDING_MEDIA_WINDOW = timedelta(hours=1)
 CONFIRM_YES_REPLY = "confirm:yes"
 CONFIRM_NO_REPLY = "confirm:no"
 
@@ -87,7 +102,31 @@ class WhatsAppAssistant:
             outbox = WhatsAppOutbox(
                 session, self._client, self._storage, channel, inbound.wa_phone, user.id
             )
-            await self._dispatch(uow, outbox, user, channel, wa_session, inbound)
+            await self._dispatch(uow, outbox, user, channel, wa_session, inbound, is_new=is_new)
+            await uow.commit()
+
+    async def collect_media(self, user_id: uuid.UUID, message_id: uuid.UUID) -> None:
+        async with self._session_factory() as session:
+            uow = UnitOfWork(session, self._queue)
+            user = await session.get(User, user_id)
+            wa_session = await self._latest_session(session, user_id)
+            if user is None or wa_session is None:
+                return
+            if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
+                return
+            pending = await self._pending_media(session, user_id)
+            if not pending or pending[-1].id != message_id:
+                return
+            channel = await session.get(WhatsAppChannel, pending[-1].channel_id)
+            if channel is None:
+                return
+            for message in pending:
+                message.status = WhatsAppMessageStatus.PROCESSED
+            await uow.commit()
+            outbox = WhatsAppOutbox(
+                session, self._client, self._storage, channel, _wa_id(user), user.id
+            )
+            await self._create_document(uow, outbox, user, wa_session, pending)
             await uow.commit()
 
     async def document_finished(self, document_id: uuid.UUID) -> None:
@@ -110,18 +149,26 @@ class WhatsAppAssistant:
                 await outbox.prompt(_error_prompt(document.failure_reason), user.language)
                 await uow.commit()
                 return
+            explanation = await DocumentRepository(session).explanation(
+                document.id, user.language, ExplanationVariant.STANDARD
+            )
+            if explanation is not None and await self._already_sent(
+                session, user.id, explanation.audio_key
+            ):
+                return
             conversation = await ConversationService(
                 uow, self._storage, self._settings
             ).open_for_document(user, document.id, source=Channel.WHATSAPP)
             conversation.channel_id = channel.id
             wa_session.state = WhatsAppSessionState.DOCUMENT_QUESTION
             wa_session.active_conversation_id = conversation.id
-            explanation = await DocumentRepository(session).explanation(
-                document.id, user.language, ExplanationVariant.STANDARD
-            )
-            if explanation is not None:
+            invitation = await outbox.prompt_audio_key("whatsapp.ask_question", user.language)
+            if explanation is None:
+                await outbox.prompt("whatsapp.ask_question", user.language)
+            elif invitation is None:
                 await outbox.audio(explanation.audio_key, caption=document.title)
-            await outbox.prompt("whatsapp.ask_question", user.language)
+            else:
+                await outbox.audio(explanation.audio_key, invitation, caption=document.title)
             await uow.commit()
 
     async def answer_finished(self, answer_id: uuid.UUID) -> None:
@@ -157,11 +204,13 @@ class WhatsAppAssistant:
         channel: WhatsAppChannel,
         wa_session: WhatsAppSession,
         inbound: WhatsAppMessage,
+        *,
+        is_new: bool,
     ) -> None:
         reply = (inbound.body_text or "").strip().lower()
         if inbound.type in {WhatsAppMessageType.INTERACTIVE, WhatsAppMessageType.BUTTON}:
             if reply.startswith(LANGUAGE_REPLY_PREFIX):
-                await self._choose_language(outbox, user, wa_session, reply)
+                await self._choose_language(uow, outbox, user, wa_session, reply)
                 return
             if reply in RENEW_REPLIES:
                 await outbox.prompt("whatsapp.renew", user.language)
@@ -169,13 +218,21 @@ class WhatsAppAssistant:
             if wa_session.state is WhatsAppSessionState.CONFIRMING_QUESTION:
                 await self._confirm_question(uow, outbox, user, channel, wa_session, reply)
                 return
-        if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE or (
-            inbound.type is WhatsAppMessageType.TEXT and reply in LANGUAGE_KEYWORDS
-        ):
+        is_media = inbound.type in MEDIA_TYPES
+        if is_media:
+            await self._collect_later(uow, outbox, user, inbound)
+        if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
+            if is_new:
+                await outbox.text(WELCOME_TEXT)
+            if is_new or not is_media:
+                await self._ask_language(outbox, wa_session)
+            return
+        if is_new and not is_media:
+            await outbox.prompt("whatsapp.welcome", user.language)
+        if inbound.type is WhatsAppMessageType.TEXT and reply in LANGUAGE_KEYWORDS:
             await self._ask_language(outbox, wa_session)
             return
-        if inbound.type in {WhatsAppMessageType.IMAGE, WhatsAppMessageType.DOCUMENT}:
-            await self._receive_document(uow, outbox, user, wa_session, inbound)
+        if is_media:
             return
         if inbound.type in {WhatsAppMessageType.AUDIO, WhatsAppMessageType.TEXT}:
             await self._receive_question(uow, outbox, user, channel, wa_session, inbound)
@@ -183,7 +240,12 @@ class WhatsAppAssistant:
         await outbox.prompt("whatsapp.unsupported", user.language)
 
     async def _choose_language(
-        self, outbox: WhatsAppOutbox, user: User, wa_session: WhatsAppSession, reply: str
+        self,
+        uow: UnitOfWork,
+        outbox: WhatsAppOutbox,
+        user: User,
+        wa_session: WhatsAppSession,
+        reply: str,
     ) -> None:
         code = reply.removeprefix(LANGUAGE_REPLY_PREFIX)
         try:
@@ -197,6 +259,10 @@ class WhatsAppAssistant:
             return
         user.language = language
         wa_session.state = WhatsAppSessionState.IDLE
+        pending = await self._pending_media(uow.session, user.id)
+        if pending:
+            self._schedule_collect(uow, user, pending[-1], immediately=True)
+            return
         await outbox.prompt("whatsapp.welcome", language)
 
     async def _ask_language(self, outbox: WhatsAppOutbox, wa_session: WhatsAppSession) -> None:
@@ -209,28 +275,42 @@ class WhatsAppAssistant:
             ],
         )
 
-    async def _receive_document(
+    async def _collect_later(
+        self, uow: UnitOfWork, outbox: WhatsAppOutbox, user: User, inbound: WhatsAppMessage
+    ) -> None:
+        if inbound.wa_media_id is None:
+            inbound.status = WhatsAppMessageStatus.PROCESSED
+            await outbox.prompt("whatsapp.unsupported", user.language)
+            return
+        self._schedule_collect(uow, user, inbound, immediately=False)
+
+    def _schedule_collect(
+        self, uow: UnitOfWork, user: User, latest: WhatsAppMessage, *, immediately: bool
+    ) -> None:
+        uow.defer(
+            Job.COLLECT_WHATSAPP_MEDIA,
+            key=f"whatsapp-media:{latest.id}:{'now' if immediately else 'batch'}",
+            defer_by=None if immediately else self._settings.whatsapp_media_batch_seconds,
+            user_id=str(user.id),
+            message_id=str(latest.id),
+        )
+
+    async def _create_document(
         self,
         uow: UnitOfWork,
         outbox: WhatsAppOutbox,
         user: User,
         wa_session: WhatsAppSession,
-        inbound: WhatsAppMessage,
+        messages: Sequence[WhatsAppMessage],
     ) -> None:
-        if inbound.wa_media_id is None:
-            await outbox.prompt("whatsapp.unsupported", user.language)
-            return
-        try:
-            media = await self._client.download_media(inbound.wa_media_id)
-        except WhatsAppError:
-            await outbox.prompt("error.document_unreadable", user.language)
-            return
         language = user.language
+        files = await self._download(messages)
+        if not files:
+            await outbox.prompt("error.document_unreadable", language)
+            return
         try:
             await DocumentService(uow, self._ai, self._storage, self._settings).create(
-                user,
-                [IncomingFile(safe_filename(inbound.body_text, "whatsapp"), media.content)],
-                source=Channel.WHATSAPP,
+                user, files, source=Channel.WHATSAPP
             )
         except AppError as exc:
             await uow.rollback()
@@ -238,7 +318,52 @@ class WhatsAppAssistant:
             return
         wa_session.state = WhatsAppSessionState.IDLE
         wa_session.active_conversation_id = None
-        await outbox.prompt("whatsapp.reading", user.language)
+
+    async def _download(self, messages: Sequence[WhatsAppMessage]) -> list[IncomingFile]:
+        files = []
+        for message in messages:
+            if message.wa_media_id is None:
+                continue
+            try:
+                media = await self._client.download_media(message.wa_media_id)
+            except WhatsAppError:
+                logger.warning(
+                    "whatsapp_media_download_failed", extra={"message_id": str(message.id)}
+                )
+                continue
+            files.append(IncomingFile(safe_filename(message.body_text, "whatsapp"), media.content))
+        return files
+
+    async def _pending_media(
+        self, session: AsyncSession, user_id: uuid.UUID
+    ) -> Sequence[WhatsAppMessage]:
+        result = await session.scalars(
+            select(WhatsAppMessage)
+            .where(
+                WhatsAppMessage.user_id == user_id,
+                WhatsAppMessage.direction == WhatsAppDirection.INBOUND,
+                WhatsAppMessage.type.in_(MEDIA_TYPES),
+                WhatsAppMessage.status == WhatsAppMessageStatus.RECEIVED,
+                WhatsAppMessage.created_at > utcnow() - PENDING_MEDIA_WINDOW,
+            )
+            .order_by(WhatsAppMessage.created_at, WhatsAppMessage.id)
+            .with_for_update(skip_locked=True)
+        )
+        return result.all()
+
+    async def _already_sent(
+        self, session: AsyncSession, user_id: uuid.UUID, audio_key: str
+    ) -> bool:
+        sent = await session.scalar(
+            select(WhatsAppMessage.id)
+            .where(
+                WhatsAppMessage.user_id == user_id,
+                WhatsAppMessage.direction == WhatsAppDirection.OUTBOUND,
+                WhatsAppMessage.media_key == audio_key,
+            )
+            .limit(1)
+        )
+        return sent is not None
 
     async def _receive_question(
         self,

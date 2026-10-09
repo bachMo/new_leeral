@@ -2,7 +2,9 @@ import io
 import math
 import shutil
 import struct
+import subprocess
 import wave
+from pathlib import Path
 
 import pytest
 
@@ -53,3 +55,38 @@ async def test_unreadable_audio_falls_back_to_the_original() -> None:
 
     assert not outgoing.voice
     assert outgoing.content == b"not an audio file"
+
+
+@pytest.mark.skipif(shutil.which("ffprobe") is None, reason="ffprobe is not installed")
+async def test_several_segments_become_a_single_voice_note(tmp_path: Path) -> None:
+    outgoing = await as_voice_note(_tone_mp3(1.0), _tone_mp3(1.5, sample_rate=22050))
+    note = tmp_path / "note.ogg"
+    note.write_bytes(outgoing.content)
+
+    assert outgoing.voice
+    assert _duration(note) == pytest.approx(2.5, abs=0.2)
+
+
+async def test_without_segments_nothing_is_sent() -> None:
+    with pytest.raises(ValueError, match="at least one"):
+        await as_voice_note()
+
+
+def _duration(path: Path) -> float:
+    ffprobe = shutil.which("ffprobe")
+    assert ffprobe is not None
+    result = subprocess.run(  # noqa: S603
+        [
+            ffprobe,
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            str(path),
+        ],
+        capture_output=True,
+        check=True,
+    )
+    return float(result.stdout)

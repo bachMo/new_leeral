@@ -10,5 +10,6 @@ class Job(StrEnum):
     ANALYZE_WRITING_ANSWER = "analyze_writing_answer"
     GENERATE_WRITING = "generate_writing"
     HANDLE_WHATSAPP_MESSAGE = "handle_whatsapp_message"
+    COLLECT_WHATSAPP_MEDIA = "collect_whatsapp_media"
     PROMOTE_GUEST_FILES = "promote_guest_files"
     DELETE_STORAGE_PREFIX = "delete_storage_prefix"

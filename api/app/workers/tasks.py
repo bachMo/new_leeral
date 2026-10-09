@@ -65,6 +65,10 @@ async def handle_whatsapp_message(
     await _runtime(ctx).whatsapp.handle(uuid.UUID(message_id), profile_name)
 
 
+async def collect_whatsapp_media(ctx: Context, user_id: str, message_id: str) -> None:
+    await _runtime(ctx).whatsapp.collect_media(uuid.UUID(user_id), uuid.UUID(message_id))
+
+
 async def promote_guest_files(ctx: Context, user_id: str) -> int:
     return await _runtime(ctx).maintenance.promote_guest_files(uuid.UUID(user_id))
 

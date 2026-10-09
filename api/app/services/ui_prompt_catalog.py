@@ -33,7 +33,6 @@ SCREEN_PROMPTS: dict[str, str] = {
         "Bonjour, je suis Leeral. Envoie-moi la photo d'un document en français, "
         "je te l'explique dans ta langue."
     ),
-    "whatsapp.reading": "J'ai bien reçu ton document. Je le lis, attends un petit moment.",
     "whatsapp.ask_question": "Tu peux me poser une question sur ce document en vocal.",
     "whatsapp.unsupported": "Envoie-moi une photo, un PDF ou un message vocal.",
     "whatsapp.renew": "Pour renouveler Leeral plus, ouvre l'application Leeral.",
