@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { KeyboardAvoidingView, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
 import { MicButton } from '@/components/Mic';
@@ -77,9 +77,28 @@ export default function FirstNameScreen() {
 
   const ready = cleanName(name).length > 0;
 
+  const confirmButton = (
+    <View style={{ alignSelf: 'stretch' }}>
+      <PrimaryButton
+        label="Oui, c'est moi"
+        bg={ready ? colors.night : colors.line}
+        fg={ready ? colors.sand : colors.label}
+        disabled={!ready}
+        loading={saving}
+        onPress={confirm}
+        left={<Icon name="check" size={20} color={ready ? colors.light : colors.label} />}
+      />
+      <MiniSpeaker
+        prompt="app.name.go"
+        label="Écouter : valider"
+        color={ready ? colors.sand : colors.label}
+        style={{ position: 'absolute', right: 6, top: 11 }}
+      />
+    </View>
+  );
+
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
+    <View
       style={{
         flex: 1,
         backgroundColor: colors.sand,
@@ -190,31 +209,16 @@ export default function FirstNameScreen() {
           >
             <Icon name="keyboard" size={16} />
             <T w={700} size={14}>
-              {typing ? 'Valider' : 'Écrire au clavier'}
+              {typing ? 'Revenir au micro' : 'Écrire au clavier'}
             </T>
           </Tap>
         </View>
+        {typing ? confirmButton : null}
       </View>
 
-      <View>
-        <PrimaryButton
-          label="Oui, c'est moi"
-          bg={ready ? colors.night : colors.line}
-          fg={ready ? colors.sand : colors.label}
-          disabled={!ready}
-          loading={saving}
-          onPress={confirm}
-          left={<Icon name="check" size={20} color={ready ? colors.light : colors.label} />}
-        />
-        <MiniSpeaker
-          prompt="app.name.go"
-          label="Écouter : valider"
-          color={ready ? colors.sand : colors.label}
-          style={{ position: 'absolute', right: 6, top: 11 }}
-        />
-      </View>
+      {typing ? null : confirmButton}
 
       <SayBubble top={insets.top + 64} />
-    </KeyboardAvoidingView>
+    </View>
   );
 }
