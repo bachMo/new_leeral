@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from app.ai.contracts import ConversationTurn, DocumentContext, QuestionContext
 from app.ai.engine import AiEngine
 from app.core.errors import ERROR_CATALOG, AppError, ErrorCode
+from app.core.logging import log_step
 from app.integrations.storage import FileStorage
 from app.models import Conversation, Message, User
 from app.models.enums import AiJobType, MessageRole, MessageStatus
@@ -77,34 +78,38 @@ class QuestionAnswerer:
         question: Message,
         answer: Message,
     ) -> None:
-        language = conversation.language
-        question_fr = await self._speech_input.to_french(question, language)
-        document = await self._document_context(session, conversation)
-        history = await MessageRepository(session).recent_ready(conversation.id, HISTORY_SIZE)
-        turns = tuple(
-            ConversationTurn(
-                role="user" if message.role is MessageRole.USER else "assistant",
-                text_fr=message.text_fr or "",
+        with log_step(logger, "question_answered", conversation_id=str(conversation.id)) as out:
+            language = conversation.language
+            question_fr = await self._speech_input.to_french(question, language)
+            document = await self._document_context(session, conversation)
+            history = await MessageRepository(session).recent_ready(conversation.id, HISTORY_SIZE)
+            turns = tuple(
+                ConversationTurn(
+                    role="user" if message.role is MessageRole.USER else "assistant",
+                    text_fr=message.text_fr or "",
+                )
+                for message in history
+                if message.id not in {question.id, answer.id} and message.text_fr
             )
-            for message in history
-            if message.id not in {question.id, answer.id} and message.text_fr
-        )
-        reply = await self._ai.answer(
-            QuestionContext(question_fr=question_fr, document=document, history=turns)
-        )
-        localized, audio = await self._narrator.voice(
-            reply.text_fr,
-            language,
-            protected_terms=document.protected_terms if document else (),
-        )
-        key = storage_keys.message_media(user, conversation.id, audio.extension)
-        await self._storage.put(key, audio.content, audio.mime_type)
-        answer.text = localized.text
-        answer.text_fr = reply.text_fr
-        answer.audio_key = key
-        answer.audio_duration_s = audio.duration_s
-        answer.source_quote = reply.source_quote
-        answer.status = MessageStatus.READY
+            reply = await self._ai.answer(
+                QuestionContext(question_fr=question_fr, document=document, history=turns)
+            )
+            localized, audio = await self._narrator.voice(
+                reply.text_fr,
+                language,
+                protected_terms=document.protected_terms if document else (),
+            )
+            key = storage_keys.message_media(user, conversation.id, audio.extension)
+            await self._storage.put(key, audio.content, audio.mime_type)
+            answer.text = localized.text
+            answer.text_fr = reply.text_fr
+            answer.audio_key = key
+            answer.audio_duration_s = audio.duration_s
+            answer.source_quote = reply.source_quote
+            answer.status = MessageStatus.READY
+            out["grounded"] = reply.grounded
+            out["has_quote"] = reply.source_quote is not None
+            out["audio_duration_s"] = audio.duration_s
 
     async def _document_context(
         self, session: AsyncSession, conversation: Conversation

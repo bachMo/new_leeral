@@ -67,8 +67,10 @@ class Settings(BaseSettings):
     max_docx_bytes: int = 10 * 1024 * 1024
     max_audio_bytes: int = 16 * 1024 * 1024
     max_question_chars: int = 1000
+    max_question_audio_seconds: int = 60
 
     guest_document_ttl_hours: int = 24
+    guest_session_ttl_hours: int = 5
     guest_inactivity_days: int = 30
     subscription_reminder_days: int = 2
     practice_session_size: int = 8

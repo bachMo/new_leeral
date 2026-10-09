@@ -5,9 +5,10 @@ import pymupdf
 import pytest
 from PIL import Image
 
+from app.ai.audio import silent_wav
 from app.core.errors import AppError, ErrorCode
 from app.integrations.storage import promoted_key
-from app.services.media import FileKind, build_pages, detect, safe_filename
+from app.services.media import FileKind, audio_duration_seconds, build_pages, detect, safe_filename
 
 
 def jpeg() -> bytes:
@@ -48,6 +49,17 @@ def test_filenames_cannot_escape_their_folder() -> None:
     assert safe_filename("../../etc/passwd", "file") == "passwd"
     assert safe_filename("..\\..\\boot.ini", "file") == "boot.ini"
     assert safe_filename(None, "file") == "file"
+
+
+def test_audio_duration_is_measured_from_a_real_wav() -> None:
+    duration = audio_duration_seconds(silent_wav(3.0))
+
+    assert duration is not None
+    assert 2.9 <= duration <= 3.1
+
+
+def test_audio_duration_is_none_for_an_unrecognized_format() -> None:
+    assert audio_duration_seconds(b"not an audio file") is None
 
 
 def test_guest_keys_move_under_the_account_prefix() -> None:

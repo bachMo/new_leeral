@@ -86,8 +86,11 @@ class KirikuClient:
             "voice": voice,
             "response_format": "wav",
         }
-        if settings.tts_speed is not None:
-            payload["speed"] = settings.tts_speed
+        speed = (
+            settings.tts_speed_wolof if language is Language.WOLOF else settings.tts_speed_pulaar
+        )
+        if speed is not None:
+            payload["speed"] = speed
         response = await request_with_retry(
             self._http,
             "POST",

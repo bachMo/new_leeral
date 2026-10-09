@@ -1,3 +1,4 @@
+import logging
 import uuid
 from collections.abc import Sequence
 from datetime import datetime
@@ -7,6 +8,7 @@ from app.ai.engine import AiEngine
 from app.core.config import Settings
 from app.core.errors import AppError, ErrorCode, NotFoundError
 from app.core.languages import Language, ensure_available
+from app.core.logging import log_step
 from app.db.unit_of_work import UnitOfWork
 from app.integrations.storage import FileStorage, owner_prefix
 from app.models import Document, DocumentExplanation, DocumentFile, User
@@ -22,6 +24,8 @@ from app.services import storage_keys
 from app.services.billing_service import EntitlementService
 from app.services.media import DetectedFile, FileKind, IncomingFile, detect, pdf_page_count
 from app.workers.jobs import Job
+
+logger = logging.getLogger("leeral.documents")
 
 _QUALITY_ERRORS = {
     QualityIssue.TOO_BLURRY: ErrorCode.IMAGE_TOO_BLURRY,
@@ -47,6 +51,15 @@ class DocumentService:
 
     async def create(
         self, user: User, files: Sequence[IncomingFile], *, source: Channel = Channel.APP
+    ) -> Document:
+        with log_step(logger, "document_received", channel=source.value, files=len(files)) as out:
+            document = await self._create(user, files, source=source)
+            out["document_id"] = str(document.id)
+            out["pages"] = document.page_count
+            return document
+
+    async def _create(
+        self, user: User, files: Sequence[IncomingFile], *, source: Channel
     ) -> Document:
         if not files:
             raise AppError(ErrorCode.FILE_MISSING)

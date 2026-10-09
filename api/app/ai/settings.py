@@ -10,7 +10,9 @@ ReasoningEffort = Literal["none", "minimal", "low", "medium", "high"]
 
 
 class AiSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=ENV_FILES, env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=ENV_FILES, env_file_encoding="utf-8", extra="ignore", env_ignore_empty=True
+    )
 
     ai_provider: Literal["mock", "real"] = "mock"
 
@@ -27,7 +29,8 @@ class AiSettings(BaseSettings):
     tts_max_retries: int = 2
     tts_max_input_chars: int = 500
     tts_concurrency: int = 3
-    tts_speed: float | None = None
+    tts_speed_wolof: float | None = None
+    tts_speed_pulaar: float | None = None
 
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_api_key: SecretStr = SecretStr("")
@@ -42,8 +45,21 @@ class AiSettings(BaseSettings):
     reader_max_image_bytes: int = 8_000_000
     reader_max_image_side: int = 2200
 
-    translator_model_primary: str = "google/gemini-2.5-flash-lite"
-    translator_model_primary_reasoning_effort: ReasoningEffort = "none"
+    # Déclassification volontairement séparée des modèles de lecture ci-dessus : classifier un
+    # document (type + langue) n'a pas besoin du même niveau de prudence qu'une double lecture
+    # d'ordonnance, et `reader_model_b` a un raisonnement obligatoire qui coûte ~16s à chaque
+    # appel (AI_DECISIONS.md, décision 6) — payé une fois en trop pour une simple classification
+    # si on réutilise les modèles de lecture ici. Voir décision sur la latence.
+    classifier_model_a: str = "qwen/qwen3.8-27b"
+    classifier_model_a_reasoning_effort: ReasoningEffort = "none"
+    classifier_model_b: str = "google/gemini-2.5-flash-lite"
+    classifier_model_b_reasoning_effort: ReasoningEffort = "none"
+    classifier_http_provider: str = ""
+    classifier_timeout_seconds: float = 30.0
+    classifier_max_retries: int = 2
+
+    translator_model_primary: str = "anthropic/claude-sonnet-5.5"
+    translator_model_primary_reasoning_effort: ReasoningEffort = "minimal"
     translator_model_fallback: str = "openai/gpt-5-mini"
     translator_model_fallback_reasoning_effort: ReasoningEffort = "minimal"
     translator_timeout_seconds: float = 45.0
@@ -65,6 +81,10 @@ class AiSettings(BaseSettings):
 
     min_page_text_chars: int = 40
     mp3_bitrate_kbps: int = 64
+
+    lexicon_fuzzy_threshold: float = 0.85
+    lexicon_min_term_length: int = 3
+    prescription_name_match_threshold: float = 0.6
 
 
 @lru_cache

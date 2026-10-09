@@ -50,44 +50,79 @@ def prepare_image(image: bytes, *, max_side: int, max_bytes: int) -> tuple[bytes
     raise AiInputError("image remains too large after compression")
 
 
+DEFAULT_CROP_BAND_FRACTION = 0.12
+
+
+def crop_band(
+    image: bytes, position: float, *, band_fraction: float = DEFAULT_CROP_BAND_FRACTION
+) -> bytes:
+    """Crop a full-width horizontal band centered on a normalized vertical position.
+
+    `position` is 0 (top of the page) to 1 (bottom) — an approximate estimate from the reading
+    model, never an exact bounding box. See AI_DECISIONS.md.
+    """
+    try:
+        with Image.open(io.BytesIO(image)) as opened:
+            picture = ImageOps.exif_transpose(opened).convert("RGB")
+    except (UnidentifiedImageError, OSError) as exc:
+        raise AiInputError("image cannot be decoded") from exc
+    width, height = picture.size
+    clamped = max(0.0, min(1.0, position))
+    half_band = band_fraction / 2
+    top = max(0, int((clamped - half_band) * height))
+    bottom = min(height, max(top + 1, int((clamped + half_band) * height)))
+    cropped = picture.crop((0, top, width, bottom))
+    buffer = io.BytesIO()
+    cropped.save(buffer, format="JPEG", quality=85, optimize=True)
+    return buffer.getvalue()
+
+
 class PageReader:
     def __init__(
         self,
         client: OpenRouterClient,
         settings: AiSettings,
-        model_a: ModelProfile,
-        model_b: ModelProfile,
+        transcribe_model: ModelProfile,
+        classifier_a: ModelProfile,
+        classifier_b: ModelProfile,
     ) -> None:
         self._client = client
         self._settings = settings
-        self._model_a = model_a
-        self._model_b = model_b
+        self._transcribe_model = transcribe_model
+        self._classifier_a = classifier_a
+        self._classifier_b = classifier_b
 
-    def prepare(self, page: PageInput) -> list[dict[str, Any]]:
+    async def prepare(self, page: PageInput) -> list[dict[str, Any]]:
         if page.image is None:
             raise AiInputError("page has no image")
-        image, mime_type = prepare_image(
+        image, mime_type = await asyncio.to_thread(
+            prepare_image,
             page.image,
             max_side=self._settings.reader_max_image_side,
             max_bytes=self._settings.reader_max_image_bytes,
         )
         return [image_part(image, mime_type)]
 
-    def content(
+    async def content(
         self, page: PageInput, *, image_prompt: str, text_prompt: str
     ) -> list[dict[str, Any]]:
         if page.image is not None:
-            return [text_part(image_prompt), *self.prepare(page)]
+            return [text_part(image_prompt), *await self.prepare(page)]
         text = (page.text or "")[:MAX_TEXT_PAGE_CHARS]
         return [text_part(text_prompt.format(text=text))]
 
     async def classify(self, page: PageInput) -> Classification:
-        content = self.content(
+        content = await self.content(
             page, image_prompt=prompts.CLASSIFY_IMAGE, text_prompt=prompts.CLASSIFY_TEXT
         )
+        if page.image is None:
+            # Text already extracted (PDF/DOCX) carries far less ambiguity than a photo (no
+            # blur, no framing) — a single fast model is enough, the second opinion is reserved
+            # for where doubt is real. See AI_DECISIONS.md, latency decision.
+            return await self._classify_once(self._classifier_a, content)
         results = await asyncio.gather(
-            self._classify_once(self._model_a, content),
-            self._classify_once(self._model_b, content),
+            self._classify_once(self._classifier_a, content),
+            self._classify_once(self._classifier_b, content),
             return_exceptions=True,
         )
         readings = [result for result in results if isinstance(result, Classification)]
@@ -109,9 +144,9 @@ class PageReader:
         )
 
     async def transcribe(self, page: PageInput) -> str:
-        content = [text_part(prompts.TRANSCRIBE_PAGE), *self.prepare(page)]
+        content = [text_part(prompts.TRANSCRIBE_PAGE), *await self.prepare(page)]
         text = await self._client.complete(
-            self._model_a, content, operation="transcribe_page", max_tokens=4000
+            self._transcribe_model, content, operation="transcribe_page", max_tokens=4000
         )
         return text.strip()
 

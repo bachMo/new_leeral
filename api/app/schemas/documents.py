@@ -55,10 +55,15 @@ class PrescriptionLineOut(Schema):
     name: str | None
     name_read: str | None
     suggestion: str | None
+    dci: str | None
     strength: str | None
+    form: str | None
     times_per_day: int | None
     duration_days: int | None
     timing: str | None
+    instructions: str | None
+    raw: str | None
+    image_url: str | None
 
 
 class DocumentSummaryOut(Schema):

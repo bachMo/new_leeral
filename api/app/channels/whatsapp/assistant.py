@@ -4,12 +4,14 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.ai.contracts import PRESCRIPTION
 from app.ai.engine import AiEngine
+from app.ai.errors import TranslationError
 from app.channels.whatsapp.outbox import WhatsAppOutbox
 from app.core.clock import utcnow
 from app.core.config import Settings
 from app.core.errors import AppError, ErrorCode
-from app.core.languages import AVAILABLE_LANGUAGES, LANGUAGE_NAMES, Language
+from app.core.languages import AVAILABLE_LANGUAGES, LANGUAGE_NAMES, Language, TextLanguage
 from app.core.phone import normalize_phone_number
 from app.db.unit_of_work import UnitOfWork
 from app.integrations.storage import FileStorage
@@ -46,6 +48,8 @@ LANGUAGE_REPLY_PREFIX = "lang:"
 RENEW_REPLIES = frozenset({"renew", "renouveler"})
 LANGUAGE_KEYWORDS = frozenset({"langue", "language", "làkk", "lakk", "demngal"})
 LANGUAGE_QUESTION = "Choisis ta langue / Tànnal sa làkk / Suubo ɗemngal maa"
+CONFIRM_YES_REPLY = "confirm:yes"
+CONFIRM_NO_REPLY = "confirm:no"
 
 
 class WhatsAppAssistant:
@@ -162,6 +166,9 @@ class WhatsAppAssistant:
             if reply in RENEW_REPLIES:
                 await outbox.prompt("whatsapp.renew", user.language)
                 return
+            if wa_session.state is WhatsAppSessionState.CONFIRMING_QUESTION:
+                await self._confirm_question(uow, outbox, user, channel, wa_session, reply)
+                return
         if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE or (
             inbound.type is WhatsAppMessageType.TEXT and reply in LANGUAGE_KEYWORDS
         ):
@@ -245,6 +252,7 @@ class WhatsAppAssistant:
         language = user.language
         conversation = await self._active_conversation(uow, user, channel, wa_session)
         await uow.commit()
+        audio: bytes | None = None
         if inbound.type is WhatsAppMessageType.AUDIO:
             if inbound.wa_media_id is None:
                 return
@@ -253,9 +261,31 @@ class WhatsAppAssistant:
             except WhatsAppError:
                 await outbox.prompt("error.audio_unreadable", language)
                 return
-            question = Question(audio=IncomingFile("voice.ogg", media.content))
-        else:
-            question = Question(text=inbound.body_text)
+            audio = media.content
+
+        if await self._is_prescription_conversation(uow, conversation):
+            try:
+                question_fr = await self._resolve_question_fr(inbound.body_text, audio, language)
+            except AppError as exc:
+                await outbox.prompt(_error_prompt(exc.code.value), language)
+                return
+            rephrased = await self._ai.confirm_question(question_fr)
+            wa_session.pending_question_fr = question_fr
+            wa_session.state = WhatsAppSessionState.CONFIRMING_QUESTION
+            await outbox.buttons(
+                rephrased,
+                [
+                    ReplyButton(id=CONFIRM_YES_REPLY, title="Oui"),
+                    ReplyButton(id=CONFIRM_NO_REPLY, title="Non"),
+                ],
+            )
+            return
+
+        question = (
+            Question(audio=IncomingFile("voice.ogg", audio))
+            if audio is not None
+            else Question(text=inbound.body_text)
+        )
         try:
             await ConversationService(uow, self._storage, self._settings).ask(
                 user, conversation, question, whatsapp_message_id=inbound.id
@@ -263,6 +293,59 @@ class WhatsAppAssistant:
         except AppError as exc:
             await uow.rollback()
             await outbox.prompt(_error_prompt(exc.code.value), language)
+
+    async def _is_prescription_conversation(
+        self, uow: UnitOfWork, conversation: Conversation
+    ) -> bool:
+        if conversation.document_id is None:
+            return False
+        document = await uow.session.get(Document, conversation.document_id)
+        return document is not None and document.doc_type == PRESCRIPTION
+
+    async def _resolve_question_fr(
+        self, text: str | None, audio: bytes | None, language: Language
+    ) -> str:
+        """Transcribe (if spoken) and translate a question to French, without yet persisting it
+        as a `Message` — used to show a confirmation prompt before committing to an answer. The
+        regular (non-prescription) path still resolves this lazily inside the worker job via
+        `SpeechInput.to_french`; duplicated here deliberately to avoid coupling that module to a
+        not-yet-created `Message`."""
+        if audio is not None:
+            transcript = await self._ai.transcribe(audio, filename="voice.ogg", language=language)
+            if not transcript.text.strip():
+                raise AppError(ErrorCode.AUDIO_EMPTY)
+            text = transcript.text.strip()
+        text = (text or "").strip()
+        if not text:
+            raise AppError(ErrorCode.QUESTION_EMPTY)
+        try:
+            return await self._ai.to_french(text, language)
+        except TranslationError as exc:
+            raise AppError(ErrorCode.QUESTION_TRANSLATION_FAILED) from exc
+
+    async def _confirm_question(
+        self,
+        uow: UnitOfWork,
+        outbox: WhatsAppOutbox,
+        user: User,
+        channel: WhatsAppChannel,
+        wa_session: WhatsAppSession,
+        reply: str,
+    ) -> None:
+        pending = wa_session.pending_question_fr
+        wa_session.pending_question_fr = None
+        wa_session.state = WhatsAppSessionState.DOCUMENT_QUESTION
+        if reply != CONFIRM_YES_REPLY or pending is None:
+            await outbox.prompt("whatsapp.ask_question", user.language)
+            return
+        conversation = await self._active_conversation(uow, user, channel, wa_session)
+        try:
+            await ConversationService(uow, self._storage, self._settings).ask(
+                user, conversation, Question(text=pending, text_language=TextLanguage.FRENCH)
+            )
+        except AppError as exc:
+            await uow.rollback()
+            await outbox.prompt(_error_prompt(exc.code.value), user.language)
 
     async def _active_conversation(
         self,

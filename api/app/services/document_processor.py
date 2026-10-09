@@ -1,18 +1,19 @@
 import asyncio
 import logging
 import uuid
+from collections.abc import Sequence
 from dataclasses import asdict
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from app.ai.contracts import DocumentAnalysis, PageInput
+from app.ai.contracts import DocumentAnalysis, MedicationLine, PageInput
 from app.ai.engine import AiEngine
 from app.core.clock import utcnow
 from app.core.config import Settings
 from app.core.errors import AppError, ErrorCode
 from app.core.languages import Language
 from app.integrations.storage import FileStorage
-from app.models import Document, User
+from app.models import Document, PrescriptionLine, User
 from app.models.enums import (
     AiJobType,
     DocumentCategory,
@@ -21,6 +22,7 @@ from app.models.enums import (
     Urgency,
 )
 from app.repositories.documents import DocumentRepository
+from app.services import storage_keys
 from app.services.ai_jobs import AiJobRefs, AiJobTracker
 from app.services.ai_mapping import document_context, row_from_medication
 from app.services.explanation_builder import ExplanationBuilder
@@ -123,6 +125,7 @@ class DocumentProcessor:
             self._apply(document, analysis)
             await documents.clear_analysis(document.id)
             lines = [row_from_medication(document.id, line) for line in analysis.medications]
+            await self._store_image_extracts(user, analysis.medications, lines)
             session.add_all(lines)
             await session.flush()
             await self._builder.build(
@@ -143,6 +146,19 @@ class DocumentProcessor:
                 "medications": len(analysis.medications),
             }
         return document.status
+
+    async def _store_image_extracts(
+        self,
+        user: User,
+        medications: Sequence[MedicationLine],
+        rows: Sequence[PrescriptionLine],
+    ) -> None:
+        for medication, row in zip(medications, rows, strict=True):
+            if not medication.image_extract:
+                continue
+            key = storage_keys.document_image_extract(user, row.document_id, f"line-{row.position}")
+            await self._storage.put(key, medication.image_extract, "image/jpeg")
+            row.image_key = key
 
     async def _pages(self, document: Document) -> list[PageInput]:
         contents = await asyncio.gather(
@@ -172,6 +188,7 @@ class DocumentProcessor:
                 file.ocr_text = text or None
         document.extracted_data = {
             **analysis.extracted_data,
+            "cut_off": analysis.cut_off,
             "key_points": [
                 {
                     **asdict(point),

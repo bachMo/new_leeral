@@ -15,6 +15,7 @@ class ConversationOut(Schema):
     id: uuid.UUID
     kind: ConversationKind
     document_id: uuid.UUID | None
+    document_ids: list[uuid.UUID]
     language: Language
     last_message_at: datetime
     created_at: datetime

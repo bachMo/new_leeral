@@ -1,5 +1,7 @@
 import asyncio
+import logging
 from collections.abc import Sequence
+from dataclasses import replace
 from datetime import date
 
 import httpx
@@ -25,7 +27,7 @@ from app.ai.quality import assess_quality
 from app.ai.real import analysis, dialogue, prescription, prompts, vocabulary, writing
 from app.ai.real.clients.kiriku import KirikuClient
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
-from app.ai.real.pages import PageReader
+from app.ai.real.pages import Classification, PageReader
 from app.ai.real.reasoning import Reasoner
 from app.ai.real.safety.lexicon import get_lexicon
 from app.ai.real.safety.pharmacology import get_pharmacology_rules
@@ -33,6 +35,9 @@ from app.ai.real.speech import SpeechSynthesizer
 from app.ai.real.translation import Translator
 from app.ai.settings import AiSettings
 from app.core.languages import Language
+from app.core.logging import log_step
+
+logger = logging.getLogger("leeral.ai.engine")
 
 _TRANSCRIPTION_CONCURRENCY = 3
 
@@ -59,10 +64,34 @@ class RealAiEngine:
             settings.reader_max_retries,
             settings.reader_http_provider or None,
         )
+        classifier_a = ModelProfile(
+            settings.classifier_model_a,
+            settings.classifier_model_a_reasoning_effort,
+            settings.classifier_timeout_seconds,
+            settings.classifier_max_retries,
+            settings.classifier_http_provider or None,
+        )
+        classifier_b = ModelProfile(
+            settings.classifier_model_b,
+            settings.classifier_model_b_reasoning_effort,
+            settings.classifier_timeout_seconds,
+            settings.classifier_max_retries,
+            settings.classifier_http_provider or None,
+        )
         self._kiriku = kiriku
-        self._pages = PageReader(openrouter, settings, reader_a, reader_b)
+        self._pages = PageReader(openrouter, settings, reader_a, classifier_a, classifier_b)
+        lexicon = get_lexicon(
+            fuzzy_threshold=settings.lexicon_fuzzy_threshold,
+            min_term_length=settings.lexicon_min_term_length,
+        )
         self._prescriptions = prescription.PrescriptionReader(
-            openrouter, self._pages, reader_a, reader_b, get_lexicon(), get_pharmacology_rules()
+            openrouter,
+            self._pages,
+            reader_a,
+            reader_b,
+            lexicon,
+            get_pharmacology_rules(),
+            name_match_threshold=settings.prescription_name_match_threshold,
         )
         self._reasoner = Reasoner(
             openrouter,
@@ -108,13 +137,27 @@ class RealAiEngine:
         return "real"
 
     async def check_image(self, image: bytes) -> ImageQuality:
-        return await asyncio.to_thread(assess_quality, image, self._settings)
+        with log_step(logger, "check_image", bytes=len(image)) as out:
+            quality = await asyncio.to_thread(assess_quality, image, self._settings)
+            out["issue"] = quality.issue.value if quality.issue else None
+            out["width"] = quality.width
+            out["height"] = quality.height
+            return quality
 
     async def analyze_document(self, pages: Sequence[PageInput]) -> DocumentAnalysis:
+        with log_step(logger, "analyze_document", pages=len(pages)) as out:
+            analysis_result = await self._analyze_document(pages)
+            out["doc_type"] = analysis_result.doc_type
+            out["readable"] = analysis_result.readable
+            out["medications"] = len(analysis_result.medications)
+            return analysis_result
+
+    async def _analyze_document(self, pages: Sequence[PageInput]) -> DocumentAnalysis:
         first_page = next(
             (page for page in pages if page.image is not None or (page.text or "").strip()),
             None,
         )
+        classification: Classification | None = None
         if first_page is not None:
             classification = await self._pages.classify(first_page)
             if classification.document_type == PRESCRIPTION:
@@ -122,6 +165,7 @@ class RealAiEngine:
                     pages, classification.model_dump(mode="json")
                 )
         page_texts = await self._page_texts(pages)
+        cut_off = any("[page_coupee]" in text for text in page_texts)
         full_text = "\n\n".join(
             f"--- Page {index + 1} ---\n{text}" if len(page_texts) > 1 else text
             for index, text in enumerate(page_texts)
@@ -134,55 +178,141 @@ class RealAiEngine:
                 category="other",
                 summary_fr="",
                 full_text=full_text,
+                cut_off=cut_off,
                 page_texts=tuple(page_texts),
             )
-        return await analysis.analyze_text(
-            self._reasoner, full_text, page_texts=tuple(page_texts), today=date.today()
+        uncertain = (
+            classification is None
+            or not classification.confident
+            or classification.document_type == "unknown"
         )
+        result = await analysis.analyze_text(
+            self._reasoner,
+            full_text,
+            page_texts=tuple(page_texts),
+            today=date.today(),
+            cut_off=cut_off,
+            uncertain=uncertain,
+        )
+        if classification is not None:
+            result = replace(
+                result,
+                extracted_data={
+                    **result.extracted_data,
+                    "classification": classification.model_dump(mode="json"),
+                },
+            )
+        return result
 
     async def simplify(self, document: DocumentContext) -> str:
-        if document.is_prescription:
-            return prescription_text.explain_prescription(document.medications, simple=True)
-        raw = await self._reasoner.complete_json(
-            prompts.SIMPLIFY.format(summary=document.summary_fr),
-            operation="simplify_explanation",
-            max_tokens=600,
-        )
-        summary = raw.get("summary_fr")
-        if not isinstance(summary, str) or not summary.strip():
-            raise AiOutputError("simplification without summary")
-        return summary.strip()
+        with log_step(logger, "simplify", is_prescription=document.is_prescription) as out:
+            if document.is_prescription:
+                result = prescription_text.explain_prescription(document.medications, simple=True)
+            else:
+                raw = await self._reasoner.complete_json(
+                    prompts.SIMPLIFY.format(summary=document.summary_fr),
+                    operation="simplify_explanation",
+                    max_tokens=600,
+                )
+                summary = raw.get("summary_fr")
+                if not isinstance(summary, str) or not summary.strip():
+                    raise AiOutputError("simplification without summary")
+                result = summary.strip()
+            out["length"] = len(result)
+            return result
 
     async def localize(
         self, text_fr: str, language: Language, *, protected_terms: Sequence[str] = ()
     ) -> LocalizedText:
-        return await self._translator.localize(text_fr, language, protected_terms=protected_terms)
+        with log_step(
+            logger,
+            "localize",
+            language=language.value,
+            protected_terms=len(protected_terms),
+            length=len(text_fr),
+        ) as out:
+            result = await self._translator.localize(
+                text_fr, language, protected_terms=protected_terms
+            )
+            out["complete"] = result.complete
+            out["length"] = len(result.text)
+            return result
 
     async def to_french(self, text: str, language: Language) -> str:
-        return await self._translator.to_french(text, language)
+        with log_step(logger, "to_french", language=language.value, length=len(text)) as out:
+            result = await self._translator.to_french(text, language)
+            out["length"] = len(result)
+            return result
 
     async def speak(self, text: str, language: Language) -> SpeechAudio:
-        return await self._speech.speak(text, language)
+        with log_step(logger, "speak", language=language.value, length=len(text)) as out:
+            audio = await self._speech.speak(text, language)
+            out["duration_s"] = audio.duration_s
+            out["bytes"] = len(audio.content)
+            return audio
 
     async def transcribe(
         self, audio: bytes, *, filename: str, language: Language | None
     ) -> Transcript:
-        text = await self._kiriku.transcribe(audio, filename=filename, language=language)
-        return Transcript(text=text, language=language)
+        with log_step(
+            logger,
+            "transcribe",
+            bytes=len(audio),
+            language=language.value if language else None,
+        ) as out:
+            text = await self._kiriku.transcribe(audio, filename=filename, language=language)
+            out["length"] = len(text)
+            return Transcript(text=text, language=language)
 
     async def answer(self, context: QuestionContext) -> Answer:
-        return await dialogue.answer_question(self._reasoner, context)
+        with log_step(
+            logger,
+            "answer",
+            has_document=context.document is not None,
+            history=len(context.history),
+        ) as out:
+            result = await dialogue.answer_question(self._reasoner, context)
+            out["grounded"] = result.grounded
+            out["has_quote"] = result.source_quote is not None
+            return result
+
+    async def confirm_question(self, question_fr: str) -> str:
+        with log_step(logger, "confirm_question", length=len(question_fr)) as out:
+            raw = await self._reasoner.complete_json(
+                prompts.CONFIRM_QUESTION.format(question=question_fr),
+                operation="confirm_question",
+                max_tokens=200,
+            )
+            rephrased = raw.get("rephrased_fr")
+            if not isinstance(rephrased, str) or not rephrased.strip():
+                raise AiOutputError("confirm_question without rephrased_fr")
+            result = rephrased.strip()
+            out["length"] = len(result)
+            return result
 
     async def interpret_writing_answer(self, field: WritingField, answer_fr: str) -> str | None:
-        return await writing.interpret_answer(self._reasoner, field, answer_fr)
+        with log_step(
+            logger, "interpret_writing_answer", field=field.key, length=len(answer_fr)
+        ) as out:
+            result = await writing.interpret_answer(self._reasoner, field, answer_fr)
+            out["found"] = result is not None
+            return result
 
     async def compose_writing(
         self, writing_type: str, fields: Sequence[WritingField], values: dict[str, str]
     ) -> ComposedWriting:
-        return await writing.compose(self._reasoner, writing_type, fields, values)
+        with log_step(
+            logger, "compose_writing", writing_type=writing_type, fields=len(fields)
+        ) as out:
+            result = await writing.compose(self._reasoner, writing_type, fields, values)
+            out["documents"] = len(result.documents)
+            return result
 
     async def extract_vocabulary(self, text_fr: str, *, limit: int) -> list[VocabularyCandidate]:
-        return await vocabulary.extract_vocabulary(self._reasoner, text_fr, limit=limit)
+        with log_step(logger, "extract_vocabulary", length=len(text_fr), limit=limit) as out:
+            result = await vocabulary.extract_vocabulary(self._reasoner, text_fr, limit=limit)
+            out["count"] = len(result)
+            return result
 
     async def aclose(self) -> None:
         await self._http.aclose()
@@ -190,22 +320,25 @@ class RealAiEngine:
     async def _analyze_prescription(
         self, pages: Sequence[PageInput], classification: dict[str, object]
     ) -> DocumentAnalysis:
-        lines = tuple(await self._prescriptions.read_pages(pages))
+        read_lines, cut_off = await self._prescriptions.read_pages(pages)
+        lines = tuple(read_lines)
         return DocumentAnalysis(
             readable=True,
             doc_type=PRESCRIPTION,
             title="Ordonnance",
             category="health",
-            summary_fr=prescription_text.explain_prescription(lines, simple=False),
-            full_text=prescription_text.prescription_context(lines),
+            summary_fr=prescription_text.explain_prescription(lines, simple=False, cut_off=cut_off),
+            full_text=prescription_text.prescription_context(lines, cut_off=cut_off),
+            cut_off=cut_off,
             medications=lines,
-            key_points=prescription_text.prescription_key_points(lines),
+            key_points=prescription_text.prescription_key_points(lines, cut_off=cut_off),
             suggested_questions_fr=prescription_text.SUGGESTED_QUESTIONS,
             protected_terms=tuple(name for line in lines if (name := line.display_name)),
             extracted_data={
                 "classification": classification,
                 "medication_count": len(lines),
                 "lines_to_check": sum(line.status != "sure" for line in lines),
+                "cut_off": cut_off,
             },
         )
 

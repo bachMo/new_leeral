@@ -116,10 +116,13 @@ async def request_explanation(
 
 @router.post("/documents/{document_id}/conversation", response_model=ConversationOut)
 async def open_document_conversation(
-    document_id: uuid.UUID, user: CurrentUser, service: ConversationServiceDep
+    document_id: uuid.UUID,
+    user: CurrentUser,
+    service: ConversationServiceDep,
+    presenter: PresenterDep,
 ) -> ConversationOut:
     conversation = await service.open_for_document(user, document_id)
-    return ConversationOut.model_validate(conversation)
+    return presenter.conversation(conversation, await service.documents_for(conversation.id))
 
 
 @router.get("/library", response_model=list[LibraryItemOut])

@@ -5,6 +5,7 @@ from typing import Any
 import httpx
 
 from app.ai.errors import AiAuthError, AiInputError, AiUnavailableError
+from app.core.logging import log_step
 
 logger = logging.getLogger("leeral.ai.http")
 
@@ -63,30 +64,37 @@ async def request_with_retry(
     files: dict[str, tuple[str, bytes, str]] | None = None,
 ) -> httpx.Response:
     merged_headers = {"User-Agent": USER_AGENT, **(headers or {})}
-    for attempt in range(max_retries + 1):
-        response: httpx.Response | None = None
-        try:
-            response = await client.request(
-                method,
-                url,
-                headers=merged_headers,
-                json=json,
-                data=data,
-                files=files,
-                timeout=timeout,
-            )
-        except httpx.HTTPError as exc:
-            if attempt >= max_retries:
-                raise AiUnavailableError(f"{service}: network error: {exc!r}") from exc
-            logger.warning("ai_network_retry", extra={"service": service, "attempt": attempt})
-        else:
-            if response.is_success:
-                return response
-            if response.status_code not in _RETRYABLE_STATUSES or attempt >= max_retries:
-                _raise_for_status(response, service)
-            logger.warning(
-                "ai_status_retry",
-                extra={"service": service, "status": response.status_code, "attempt": attempt},
-            )
-        await asyncio.sleep(_retry_delay(response, attempt))
-    raise AiUnavailableError(f"{service}: exhausted {max_retries + 1} attempts")
+    with log_step(logger, "ai_http_request", service=service) as out:
+        for attempt in range(max_retries + 1):
+            response: httpx.Response | None = None
+            try:
+                response = await client.request(
+                    method,
+                    url,
+                    headers=merged_headers,
+                    json=json,
+                    data=data,
+                    files=files,
+                    timeout=timeout,
+                )
+            except httpx.HTTPError as exc:
+                if attempt >= max_retries:
+                    raise AiUnavailableError(f"{service}: network error: {exc!r}") from exc
+                logger.warning("ai_network_retry", extra={"service": service, "attempt": attempt})
+            else:
+                if response.is_success:
+                    out["status"] = response.status_code
+                    out["attempt"] = attempt + 1
+                    return response
+                if response.status_code not in _RETRYABLE_STATUSES or attempt >= max_retries:
+                    _raise_for_status(response, service)
+                logger.warning(
+                    "ai_status_retry",
+                    extra={
+                        "service": service,
+                        "status": response.status_code,
+                        "attempt": attempt,
+                    },
+                )
+            await asyncio.sleep(_retry_delay(response, attempt))
+        raise AiUnavailableError(f"{service}: exhausted {max_retries + 1} attempts")
