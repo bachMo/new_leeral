@@ -1,18 +1,19 @@
 import pytest
 
+from app.core.languages import Language
 from app.services.vocabulary_builder import spoken_meaning
 
 
 @pytest.mark.parametrize(
-    ("meaning", "spoken"),
+    ("meaning", "language", "spoken"),
     [
-        ("fey", "fey, fey."),
-        ("Pacc.", "Pacc, Pacc."),
-        ("am na", "am na, am na."),
-        ("jamono", "jamono, jamono."),
-        ("Jelee na", "Jelee na"),
-        ("bés bu mu war a fey", "bés bu mu war a fey"),
+        ("fey", Language.WOLOF, "Baat bi mooy: fey."),
+        ("Pacc.", Language.WOLOF, "Baat bi mooy: Pacc."),
+        ("bés bu mu war a fey", Language.WOLOF, "Baat bi mooy: bés bu mu war a fey."),
+        ("yobbu", Language.PULAAR, "Konngol ngol ko: yobbu."),
     ],
 )
-def test_short_meanings_are_said_twice(meaning: str, spoken: str) -> None:
-    assert spoken_meaning(meaning) == spoken
+def test_every_word_is_introduced_before_being_said(
+    meaning: str, language: Language, spoken: str
+) -> None:
+    assert spoken_meaning(meaning, language) == spoken

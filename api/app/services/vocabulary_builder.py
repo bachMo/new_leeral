@@ -16,12 +16,16 @@ from app.services.billing_service import EntitlementService
 logger = logging.getLogger("leeral.vocabulary")
 
 WORDS_PER_DOCUMENT = 6
-SHORT_MEANING_CHARS = 6
+WORD_INTRODUCTIONS: dict[Language, str] = {
+    Language.WOLOF: "Baat bi mooy",
+    Language.PULAAR: "Konngol ngol ko",
+}
 
 
-def spoken_meaning(meaning: str) -> str:
+def spoken_meaning(meaning: str, language: Language) -> str:
     text = meaning.strip().rstrip(".!?…")
-    return f"{text}, {text}." if len(text) <= SHORT_MEANING_CHARS else meaning
+    introduction = WORD_INTRODUCTIONS.get(language)
+    return f"{introduction}: {text}." if introduction else f"{text}."
 
 
 class VocabularyBuilder:
@@ -45,7 +49,7 @@ class VocabularyBuilder:
         if existing is not None:
             return existing
         localized = await self._ai.localize(word.word_fr, language)
-        audio = await self._ai.speak(spoken_meaning(localized.text), language)
+        audio = await self._ai.speak(spoken_meaning(localized.text, language), language)
         key = storage_keys.word_audio(word.id, language)
         await self._storage.put(key, audio.content, audio.mime_type)
         translation = WordTranslation(
@@ -59,7 +63,9 @@ class VocabularyBuilder:
         return translation
 
     async def revoice(self, translation: WordTranslation) -> str:
-        audio = await self._ai.speak(spoken_meaning(translation.meaning), translation.language)
+        audio = await self._ai.speak(
+            spoken_meaning(translation.meaning, translation.language), translation.language
+        )
         key = storage_keys.word_audio(translation.word_id, translation.language)
         await self._storage.put(key, audio.content, audio.mime_type)
         previous, translation.audio_key = translation.audio_key, key
