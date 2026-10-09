@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useEffect, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -7,6 +7,9 @@ import {
   Pressable,
   StyleSheet,
   View,
+  type AccessibilityActionEvent,
+  type GestureResponderEvent,
+  type LayoutChangeEvent,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
@@ -439,6 +442,8 @@ export function NumberPad({ onKey }: { onKey: (key: string) => void }) {
   );
 }
 
+const SEEK_STEP = 0.1;
+
 export function Waveform({
   bars,
   progress = 0,
@@ -447,6 +452,8 @@ export function Waveform({
   width = 3.5,
   gap = 3,
   height = 40,
+  onSeek,
+  label = 'Position dans l’audio',
 }: {
   bars: number[];
   progress?: number;
@@ -455,13 +462,57 @@ export function Waveform({
   width?: number;
   gap?: number;
   height?: number;
+  onSeek?: (fraction: number) => void;
+  label?: string;
 }) {
-  const lit = Math.round(bars.length * Math.min(1, Math.max(0, progress)));
+  const span = useRef(0);
+  const [dragging, setDragging] = useState<number | null>(null);
+  const shown = Math.min(1, Math.max(0, dragging ?? progress));
+  const lit = Math.round(bars.length * shown);
+
+  const fractionAt = (event: GestureResponderEvent) =>
+    span.current > 0 ? Math.min(1, Math.max(0, event.nativeEvent.locationX / span.current)) : 0;
+
+  const seekable = onSeek
+    ? {
+        accessible: true,
+        accessibilityRole: 'adjustable' as const,
+        accessibilityLabel: label,
+        accessibilityValue: { min: 0, max: 100, now: Math.round(shown * 100) },
+        accessibilityActions: [{ name: 'increment' as const }, { name: 'decrement' as const }],
+        onAccessibilityAction: (event: AccessibilityActionEvent) =>
+          onSeek(
+            Math.min(
+              1,
+              Math.max(0, shown + (event.nativeEvent.actionName === 'increment' ? SEEK_STEP : -SEEK_STEP)),
+            ),
+          ),
+        hitSlop: { top: 14, bottom: 14, left: 6, right: 6 },
+        onStartShouldSetResponder: () => true,
+        onMoveShouldSetResponder: () => true,
+        onResponderTerminationRequest: () => false,
+        onResponderGrant: (event: GestureResponderEvent) => setDragging(fractionAt(event)),
+        onResponderMove: (event: GestureResponderEvent) => setDragging(fractionAt(event)),
+        onResponderRelease: (event: GestureResponderEvent) => {
+          setDragging(null);
+          onSeek(fractionAt(event));
+        },
+        onResponderTerminate: () => setDragging(null),
+      }
+    : {};
+
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap, height }}>
+    <View
+      {...seekable}
+      onLayout={(event: LayoutChangeEvent) => {
+        span.current = event.nativeEvent.layout.width;
+      }}
+      style={{ flexDirection: 'row', alignItems: 'center', gap, height }}
+    >
       {bars.map((bar, index) => (
         <View
           key={index}
+          pointerEvents="none"
           style={{ width, height: bar, borderRadius: 2, backgroundColor: index < lit ? active : inactive }}
         />
       ))}

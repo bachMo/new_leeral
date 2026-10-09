@@ -13,11 +13,12 @@ type Props = {
   progress: number;
   duration: number | null;
   onPress: () => void;
+  onSeek?: (fraction: number) => void;
   tone: 'mine' | 'leeral';
   label: string;
 };
 
-export function VoiceNote({ bars, playing, progress, duration, onPress, tone, label }: Props) {
+export function VoiceNote({ bars, playing, progress, duration, onPress, onSeek, tone, label }: Props) {
   const mine = tone === 'mine';
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -43,6 +44,8 @@ export function VoiceNote({ bars, playing, progress, duration, onPress, tone, la
       <Waveform
         bars={bars}
         progress={progress}
+        onSeek={onSeek}
+        label={`${label} : avancer ou reculer`}
         width={3}
         gap={2.5}
         height={mine ? 22 : 24}

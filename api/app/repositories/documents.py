@@ -2,7 +2,7 @@ import uuid
 from collections.abc import Sequence
 from datetime import datetime
 
-from sqlalchemy import delete, select, update
+from sqlalchemy import delete, exists, select, update
 from sqlalchemy.orm import selectinload
 
 from app.core.languages import Language
@@ -12,10 +12,11 @@ from app.models import (
     DocumentFile,
     DocumentKeyPoint,
     DocumentSuggestedQuestion,
+    DocumentWord,
     PrescriptionLine,
     User,
 )
-from app.models.enums import DocumentCategory, ExplanationVariant
+from app.models.enums import DocumentCategory, DocumentStatus, ExplanationVariant
 from app.repositories.base import Repository
 
 _DETAIL_OPTIONS = (
@@ -29,6 +30,20 @@ _DETAIL_OPTIONS = (
 
 class DocumentRepository(Repository[Document]):
     model = Document
+
+    async def ready_without_words(self, user_id: uuid.UUID, limit: int) -> Sequence[uuid.UUID]:
+        return (
+            await self.session.scalars(
+                select(Document.id)
+                .where(
+                    Document.user_id == user_id,
+                    Document.status == DocumentStatus.READY,
+                    ~exists().where(DocumentWord.document_id == Document.id),
+                )
+                .order_by(Document.created_at.desc())
+                .limit(limit)
+            )
+        ).all()
 
     async def owned(
         self, user_id: uuid.UUID, document_id: uuid.UUID, *, detailed: bool = False

@@ -53,6 +53,13 @@ class VocabularyBuilder:
         session.add(translation)
         return translation
 
+    async def revoice(self, translation: WordTranslation) -> str:
+        audio = await self._ai.speak(translation.meaning, translation.language)
+        key = storage_keys.word_audio(translation.word_id, translation.language)
+        await self._storage.put(key, audio.content, audio.mime_type)
+        previous, translation.audio_key = translation.audio_key, key
+        return previous
+
     async def get_or_create_word(
         self,
         session: AsyncSession,

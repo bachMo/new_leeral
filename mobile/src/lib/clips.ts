@@ -1,16 +1,19 @@
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useFocusEffect } from 'expo-router';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { audioBus, enablePlayback } from './audio';
+import { audioBus, enablePlayback, untilLoaded } from './audio';
 
 let counter = 0;
+
+type PendingSeek = { id: string; fraction: number };
 
 export function useClipPlayer(rate = 1) {
   const owner = useRef(`clips-${(counter += 1)}`).current;
   const player = useAudioPlayer(null, { updateInterval: 200, keepAudioSessionActive: true });
   const status = useAudioPlayerStatus(player);
   const [current, setCurrent] = useState<string | null>(null);
+  const pendingSeek = useRef<PendingSeek | null>(null);
 
   const stop = useCallback(() => {
     try {
@@ -20,26 +23,55 @@ export function useClipPlayer(rate = 1) {
     }
   }, [player]);
 
-  const play = useCallback(
-    async (id: string, url: string | null | undefined) => {
-      if (!url || audioBus.recording) return;
+  const load = useCallback(
+    async (id: string, url: string) => {
       audioBus.claim(owner, stop);
-      if (id === current && status.playing) {
-        stop();
-        return;
-      }
       await enablePlayback();
       if (id !== current) {
         player.replace({ uri: url });
         setCurrent(id);
-      } else if (status.duration > 0 && status.currentTime >= status.duration - 0.2) {
-        await player.seekTo(0);
+        await untilLoaded(player);
       }
       player.setPlaybackRate(rate);
+    },
+    [current, owner, player, rate, stop],
+  );
+
+  const play = useCallback(
+    async (id: string, url: string | null | undefined) => {
+      if (!url || audioBus.recording) return;
+      if (id === current && status.playing) {
+        stop();
+        return;
+      }
+      const finished = status.duration > 0 && status.currentTime >= status.duration - 0.2;
+      await load(id, url);
+      if (id === current && finished) await player.seekTo(0);
       player.play();
     },
-    [current, owner, player, rate, status.currentTime, status.duration, status.playing, stop],
+    [current, load, player, status.currentTime, status.duration, status.playing, stop],
   );
+
+  const seek = useCallback(
+    async (id: string, url: string | null | undefined, fraction: number) => {
+      if (!url || audioBus.recording) return;
+      if (id === current && status.duration > 0) {
+        await player.seekTo(fraction * status.duration);
+        return;
+      }
+      pendingSeek.current = { id, fraction };
+      await load(id, url);
+      player.play();
+    },
+    [current, load, player, status.duration],
+  );
+
+  useEffect(() => {
+    const pending = pendingSeek.current;
+    if (!pending || pending.id !== current || status.duration <= 0) return;
+    pendingSeek.current = null;
+    player.seekTo(pending.fraction * status.duration);
+  }, [current, player, status.duration]);
 
   useFocusEffect(
     useCallback(() => {
@@ -51,5 +83,5 @@ export function useClipPlayer(rate = 1) {
   const progressOf = (id: string) =>
     current === id && status.duration > 0 ? status.currentTime / status.duration : 0;
 
-  return { play, stop, isPlaying, progressOf, current, status };
+  return { play, seek, stop, isPlaying, progressOf, current, status };
 }

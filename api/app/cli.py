@@ -7,6 +7,8 @@ from collections.abc import Sequence
 from datetime import datetime
 from pathlib import Path
 
+from sqlalchemy import select
+
 from app.ai import build_ai_engine
 from app.ai.contracts import (
     ConversationTurn,
@@ -17,11 +19,12 @@ from app.ai.contracts import (
 )
 from app.ai.engine import AiEngine
 from app.core.config import PROJECT_ROOT, get_settings
+from app.core.errors import AppError
 from app.core.languages import AVAILABLE_LANGUAGES, Language
 from app.core.logging import configure_logging
 from app.db.session import get_engine, get_session_factory
 from app.integrations.storage import get_storage
-from app.models import WhatsAppChannel
+from app.models import WhatsAppChannel, WordTranslation
 from app.repositories.system import WhatsAppChannelRepository
 from app.services.ai_jobs import AiJobTracker
 from app.services.core_vocabulary import CORE_WORDS
@@ -76,6 +79,32 @@ async def seed_words(language: str | None) -> None:
     finally:
         await ai.aclose()
     print(f"{len(CORE_WORDS)} core words ready")
+
+
+async def revoice_words(language: str | None) -> None:
+    ai = build_ai_engine()
+    sessions = get_session_factory()
+    storage = get_storage()
+    builder = VocabularyBuilder(sessions, ai, storage, AiJobTracker(sessions, ai.name))
+    done = failed = 0
+    try:
+        async with sessions() as session:
+            query = select(WordTranslation).order_by(WordTranslation.created_at)
+            if language:
+                query = query.where(WordTranslation.language == Language(language))
+            for translation in (await session.scalars(query)).all():
+                try:
+                    previous = await builder.revoice(translation)
+                except AppError as exc:
+                    failed += 1
+                    print(f"  {translation.meaning}: {exc.code}")
+                    continue
+                await session.commit()
+                await storage.delete([previous])
+                done += 1
+    finally:
+        await ai.aclose()
+    print(f"{done} word recordings regenerated, {failed} failed")
 
 
 async def sync_prompts(language: str | None, force: bool) -> None:
@@ -329,6 +358,9 @@ def main(argv: list[str] | None = None) -> None:
     words = commands.add_parser("seed-words", help="create core vocabulary with audio")
     words.add_argument("--language", choices=[lang.value for lang in AVAILABLE_LANGUAGES])
 
+    revoice = commands.add_parser("revoice-words", help="regenerate the audio of every word")
+    revoice.add_argument("--language", choices=[lang.value for lang in AVAILABLE_LANGUAGES])
+
     prompts = commands.add_parser("sync-prompts", help="generate spoken interface prompts")
     prompts.add_argument("--language", choices=[lang.value for lang in AVAILABLE_LANGUAGES])
     prompts.add_argument("--force", action="store_true")
@@ -371,6 +403,7 @@ def main(argv: list[str] | None = None) -> None:
         "seed-channel": lambda: seed_channel(args.display_number, args.language),
         "seed-words": lambda: seed_words(args.language),
         "sync-prompts": lambda: sync_prompts(args.language, args.force),
+        "revoice-words": lambda: revoice_words(args.language),
         "check-ai": lambda: check_ai(args.language),
         "try-document": lambda: try_document(
             args.files,

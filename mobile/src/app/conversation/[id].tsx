@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
 import { LiveBars, MicButton } from '@/components/Mic';
@@ -118,10 +118,7 @@ export default function ConversationScreen() {
   const explanationDuration = doc?.explanation?.audio_duration_s;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={{ flex: 1, backgroundColor: colors.sand }}
-    >
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: colors.sand }}>
       <StatusBar style="dark" />
       <View
         style={{
@@ -207,6 +204,7 @@ export default function ConversationScreen() {
                     progress={clips.progressOf(message.id)}
                     duration={message.audio_duration_s}
                     onPress={() => clips.play(message.id, message.audio_url)}
+                    onSeek={(fraction) => clips.seek(message.id, message.audio_url, fraction)}
                   />
                 </View>
               ) : null}
@@ -271,6 +269,7 @@ export default function ConversationScreen() {
                         progress={clips.progressOf(message.id)}
                         duration={message.audio_duration_s}
                         onPress={() => clips.play(message.id, message.audio_url)}
+                        onSeek={(fraction) => clips.seek(message.id, message.audio_url, fraction)}
                       />
                     ) : null}
                     <T size={15} lh={1.4} color={colors.sand}>
@@ -299,34 +298,70 @@ export default function ConversationScreen() {
               </T>
               <MiniSpeaker prompt="app.conversation.suggestions" label="Écouter : questions fréquentes" />
             </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-              {suggestions.map((item) => (
-                <Tap
-                  key={item.id}
-                  accessibilityRole="button"
-                  disabled={sending}
-                  onPress={() => submit({ suggestedId: item.id })}
-                  onLongPress={() => clips.play(item.id, item.audio_url)}
-                  style={{
-                    minHeight: 44,
-                    paddingHorizontal: 14,
-                    paddingVertical: 8,
-                    borderRadius: 22,
-                    backgroundColor: colors.paper,
-                    borderWidth: 1,
-                    borderColor: colors.line,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 6,
-                    maxWidth: '100%',
-                  }}
-                >
-                  <Icon name="soundBare" size={14} />
-                  <T w={600} size={14} style={{ flexShrink: 1 }}>
-                    {item.text_fr}
-                  </T>
-                </Tap>
-              ))}
+            <View style={{ gap: 6 }}>
+              {suggestions.map((item) => {
+                const listening = clips.isPlaying(item.id);
+                return (
+                  <View
+                    key={item.id}
+                    style={{
+                      minHeight: 52,
+                      borderRadius: 26,
+                      backgroundColor: colors.paper,
+                      borderWidth: 1,
+                      borderColor: listening ? colors.light : colors.line,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingLeft: 4,
+                    }}
+                  >
+                    <Tap
+                      accessibilityRole="button"
+                      accessibilityLabel={`Écouter la question : ${item.text_fr}`}
+                      accessibilityState={{ selected: listening }}
+                      onPress={() => clips.play(item.id, item.audio_url)}
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 22,
+                        backgroundColor: listening ? colors.night : colors.sand,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Icon
+                        name={listening ? 'pause' : 'soundSmall'}
+                        size={listening ? 12 : 18}
+                        color={listening ? colors.light : colors.night}
+                      />
+                    </Tap>
+                    <Tap
+                      accessibilityRole="button"
+                      accessibilityLabel={`Poser la question : ${item.text_fr}`}
+                      disabled={sending}
+                      onPress={() => {
+                        clips.stop();
+                        submit({ suggestedId: item.id });
+                      }}
+                      style={{
+                        flex: 1,
+                        minHeight: 44,
+                        paddingVertical: 8,
+                        paddingLeft: 10,
+                        paddingRight: 14,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 8,
+                      }}
+                    >
+                      <T w={600} size={14.5} style={{ flex: 1 }}>
+                        {item.text_fr}
+                      </T>
+                      <Icon name="arrow" size={16} color={colors.muted} />
+                    </Tap>
+                  </View>
+                );
+              })}
             </View>
           </View>
         ) : null}
