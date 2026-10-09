@@ -58,6 +58,7 @@ class Settings(BaseSettings):
     whatsapp_otp_template: str = "leeral_code"
     whatsapp_reminder_template: str = "leeral_rappel"
     whatsapp_template_language: str = "fr"
+    whatsapp_media_batch_seconds: float = 10.0
 
     payment_provider: Literal["simulated"] = "simulated"
 

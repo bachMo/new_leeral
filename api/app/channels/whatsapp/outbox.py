@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import uuid
 from collections.abc import Awaitable, Callable
@@ -50,8 +51,11 @@ class WhatsAppOutbox:
             ),
         )
 
-    async def audio(self, key: str, *, caption: str | None = None) -> WhatsAppMessage | None:
-        outgoing = await as_voice_note(await self._storage.get(key))
+    async def audio(
+        self, key: str, *extra_keys: str, caption: str | None = None
+    ) -> WhatsAppMessage | None:
+        segments = await asyncio.gather(*(self._storage.get(item) for item in (key, *extra_keys)))
+        outgoing = await as_voice_note(*segments)
         return await self._deliver(
             WhatsAppMessageType.AUDIO,
             caption,
@@ -83,13 +87,17 @@ class WhatsAppOutbox:
         )
 
     async def prompt(self, key: str, language: Language) -> None:
-        stored = await UiPromptRepository(self._session).find(key, language)
+        stored = await self.prompt_audio_key(key, language)
         if stored is not None:
-            await self.audio(stored.audio_key)
+            await self.audio(stored)
             return
         text = prompt_catalog().get(key)
         if text:
             await self.text(text)
+
+    async def prompt_audio_key(self, key: str, language: Language) -> str | None:
+        stored = await UiPromptRepository(self._session).find(key, language)
+        return stored.audio_key if stored is not None else None
 
     async def _deliver(
         self,

@@ -98,6 +98,7 @@ class WhatsAppMessageStatus(StrEnum):
     DELIVERED = "delivered"
     READ = "read"
     FAILED = "failed"
+    PROCESSED = "processed"
 
 
 class WhatsAppSessionState(StrEnum):

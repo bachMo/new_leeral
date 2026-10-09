@@ -11,6 +11,7 @@ from app.workers.queue import JobQueue
 class _DeferredJob:
     job: Job
     key: str | None
+    defer_by: float | None
     kwargs: dict[str, Any]
 
 
@@ -20,14 +21,18 @@ class UnitOfWork:
         self._queue = queue
         self._jobs: list[_DeferredJob] = []
 
-    def defer(self, job: Job, *, key: str | None = None, **kwargs: Any) -> None:
-        self._jobs.append(_DeferredJob(job, key, kwargs))
+    def defer(
+        self, job: Job, *, key: str | None = None, defer_by: float | None = None, **kwargs: Any
+    ) -> None:
+        self._jobs.append(_DeferredJob(job, key, defer_by, kwargs))
 
     async def commit(self) -> None:
         await self.session.commit()
         jobs, self._jobs = self._jobs, []
         for deferred in jobs:
-            await self._queue.enqueue(deferred.job, key=deferred.key, **deferred.kwargs)
+            await self._queue.enqueue(
+                deferred.job, key=deferred.key, defer_by=deferred.defer_by, **deferred.kwargs
+            )
 
     async def rollback(self) -> None:
         self._jobs.clear()
