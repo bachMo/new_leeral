@@ -50,6 +50,7 @@ class InboundMessage(_Model):
     audio: Media | None = None
     interactive: Interactive | None = None
     button: Button | None = None
+    errors: list[dict[str, Any]] = Field(default_factory=list)
 
     @property
     def media(self) -> Media | None:

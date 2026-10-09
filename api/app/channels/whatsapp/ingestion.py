@@ -81,6 +81,17 @@ class WebhookIngestor:
     ) -> int:
         if await self._messages.by_wa_id(message.id) is not None:
             return 0
+        if message.type not in _TYPE_MAP:
+            logger.info(
+                "whatsapp_unsupported_message",
+                extra={
+                    "type": message.type,
+                    "errors": [
+                        {"code": error.get("code"), "title": error.get("title")}
+                        for error in message.errors
+                    ],
+                },
+            )
         media = message.media
         record = WhatsAppMessage(
             wa_phone=message.sender,
