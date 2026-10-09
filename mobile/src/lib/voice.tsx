@@ -11,7 +11,7 @@ import {
 } from 'react';
 
 import { api, ApiError, asApiError } from './api';
-import { audioBus, enablePlayback } from './audio';
+import { audioBus, enablePlayback, untilLoaded } from './audio';
 import { useSession } from './session';
 import { readValue, writeValue } from './storage';
 import type { Language, Prompt } from './types';
@@ -96,9 +96,10 @@ export function VoiceProvider({ children }: { children: ReactNode }) {
     (url: string | null | undefined) => {
       if (!url || audioBus.recording) return;
       audioBus.claim(OWNER, stop);
-      enablePlayback().then(() => {
+      enablePlayback().then(async () => {
         try {
           player.replace({ uri: url });
+          await untilLoaded(player);
           player.setPlaybackRate(rate);
           player.play();
         } catch {

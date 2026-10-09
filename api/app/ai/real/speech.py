@@ -9,6 +9,9 @@ from app.core.languages import Language
 
 _SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?\n])\s+")
 _WORD_BOUNDARY = re.compile(r"\s+")
+_FINAL_PUNCTUATION = (".", "!", "?", "…")
+LEAD_SILENCE_S = 0.2
+TAIL_SILENCE_S = 0.4
 
 
 def chunk_text(text: str, max_chars: int) -> list[str]:
@@ -61,8 +64,13 @@ class SpeechSynthesizer:
         if not chunks:
             raise AiInputError("nothing to speak")
         wavs = await asyncio.gather(*(self._synthesize(chunk, language) for chunk in chunks))
-        return wav_to_speech(concat_wav(wavs), bitrate_kbps=self._bitrate_kbps)
+        padded = concat_wav(wavs, lead_s=LEAD_SILENCE_S, tail_s=TAIL_SILENCE_S)
+        return wav_to_speech(padded, bitrate_kbps=self._bitrate_kbps)
 
     async def _synthesize(self, chunk: str, language: Language) -> bytes:
         async with self._semaphore:
-            return await self._kiriku.synthesize(chunk, language)
+            return await self._kiriku.synthesize(_with_final_stop(chunk), language)
+
+
+def _with_final_stop(chunk: str) -> str:
+    return chunk if chunk.endswith(_FINAL_PUNCTUATION) else f"{chunk}."

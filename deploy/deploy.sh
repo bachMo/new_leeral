@@ -19,6 +19,7 @@ main() {
   echo
 
   docker compose exec -T api leeral sync-prompts
+  docker compose exec -T api leeral seed-words > /dev/null
   docker image prune -f > /dev/null
   docker compose ps
 }

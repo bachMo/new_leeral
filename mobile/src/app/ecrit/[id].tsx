@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
 import { LiveBars, MicButton } from '@/components/Mic';
@@ -193,10 +193,7 @@ export default function WritingScreen() {
   const collecting = writing.status === 'collecting';
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={{ flex: 1, backgroundColor: colors.sand }}
-    >
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: colors.sand }}>
       <StatusBar style="dark" />
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top, paddingHorizontal: 20, paddingBottom: 16, gap: 14 }}
@@ -319,6 +316,9 @@ export default function WritingScreen() {
                         progress={clips.progressOf(answer.audio.uri)}
                         duration={null}
                         onPress={() => answer.audio && clips.play(answer.audio.uri, answer.audio.uri)}
+                        onSeek={(fraction) =>
+                          answer.audio && clips.seek(answer.audio.uri, answer.audio.uri, fraction)
+                        }
                       />
                     ) : (
                       <T size={15}>{answer.text}</T>

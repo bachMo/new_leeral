@@ -1,4 +1,5 @@
 import logging
+import uuid
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -26,8 +27,12 @@ from app.repositories.billing import (
     SubscriptionRepository,
     UsageRepository,
 )
+from app.repositories.documents import DocumentRepository
+from app.workers.jobs import Job
 
 logger = logging.getLogger("leeral.billing")
+
+BACKFILLED_DOCUMENTS = 10
 
 
 @dataclass(frozen=True, slots=True)
@@ -191,3 +196,14 @@ class BillingService:
                 expires_at=starts_at + timedelta(days=plan.duration_days),
             )
         )
+        if plan.document_words:
+            await self._learn_from_past_documents(payment.user_id)
+
+    async def _learn_from_past_documents(self, user_id: uuid.UUID) -> None:
+        documents = await DocumentRepository(self._uow.session).ready_without_words(
+            user_id, BACKFILLED_DOCUMENTS
+        )
+        for document_id in documents:
+            self._uow.defer(
+                Job.EXTRACT_WORDS, key=f"words:{document_id}", document_id=str(document_id)
+            )

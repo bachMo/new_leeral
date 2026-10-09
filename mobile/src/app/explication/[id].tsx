@@ -20,7 +20,7 @@ import {
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
-import { audioBus, enablePlayback, formatDuration } from '@/lib/audio';
+import { audioBus, enablePlayback, formatDuration, untilLoaded } from '@/lib/audio';
 import { POLL_INTERVAL_MS } from '@/lib/config';
 import { plural, shortDate } from '@/lib/format';
 import { useSession } from '@/lib/session';
@@ -111,6 +111,15 @@ export default function ExplanationScreen() {
     api.document(id).then(setDoc).catch(sayError);
   }, [id, sayError]);
 
+  const seek = useCallback(
+    async (fraction: number) => {
+      const total = status.duration > 0 ? status.duration : (explanation?.audio_duration_s ?? 0);
+      if (!total) return;
+      await player.seekTo(fraction * total);
+    },
+    [explanation?.audio_duration_s, player, status.duration],
+  );
+
   const pause = useCallback(() => {
     try {
       player.pause();
@@ -142,10 +151,12 @@ export default function ExplanationScreen() {
     loadedUrl.current = explanation.id;
     player.replace({ uri: url });
     audioBus.claim(OWNER, pause);
-    enablePlayback().then(() => {
-      player.setPlaybackRate(rate);
-      player.play();
-    });
+    enablePlayback()
+      .then(() => untilLoaded(player))
+      .then(() => {
+        player.setPlaybackRate(rate);
+        player.play();
+      });
   }, [explanation, pause, player, rate]);
 
   useEffect(() => {
@@ -300,6 +311,8 @@ export default function ExplanationScreen() {
               <Waveform
                 bars={BARS}
                 progress={duration ? status.currentTime / duration : 0}
+                onSeek={seek}
+                label="Avancer ou reculer dans l'explication"
                 active={colors.light}
                 inactive="rgba(246,240,228,0.28)"
               />

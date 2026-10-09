@@ -19,7 +19,9 @@ def silent_wav(duration_s: float, sample_rate: int = 16000) -> bytes:
     return buffer.getvalue()
 
 
-def concat_wav(chunks: Sequence[bytes], *, pause_s: float = 0.25) -> bytes:
+def concat_wav(
+    chunks: Sequence[bytes], *, pause_s: float = 0.25, lead_s: float = 0.0, tail_s: float = 0.0
+) -> bytes:
     if not chunks:
         raise AiOutputError("no audio chunk to concatenate")
     frames: list[bytes] = []
@@ -31,13 +33,17 @@ def concat_wav(chunks: Sequence[bytes], *, pause_s: float = 0.25) -> bytes:
     if len(formats) != 1:
         raise AiOutputError("audio chunks have different formats")
     channels, sample_width, sample_rate = formats.pop()
-    silence = b"\x00" * int(sample_rate * pause_s) * sample_width * channels
+    frame_size = sample_width * channels
+
+    def silence(seconds: float) -> bytes:
+        return b"\x00" * int(sample_rate * seconds) * frame_size
+
     buffer = io.BytesIO()
     with wave.open(buffer, "wb") as output:
         output.setnchannels(channels)
         output.setsampwidth(sample_width)
         output.setframerate(sample_rate)
-        output.writeframes(silence.join(frames))
+        output.writeframes(silence(lead_s) + silence(pause_s).join(frames) + silence(tail_s))
     return buffer.getvalue()
 
 

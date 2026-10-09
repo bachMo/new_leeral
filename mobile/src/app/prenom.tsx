@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, TextInput, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
 import { MicButton } from '@/components/Mic';
@@ -78,7 +78,8 @@ export default function FirstNameScreen() {
   const ready = cleanName(name).length > 0;
 
   return (
-    <View
+    <KeyboardAvoidingView
+      behavior="padding"
       style={{
         flex: 1,
         backgroundColor: colors.sand,
@@ -104,24 +105,30 @@ export default function FirstNameScreen() {
         </T>
       </View>
 
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 18 }}>
-        <MicButton
-          recording={recorder.recording}
-          busy={listening}
-          onPress={toggleMic}
-          size={168}
-          inset={20}
-          core={92}
-          iconSize={38}
-          idleLabel="Appuyer et dire mon prénom"
-          recordingLabel="J'ai fini de parler"
-        />
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: -8 }}>
-          <T w={700} size={15}>
-            {recorder.recording ? 'Je t’écoute… touche pour finir' : 'Appuie et dis ton prénom'}
-          </T>
-          <MiniSpeaker prompt="app.name.micro" label="Écouter : dire mon prénom" />
-        </View>
+      <View
+        style={{ flex: 1, alignItems: 'center', justifyContent: typing ? 'flex-start' : 'center', gap: 18 }}
+      >
+        {typing ? null : (
+          <>
+            <MicButton
+              recording={recorder.recording}
+              busy={listening}
+              onPress={toggleMic}
+              size={168}
+              inset={20}
+              core={92}
+              iconSize={38}
+              idleLabel="Appuyer et dire mon prénom"
+              recordingLabel="J'ai fini de parler"
+            />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: -8 }}>
+              <T w={700} size={15}>
+                {recorder.recording ? 'Je t’écoute… touche pour finir' : 'Appuie et dis ton prénom'}
+              </T>
+              <MiniSpeaker prompt="app.name.micro" label="Écouter : dire mon prénom" />
+            </View>
+          </>
+        )}
 
         <View
           style={{
@@ -144,6 +151,7 @@ export default function FirstNameScreen() {
               autoCapitalize="words"
               placeholder="Ton prénom"
               placeholderTextColor={colors.placeholder}
+              returnKeyType="done"
               onSubmitEditing={() => setTyping(false)}
               style={{
                 fontFamily: fonts.display800,
@@ -207,6 +215,6 @@ export default function FirstNameScreen() {
       </View>
 
       <SayBubble top={insets.top + 64} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -1,4 +1,4 @@
-import { AudioModule, setAudioModeAsync } from 'expo-audio';
+import { AudioModule, setAudioModeAsync, type AudioPlayer } from 'expo-audio';
 
 type Stopper = () => void;
 
@@ -57,4 +57,14 @@ export async function enableRecording(): Promise<boolean> {
 export function formatDuration(seconds: number): string {
   const total = Math.max(0, Math.round(seconds));
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+}
+
+const LOAD_TIMEOUT_MS = 4000;
+const LOAD_POLL_MS = 40;
+
+export async function untilLoaded(player: AudioPlayer): Promise<void> {
+  const deadline = Date.now() + LOAD_TIMEOUT_MS;
+  while (!player.isLoaded && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, LOAD_POLL_MS));
+  }
 }
