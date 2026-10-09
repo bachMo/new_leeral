@@ -12,11 +12,16 @@ from app.repositories.learning import UserWordRepository, WordRepository
 from app.services import storage_keys
 from app.services.ai_jobs import AiJobRefs, AiJobTracker
 from app.services.billing_service import EntitlementService
-from app.services.narrator import Narrator
 
 logger = logging.getLogger("leeral.vocabulary")
 
 WORDS_PER_DOCUMENT = 6
+SHORT_MEANING_CHARS = 6
+
+
+def spoken_meaning(meaning: str) -> str:
+    text = meaning.strip().rstrip(".!?…")
+    return f"{text}, {text}." if len(text) <= SHORT_MEANING_CHARS else meaning
 
 
 class VocabularyBuilder:
@@ -31,7 +36,6 @@ class VocabularyBuilder:
         self._ai = ai
         self._storage = storage
         self._tracker = tracker
-        self._narrator = Narrator(ai)
 
     async def ensure_translation(
         self, session: AsyncSession, word: Word, language: Language
@@ -40,7 +44,8 @@ class VocabularyBuilder:
         existing = await words.translation(word.id, language)
         if existing is not None:
             return existing
-        localized, audio = await self._narrator.voice(word.word_fr, language)
+        localized = await self._ai.localize(word.word_fr, language)
+        audio = await self._ai.speak(spoken_meaning(localized.text), language)
         key = storage_keys.word_audio(word.id, language)
         await self._storage.put(key, audio.content, audio.mime_type)
         translation = WordTranslation(
@@ -54,7 +59,7 @@ class VocabularyBuilder:
         return translation
 
     async def revoice(self, translation: WordTranslation) -> str:
-        audio = await self._ai.speak(translation.meaning, translation.language)
+        audio = await self._ai.speak(spoken_meaning(translation.meaning), translation.language)
         key = storage_keys.word_audio(translation.word_id, translation.language)
         await self._storage.put(key, audio.content, audio.mime_type)
         previous, translation.audio_key = translation.audio_key, key
