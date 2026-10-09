@@ -52,9 +52,7 @@ class DocumentService:
     async def create(
         self, user: User, files: Sequence[IncomingFile], *, source: Channel = Channel.APP
     ) -> Document:
-        with log_step(
-            logger, "document_received", channel=source.value, files=len(files)
-        ) as out:
+        with log_step(logger, "document_received", channel=source.value, files=len(files)) as out:
             document = await self._create(user, files, source=source)
             out["document_id"] = str(document.id)
             out["pages"] = document.page_count

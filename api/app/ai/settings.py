@@ -10,7 +10,9 @@ ReasoningEffort = Literal["none", "minimal", "low", "medium", "high"]
 
 
 class AiSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=ENV_FILES, env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=ENV_FILES, env_file_encoding="utf-8", extra="ignore", env_ignore_empty=True
+    )
 
     ai_provider: Literal["mock", "real"] = "mock"
 

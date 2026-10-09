@@ -9,9 +9,10 @@ logger = logging.getLogger("leeral.tests.logging")
 
 
 def test_log_step_success_logs_started_and_finished(caplog: pytest.LogCaptureFixture) -> None:
-    with caplog.at_level(logging.INFO, logger=logger.name), log_step(
-        logger, "widget_built", widget="gizmo"
-    ) as out:
+    with (
+        caplog.at_level(logging.INFO, logger=logger.name),
+        log_step(logger, "widget_built", widget="gizmo") as out,
+    ):
         out["count"] = 3
 
     started = next(r for r in caplog.records if r.message == "widget_built_started")

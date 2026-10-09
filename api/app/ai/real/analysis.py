@@ -153,9 +153,7 @@ def _grounded_summary(summary: str, text: str) -> str:
     sentences = split_sentences(summary) or [summary]
     kept = [sentence for sentence in sentences if _is_grounded(sentence, text)]
     if len(kept) < len(sentences):
-        logger.warning(
-            "analysis_summary_ungrounded", extra={"dropped": len(sentences) - len(kept)}
-        )
+        logger.warning("analysis_summary_ungrounded", extra={"dropped": len(sentences) - len(kept)})
     return " ".join(kept) if kept else summary
 
 

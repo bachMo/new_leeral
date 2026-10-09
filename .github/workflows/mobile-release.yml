@@ -1,0 +1,51 @@
+name: Publier l'app
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: Ce qui change dans cette version
+        required: true
+        type: string
+      web:
+        description: Republier aussi le site web
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: mobile-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: EAS Update et site web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    env:
+      MESSAGE: ${{ inputs.message }}
+      LEERAL_API_URL: ${{ vars.LEERAL_API_URL }}
+      LEERAL_SUPPORT_WHATSAPP: ${{ vars.LEERAL_SUPPORT_WHATSAPP }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Mise à jour de l'app (Expo Go et APK)
+        run: eas update --channel preview --environment preview --message "$MESSAGE" --non-interactive
+      - name: Site web
+        if: ${{ inputs.web }}
+        run: |
+          test -n "$LEERAL_API_URL" || { echo "Variable LEERAL_API_URL manquante dans GitHub"; exit 1; }
+          npx expo export --platform web
+          eas deploy --prod --non-interactive

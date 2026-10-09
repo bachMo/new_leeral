@@ -37,7 +37,13 @@ class MedicationReading(BaseModel):
     legible: Literal["yes", "partial", "no"] = "no"
 
     @field_validator(
-        "name_read", "dci_read", "strength", "form", "timing", "instructions", "raw",
+        "name_read",
+        "dci_read",
+        "strength",
+        "form",
+        "timing",
+        "instructions",
+        "raw",
         mode="before",
     )
     @classmethod

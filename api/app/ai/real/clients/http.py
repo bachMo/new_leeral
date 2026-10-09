@@ -80,9 +80,7 @@ async def request_with_retry(
             except httpx.HTTPError as exc:
                 if attempt >= max_retries:
                     raise AiUnavailableError(f"{service}: network error: {exc!r}") from exc
-                logger.warning(
-                    "ai_network_retry", extra={"service": service, "attempt": attempt}
-                )
+                logger.warning("ai_network_retry", extra={"service": service, "attempt": attempt})
             else:
                 if response.is_success:
                     out["status"] = response.status_code

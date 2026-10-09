@@ -17,9 +17,7 @@ class Narrator:
         self, text_fr: str, language: Language, *, protected_terms: Sequence[str] = ()
     ) -> tuple[LocalizedText, SpeechAudio]:
         with log_step(logger, "narration", language=language.value, length=len(text_fr)) as out:
-            localized = await self._ai.localize(
-                text_fr, language, protected_terms=protected_terms
-            )
+            localized = await self._ai.localize(text_fr, language, protected_terms=protected_terms)
             audio = await self._ai.speak(localized.text, language)
             out["audio_duration_s"] = audio.duration_s
             return localized, audio

@@ -74,8 +74,8 @@ class FakeProviders:
             ("Tu lis la photo d'une ordonnance", "Tu lis le texte d'une ordonnance")
         ):
             self.calls.append("read")
-            strength = "750 mg" if self.line_disagree and model == "meta/muse-glimmer-30b" else (
-                "500 mg"
+            strength = (
+                "750 mg" if self.line_disagree and model == "meta/muse-glimmer-30b" else ("500 mg")
             )
             line = {
                 "raw": "Doliprane 500 mg 3/j 5 jours",
@@ -237,8 +237,15 @@ async def test_contract_terms_become_dedicated_key_points() -> None:
 
     tags = [point.tag for point in analysis.key_points]
     assert tags[:9] == [
-        "Avis", "Durée", "Reconduction", "Résiliation", "Pénalité", "Partie", "Partie",
-        "Montant", "Vigilance",
+        "Avis",
+        "Durée",
+        "Reconduction",
+        "Résiliation",
+        "Pénalité",
+        "Partie",
+        "Partie",
+        "Montant",
+        "Vigilance",
     ]
     assert analysis.key_points[0].title_fr == (
         "Ceci n'est pas un avis juridique. "

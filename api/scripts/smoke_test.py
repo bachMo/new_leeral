@@ -29,6 +29,7 @@ LETTER_ANSWERS = {
     "reason": "J'en ai besoin pour inscrire mon fils à l'école.",
 }
 
+
 def invoice_photo() -> bytes:
     image = Image.new("RGB", (1240, 1754), "white")
     draw = ImageDraw.Draw(image)

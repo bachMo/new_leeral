@@ -115,19 +115,20 @@ class ConversationService:
     async def _existing_conversation(
         self, user: User, document_id: uuid.UUID, source: Channel
     ) -> Conversation | None:
-        """Guests get one conversation per document, dropped after `guest_session_ttl_hours` of
-        inactivity (a fresh upload of the *same* document then starts over rather than resuming a
-        stale thread). Accounts keep a single ongoing conversation per channel, which every new
-        document joins (see AI_DECISIONS.md for the full rule and why `document_id` is kept as the
-        "current/default document" pointer rather than dropped)."""
-        if user.is_guest:
-            existing = await self._conversations.for_document(user.id, document_id)
-            if existing is None or is_guest_session_expired(
-                existing.last_message_at, self._settings.guest_session_ttl_hours
-            ):
-                return None
-            return existing
-        return await self._conversations.active_for_account(user.id, source)
+        """On WhatsApp, an account keeps a single ongoing conversation that every new document
+        joins, like the chat itself (see AI_DECISIONS.md). In the app, each document has its own
+        conversation, opened from that document's screen. A guest conversation is dropped after
+        `guest_session_ttl_hours` of inactivity, so a fresh upload starts over."""
+        if source is Channel.WHATSAPP and not user.is_guest:
+            return await self._conversations.active_for_account(user.id, source)
+        existing = await self._conversations.for_document(user.id, document_id, source)
+        if existing is None:
+            return None
+        if user.is_guest and is_guest_session_expired(
+            existing.last_message_at, self._settings.guest_session_ttl_hours
+        ):
+            return None
+        return existing
 
     async def get(self, user: User, conversation_id: uuid.UUID) -> Conversation:
         conversation = await self._conversations.owned(user.id, conversation_id)

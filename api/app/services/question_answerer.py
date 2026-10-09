@@ -78,9 +78,7 @@ class QuestionAnswerer:
         question: Message,
         answer: Message,
     ) -> None:
-        with log_step(
-            logger, "question_answered", conversation_id=str(conversation.id)
-        ) as out:
+        with log_step(logger, "question_answered", conversation_id=str(conversation.id)) as out:
             language = conversation.language
             question_fr = await self._speech_input.to_french(question, language)
             document = await self._document_context(session, conversation)

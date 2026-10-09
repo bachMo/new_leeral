@@ -158,9 +158,7 @@ def test_form_and_instructions_are_sure_only_when_both_readings_agree(
 
 
 def test_disagreement_on_form_requires_a_check(lexicon: Lexicon, rules: PharmacologyRules) -> None:
-    line = verify(
-        reading(form="comprimé"), reading(form="sirop"), lexicon, rules
-    )
+    line = verify(reading(form="comprimé"), reading(form="sirop"), lexicon, rules)
 
     assert line.status == "to_check"
     assert line.field_statuses["form"] == "to_check"
@@ -189,9 +187,7 @@ def test_dci_read_as_a_brand_only_name_is_never_trusted(
 def test_raw_line_is_kept_alongside_structured_fields(
     lexicon: Lexicon, rules: PharmacologyRules
 ) -> None:
-    line = verify(
-        reading(raw="Amoxicilline 500 mg 3x/j 7 jours"), reading(), lexicon, rules
-    )
+    line = verify(reading(raw="Amoxicilline 500 mg 3x/j 7 jours"), reading(), lexicon, rules)
 
     assert line.raw_read == "Amoxicilline 500 mg 3x/j 7 jours"
 

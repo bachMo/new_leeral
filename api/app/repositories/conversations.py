@@ -20,21 +20,22 @@ class ConversationRepository(Repository[Conversation]):
             )
         )
 
-    async def for_document(self, user_id: uuid.UUID, document_id: uuid.UUID) -> Conversation | None:
+    async def for_document(
+        self, user_id: uuid.UUID, document_id: uuid.UUID, source: Channel
+    ) -> Conversation | None:
         return await self.session.scalar(
             select(Conversation)
             .where(
                 Conversation.user_id == user_id,
                 Conversation.document_id == document_id,
+                Conversation.source == source,
                 Conversation.kind == ConversationKind.DOCUMENT,
             )
             .order_by(Conversation.created_at)
             .limit(1)
         )
 
-    async def active_for_account(
-        self, user_id: uuid.UUID, source: Channel
-    ) -> Conversation | None:
+    async def active_for_account(self, user_id: uuid.UUID, source: Channel) -> Conversation | None:
         """Most recently active document conversation for this account, across every document
         attached to it (see `ConversationDocument`) — accounts keep one ongoing conversation per
         channel rather than one per document (unlike guests, see decision in AI_DECISIONS.md)."""

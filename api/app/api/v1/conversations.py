@@ -37,19 +37,13 @@ async def question_from_form(
 
 @router.get("/{conversation_id}", response_model=ConversationOut)
 async def read_conversation(
-    conversation_id: uuid.UUID, user: CurrentUser, service: ConversationServiceDep
+    conversation_id: uuid.UUID,
+    user: CurrentUser,
+    service: ConversationServiceDep,
+    presenter: PresenterDep,
 ) -> ConversationOut:
     conversation = await service.get(user, conversation_id)
-    document_ids = await service.documents_for(conversation.id)
-    return ConversationOut(
-        id=conversation.id,
-        kind=conversation.kind,
-        document_id=conversation.document_id,
-        document_ids=list(document_ids),
-        language=conversation.language,
-        last_message_at=conversation.last_message_at,
-        created_at=conversation.created_at,
-    )
+    return presenter.conversation(conversation, await service.documents_for(conversation.id))
 
 
 @router.get("/{conversation_id}/messages", response_model=list[MessageOut])

@@ -309,9 +309,7 @@ class RealAiEngine:
             return result
 
     async def extract_vocabulary(self, text_fr: str, *, limit: int) -> list[VocabularyCandidate]:
-        with log_step(
-            logger, "extract_vocabulary", length=len(text_fr), limit=limit
-        ) as out:
+        with log_step(logger, "extract_vocabulary", length=len(text_fr), limit=limit) as out:
             result = await vocabulary.extract_vocabulary(self._reasoner, text_fr, limit=limit)
             out["count"] = len(result)
             return result

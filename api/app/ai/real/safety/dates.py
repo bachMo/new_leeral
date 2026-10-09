@@ -67,9 +67,7 @@ MONTH_NAMES: dict[Language, tuple[str, ...]] = {
     ),
 }
 
-_MONTH_PATTERN = re.compile(
-    "|".join(re.escape(month) for month in FRENCH_MONTHS), re.IGNORECASE
-)
+_MONTH_PATTERN = re.compile("|".join(re.escape(month) for month in FRENCH_MONTHS), re.IGNORECASE)
 
 
 def localize_month_names(text: str, language: Language) -> tuple[str, tuple[str, ...]]:
