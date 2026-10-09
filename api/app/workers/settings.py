@@ -36,6 +36,7 @@ class WorkerSettings:
         tasks.generate_writing,
         tasks.handle_whatsapp_message,
         tasks.collect_whatsapp_media,
+        tasks.reject_whatsapp_message,
         tasks.promote_guest_files,
         tasks.delete_storage_prefix,
     ]

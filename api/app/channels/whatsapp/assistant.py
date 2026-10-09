@@ -122,7 +122,10 @@ class WhatsAppAssistant:
                 return
             if wa_session.state is WhatsAppSessionState.CHOOSING_LANGUAGE:
                 return
-            pending = await self._pending_media(session, user_id)
+            latest = await self._pending_media(session, user_id)
+            if not latest or latest[-1].id != message_id:
+                return
+            pending = await self._pending_media(session, user_id, claim=True)
             if not pending or pending[-1].id != message_id:
                 return
             channel = await session.get(WhatsAppChannel, pending[-1].channel_id)
@@ -136,6 +139,23 @@ class WhatsAppAssistant:
             )
             await self._create_document(uow, outbox, user, wa_session, pending)
             await uow.commit()
+
+    async def reject_unsupported(self, message_id: uuid.UUID) -> None:
+        async with self._session_factory() as session:
+            inbound = await session.get(WhatsAppMessage, message_id)
+            if inbound is None or inbound.user_id is None:
+                return
+            if await self._followed_by_media(session, inbound):
+                return
+            user = await session.get(User, inbound.user_id)
+            channel = await session.get(WhatsAppChannel, inbound.channel_id)
+            if user is None or channel is None:
+                return
+            outbox = WhatsAppOutbox(
+                session, self._client, self._storage, channel, inbound.wa_phone, user.id
+            )
+            await outbox.prompt("whatsapp.unsupported", user.language)
+            await session.commit()
 
     async def document_finished(self, document_id: uuid.UUID) -> None:
         async with self._session_factory() as session:
@@ -245,6 +265,14 @@ class WhatsAppAssistant:
             return
         if inbound.type in SPEECH_TYPES:
             await self._receive_question(uow, outbox, user, channel, wa_session, inbound, audio)
+            return
+        if inbound.type is WhatsAppMessageType.UNSUPPORTED:
+            uow.defer(
+                Job.REJECT_WHATSAPP_MESSAGE,
+                key=f"whatsapp-unsupported:{inbound.id}",
+                defer_by=self._settings.whatsapp_media_batch_seconds,
+                message_id=str(inbound.id),
+            )
             return
         await outbox.prompt("whatsapp.unsupported", user.language)
 
@@ -438,9 +466,9 @@ class WhatsAppAssistant:
         return files
 
     async def _pending_media(
-        self, session: AsyncSession, user_id: uuid.UUID
+        self, session: AsyncSession, user_id: uuid.UUID, *, claim: bool = False
     ) -> Sequence[WhatsAppMessage]:
-        result = await session.scalars(
+        query = (
             select(WhatsAppMessage)
             .where(
                 WhatsAppMessage.user_id == user_id,
@@ -450,9 +478,23 @@ class WhatsAppAssistant:
                 WhatsAppMessage.created_at > utcnow() - PENDING_MEDIA_WINDOW,
             )
             .order_by(WhatsAppMessage.created_at, WhatsAppMessage.id)
-            .with_for_update(skip_locked=True)
         )
-        return result.all()
+        if claim:
+            query = query.with_for_update()
+        return (await session.scalars(query)).all()
+
+    async def _followed_by_media(self, session: AsyncSession, inbound: WhatsAppMessage) -> bool:
+        media = await session.scalar(
+            select(WhatsAppMessage.id)
+            .where(
+                WhatsAppMessage.user_id == inbound.user_id,
+                WhatsAppMessage.direction == WhatsAppDirection.INBOUND,
+                WhatsAppMessage.type.in_(MEDIA_TYPES),
+                WhatsAppMessage.created_at > inbound.created_at,
+            )
+            .limit(1)
+        )
+        return media is not None
 
     async def _already_sent(
         self, session: AsyncSession, user_id: uuid.UUID, audio_key: str

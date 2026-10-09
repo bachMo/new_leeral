@@ -11,5 +11,6 @@ class Job(StrEnum):
     GENERATE_WRITING = "generate_writing"
     HANDLE_WHATSAPP_MESSAGE = "handle_whatsapp_message"
     COLLECT_WHATSAPP_MEDIA = "collect_whatsapp_media"
+    REJECT_WHATSAPP_MESSAGE = "reject_whatsapp_message"
     PROMOTE_GUEST_FILES = "promote_guest_files"
     DELETE_STORAGE_PREFIX = "delete_storage_prefix"
