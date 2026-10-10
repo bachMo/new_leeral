@@ -11,9 +11,11 @@ import {
   NumberPad,
   PrimaryButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   StepDots,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
@@ -29,6 +31,7 @@ function formatLocal(digits: string): string {
 export default function PhoneScreen() {
   const { next } = useLocalSearchParams<{ next?: string }>();
   const insets = useInsets();
+  const { fit } = useLayout();
   const { sayError } = useScreenVoice();
   const [digits, setDigits] = useState('');
   const [busy, setBusy] = useState(false);
@@ -63,15 +66,27 @@ export default function PhoneScreen() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.sand,
-        paddingTop: insets.top,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom,
-        gap: 18,
-      }}
+    <Screen
+      footer={
+        <View>
+          <PrimaryButton
+            label="Recevoir mon code"
+            bg={full ? colors.night : colors.line}
+            fg={full ? colors.sand : colors.label}
+            disabled={!full}
+            loading={busy}
+            onPress={go}
+            right={<Icon name="arrow" size={22} color={full ? colors.sand : colors.label} />}
+          />
+          <MiniSpeaker
+            prompt="app.phone.go"
+            label="Écouter : recevoir mon code"
+            color={full ? colors.sand : colors.label}
+            style={{ position: 'absolute', right: 6, top: 11 }}
+          />
+        </View>
+      }
+      overlay={<SayBubble top={insets.top + 64} />}
     >
       <StatusBar style="dark" />
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -81,7 +96,7 @@ export default function PhoneScreen() {
       </View>
 
       <View>
-        <T display w={700} size={30} lh={1.05} ls={-0.8}>
+        <T display w={700} size={fit(30)} lh={1.05} ls={-0.8}>
           Ton numéro de téléphone
         </T>
         <T size={15} lh={1.4} color={colors.muted} style={{ marginTop: 6 }}>
@@ -92,32 +107,35 @@ export default function PhoneScreen() {
       <View>
         <View
           style={{
-            height: 76,
+            minHeight: fit(76),
             borderRadius: 22,
             backgroundColor: colors.paper,
             borderWidth: 2,
             borderColor: full ? colors.river : colors.light,
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 12,
-            paddingHorizontal: 16,
+            gap: 10,
+            paddingLeft: 14,
+            paddingRight: 44,
           }}
         >
           <T
             w={700}
-            size={18}
+            size={17}
             color={colors.muted}
-            style={{ paddingRight: 12, borderRightWidth: 1, borderRightColor: colors.line }}
+            style={{ paddingRight: 10, borderRightWidth: 1, borderRightColor: colors.line }}
           >
             +221
           </T>
           <T
             display
             w={700}
-            size={28}
+            size={fit(28)}
             ls={1}
+            numberOfLines={1}
+            adjustsFontSizeToFit
             color={digits ? colors.night : colors.placeholder}
-            style={{ flex: 1, fontVariant: ['tabular-nums'] }}
+            style={{ flex: 1, minWidth: 0, fontVariant: ['tabular-nums'] }}
           >
             {formatLocal(digits)}
           </T>
@@ -125,39 +143,19 @@ export default function PhoneScreen() {
         <MiniSpeaker
           prompt="app.phone.field"
           label="Écouter : mon numéro"
-          style={{ position: 'absolute', right: 6, top: 18 }}
+          style={{ position: 'absolute', right: 6, top: '50%', marginTop: -20 }}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: -8 }}>
         <Icon name="lock" size={16} color={colors.muted} />
-        <T size={13} color={colors.muted}>
+        <T size={13} color={colors.muted} style={{ flex: 1 }}>
           Nouveau ou déjà inscrit : c&apos;est pareil.
         </T>
       </View>
 
-      <View style={{ flex: 1 }} />
+      <View style={{ flexGrow: 1 }} />
 
       <NumberPad onKey={press} />
-
-      <View>
-        <PrimaryButton
-          label="Recevoir mon code"
-          bg={full ? colors.night : colors.line}
-          fg={full ? colors.sand : colors.label}
-          disabled={!full}
-          loading={busy}
-          onPress={go}
-          right={<Icon name="arrow" size={22} color={full ? colors.sand : colors.label} />}
-        />
-        <MiniSpeaker
-          prompt="app.phone.go"
-          label="Écouter : recevoir mon code"
-          color={full ? colors.sand : colors.label}
-          style={{ position: 'absolute', right: 6, top: 11 }}
-        />
-      </View>
-
-      <SayBubble top={insets.top + 64} />
-    </View>
+    </Screen>
   );
 }

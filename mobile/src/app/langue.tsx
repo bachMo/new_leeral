@@ -9,9 +9,11 @@ import {
   Logo,
   PrimaryButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   Tap,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { LANGUAGE_NAMES } from '@/lib/format';
@@ -28,6 +30,7 @@ const LANGUAGES: { id: Language; hello: string; available: boolean }[] = [
 export default function LanguageScreen() {
   const { change } = useLocalSearchParams<{ change?: string }>();
   const insets = useInsets();
+  const { fit } = useLayout();
   const { language, me, chooseLanguage } = useSession();
   const { say, sayError } = useScreenVoice();
   const [selected, setSelected] = useState<Language>(language === 'sr' ? 'wo' : language);
@@ -56,32 +59,39 @@ export default function LanguageScreen() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.night,
-        paddingTop: insets.top + 8,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom + 2,
-        gap: 22,
-      }}
+    <Screen
+      background={colors.night}
+      gap={fit(20)}
+      footer={
+        <PrimaryButton
+          label="Continuer"
+          height={fit(64)}
+          size={20}
+          bg={colors.light}
+          fg={colors.night}
+          loading={busy}
+          onPress={confirm}
+          right={<Icon name="arrow" size={22} color={colors.night} />}
+        />
+      }
+      overlay={<SayBubble light bottom={insets.bottom + 80} />}
     >
       <StatusBar style="light" />
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
         <ScreenSpeaker prompt="app.language.screen" dark />
       </View>
 
-      <View style={{ alignItems: 'center', gap: 14, marginTop: -20 }}>
-        <Logo size={64} inverted />
-        <T display w={800} size={34} ls={-1} color={colors.sand} center>
+      <View style={{ alignItems: 'center', gap: fit(12) }}>
+        <Logo size={fit(64)} inverted />
+        <T display w={800} size={fit(34)} ls={-1} color={colors.sand} center>
           Choisis ta langue
         </T>
-        <T size={16} lh={1.45} color={colors.onNightMuted} center style={{ maxWidth: 290 }}>
+        <T size={16} lh={1.45} color={colors.onNightMuted} center style={{ maxWidth: 300 }}>
           Touche une langue pour l&apos;écouter. Leeral te parlera dans cette langue.
         </T>
       </View>
 
-      <View style={{ flex: 1, justifyContent: 'center', gap: 12 }}>
+      <View style={{ flexGrow: 1, justifyContent: 'center', gap: 12 }}>
         {LANGUAGES.map((item) => {
           const active = item.id === selected;
           return (
@@ -91,32 +101,41 @@ export default function LanguageScreen() {
               accessibilityState={{ selected: active }}
               onPress={() => pick(item.id, item.available)}
               style={{
-                height: 96,
+                minHeight: fit(92),
+                paddingVertical: 10,
                 borderRadius: 26,
                 backgroundColor: active ? colors.light : 'rgba(246,240,228,0.07)',
                 borderWidth: active ? 0 : 1,
                 borderColor: 'rgba(246,240,228,0.14)',
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: 16,
+                gap: 14,
                 paddingLeft: 14,
-                paddingRight: 20,
+                paddingRight: 16,
               }}
             >
               <View
                 style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 32,
+                  width: fit(60),
+                  height: fit(60),
+                  borderRadius: fit(30),
                   backgroundColor: active ? colors.night : 'rgba(244,166,42,0.18)',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="sound" size={26} color={colors.light} />
+                <Icon name="sound" size={fit(26)} color={colors.light} />
               </View>
-              <View style={{ flex: 1, gap: 2 }}>
-                <T display w={800} size={26} ls={-0.5} color={active ? colors.night : colors.sand}>
+              <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+                <T
+                  display
+                  w={800}
+                  size={fit(26)}
+                  ls={-0.5}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  color={active ? colors.night : colors.sand}
+                >
                   {LANGUAGE_NAMES[item.id]}
                 </T>
                 <T size={15} color={active ? colors.night : colors.sand} style={{ opacity: 0.8 }}>
@@ -141,19 +160,6 @@ export default function LanguageScreen() {
           );
         })}
       </View>
-
-      <PrimaryButton
-        label="Continuer"
-        height={64}
-        size={20}
-        bg={colors.light}
-        fg={colors.night}
-        loading={busy}
-        onPress={confirm}
-        right={<Icon name="arrow" size={22} color={colors.night} />}
-      />
-
-      <SayBubble light bottom={insets.bottom + 80} />
-    </View>
+    </Screen>
   );
 }

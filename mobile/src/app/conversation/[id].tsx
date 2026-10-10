@@ -137,7 +137,7 @@ export default function ConversationScreen() {
           <T display w={700} size={20} lh={1.1} numberOfLines={1}>
             {doc?.title ?? 'Mes questions'}
           </T>
-          <T size={13} color={colors.muted}>
+          <T size={13} color={colors.muted} numberOfLines={1}>
             Tes questions sur ce document
           </T>
         </View>

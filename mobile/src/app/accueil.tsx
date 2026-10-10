@@ -14,6 +14,7 @@ import {
   ScreenSpeaker,
   Tap,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
@@ -36,7 +37,7 @@ function QuickAction({
   onPress: () => void;
 }) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flexGrow: 1, flexBasis: 150 }}>
       <Tap
         accessibilityRole="button"
         accessibilityLabel={label}
@@ -48,11 +49,12 @@ function QuickAction({
           flexDirection: 'row',
           alignItems: 'center',
           paddingLeft: 14,
+          paddingRight: 42,
           gap: 8,
         }}
       >
         <Icon name={icon} size={18} color={colors.sand} />
-        <T w={600} size={15} color={colors.sand}>
+        <T w={600} size={15} color={colors.sand} numberOfLines={1} style={{ flexShrink: 1 }}>
           {label}
         </T>
       </Tap>
@@ -88,7 +90,7 @@ function FeatureCard({
   onPress: () => void;
 }) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flexGrow: 1, flexBasis: 160 }}>
       <Tap
         accessibilityRole="button"
         accessibilityLabel={title}
@@ -98,7 +100,7 @@ function FeatureCard({
           borderRadius: 20,
           paddingVertical: 14,
           paddingLeft: 12,
-          paddingRight: 30,
+          paddingRight: 34,
           flexDirection: 'row',
           alignItems: 'center',
           gap: 8,
@@ -138,6 +140,7 @@ function FeatureCard({
 
 export default function HomeScreen() {
   const insets = useInsets();
+  const { fit, width } = useLayout();
   const { me, language, isGuest } = useSession();
   const { sayError } = useScreenVoice();
   const [docs, setDocs] = useState<DocumentSummary[]>([]);
@@ -196,9 +199,13 @@ export default function HomeScreen() {
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Logo size={36} />
-          <T display w={800} size={26} ls={-1} style={{ flex: 1 }}>
-            leeral
-          </T>
+          <View style={{ flex: 1, minWidth: 0 }}>
+            {width >= 360 ? (
+              <T display w={800} size={26} ls={-1} numberOfLines={1}>
+                leeral
+              </T>
+            ) : null}
+          </View>
           <View>
             <Tap
               accessibilityRole="button"
@@ -269,7 +276,7 @@ export default function HomeScreen() {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View style={{ flex: 1 }}>
-            <T display w={700} size={30} lh={1.05} ls={-0.8}>
+            <T display w={700} size={fit(30)} lh={1.05} ls={-0.8}>
               {isGuest || !firstName ? 'Bonjour !' : `Bonjour ${firstName}`}
             </T>
             <T size={15} color={colors.muted} style={{ marginTop: 6 }}>
@@ -304,25 +311,25 @@ export default function HomeScreen() {
             accessibilityLabel="Prendre un document en photo"
             onPress={() => router.push('/camera')}
           >
-            <Halo size={120} inset={13} core={72}>
-              <Icon name="camera" size={32} color={colors.night} />
+            <Halo size={fit(120)} inset={fit(13)} core={fit(72)}>
+              <Icon name="camera" size={fit(32)} color={colors.night} />
             </Halo>
           </Tap>
           <View style={{ alignItems: 'center' }}>
-            <T display w={700} size={22} color={colors.sand}>
+            <T display w={700} size={fit(22)} color={colors.sand} center>
               Photographier un document
             </T>
-            <T size={14} color={colors.onNightMuted} style={{ marginTop: 2 }}>
+            <T size={14} color={colors.onNightMuted} center style={{ marginTop: 2 }}>
               Leeral te l&apos;explique à voix haute
             </T>
           </View>
-          <View style={{ flexDirection: 'row', gap: 8, alignSelf: 'stretch' }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignSelf: 'stretch' }}>
             <QuickAction icon="file" label="PDF / Word" prompt="app.home.file" onPress={fromFile} />
             <QuickAction icon="image" label="Galerie" prompt="app.home.gallery" onPress={fromGallery} />
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 10 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
           <FeatureCard
             title="Écrire pour moi"
             sub="CV, lettre, demande"

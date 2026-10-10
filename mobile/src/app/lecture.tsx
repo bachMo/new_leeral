@@ -9,8 +9,10 @@ import {
   PrimaryButton,
   RoundButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api, ApiError, asApiError } from '@/lib/api';
@@ -29,7 +31,11 @@ const BLURRY_CODES = new Set([
   'DOCUMENT_UNREADABLE',
 ]);
 
-function ScannedPage() {
+const PAGE_WIDTH = 224;
+const PAGE_HEIGHT = 296;
+
+function ScannedPage({ height }: { height: number }) {
+  const ratio = height / PAGE_HEIGHT;
   const scan = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     const loop = Animated.loop(
@@ -61,13 +67,13 @@ function ScannedPage() {
   return (
     <View
       style={{
-        width: 224,
-        height: 296,
+        width: Math.round(PAGE_WIDTH * ratio),
+        height,
         borderRadius: 14,
         backgroundColor: colors.sand,
-        paddingVertical: 26,
-        paddingHorizontal: 22,
-        gap: 11,
+        paddingVertical: Math.round(26 * ratio),
+        paddingHorizontal: Math.round(22 * ratio),
+        gap: Math.round(11 * ratio),
         overflow: 'hidden',
       }}
     >
@@ -88,13 +94,17 @@ function ScannedPage() {
           position: 'absolute',
           left: 0,
           right: 0,
-          top: 40,
+          top: Math.round(40 * ratio),
           height: 3,
           backgroundColor: colors.light,
           shadowColor: colors.light,
           shadowOpacity: 0.6,
           shadowRadius: 8,
-          transform: [{ translateY: scan.interpolate({ inputRange: [0, 1], outputRange: [0, 210] }) }],
+          transform: [
+            {
+              translateY: scan.interpolate({ inputRange: [0, 1], outputRange: [0, Math.round(210 * ratio)] }),
+            },
+          ],
         }}
       />
     </View>
@@ -183,6 +193,7 @@ function Tip({ icon, label }: { icon: IconName; label: string }) {
 export default function ReadingScreen() {
   const { doc } = useLocalSearchParams<{ doc?: string }>();
   const insets = useInsets();
+  const layout = useLayout();
   const { language } = useSession();
   const { say, sayError } = useScreenVoice();
   const [phase, setPhase] = useState<Phase>(doc ? 'reading' : 'uploading');
@@ -289,16 +300,13 @@ export default function ReadingScreen() {
         ? ['done', 'active', 'todo']
         : ['done', 'done', 'active'];
 
+  const pageHeight = Math.round(Math.min(PAGE_HEIGHT, Math.max(140, layout.height * 0.3)));
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.night,
-        paddingTop: insets.top,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom,
-        gap: 22,
-      }}
+    <Screen
+      background={colors.night}
+      gap={layout.fit(22)}
+      overlay={<SayBubble light top={insets.top + 64} />}
     >
       <StatusBar style="light" />
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -309,17 +317,17 @@ export default function ReadingScreen() {
         <ScreenSpeaker prompt={phase === 'blurry' ? 'app.reading.blurry' : 'app.reading.screen'} dark />
       </View>
 
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ScannedPage />
+      <View style={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ScannedPage height={pageHeight} />
       </View>
 
       {phase === 'uploading' || phase === 'reading' ? (
         <View style={{ gap: 22 }}>
           <View style={{ alignItems: 'center' }}>
-            <T display w={700} size={28} ls={-0.6} color={colors.sand} center>
+            <T display w={700} size={layout.fit(28)} ls={-0.6} color={colors.sand} center>
               Je lis ton document…
             </T>
-            <T size={15} color={colors.onNightMuted} style={{ marginTop: 4 }}>
+            <T size={15} color={colors.onNightMuted} center style={{ marginTop: 4 }}>
               Tu peux poser le téléphone.
             </T>
           </View>
@@ -332,7 +340,7 @@ export default function ReadingScreen() {
       ) : phase === 'blurry' ? (
         <View style={{ gap: 14 }}>
           <View style={{ alignItems: 'center' }}>
-            <T display w={700} size={28} ls={-0.6} color={colors.sand} center>
+            <T display w={700} size={layout.fit(28)} ls={-0.6} color={colors.sand} center>
               Je n&apos;arrive pas à bien lire
             </T>
             <T size={15} color={colors.onNightMuted} center style={{ marginTop: 4 }}>
@@ -358,7 +366,7 @@ export default function ReadingScreen() {
       ) : (
         <View style={{ gap: 14 }}>
           <View style={{ alignItems: 'center' }}>
-            <T display w={700} size={28} ls={-0.6} color={colors.sand} center>
+            <T display w={700} size={layout.fit(28)} ls={-0.6} color={colors.sand} center>
               Je n&apos;ai pas pu finir
             </T>
             <T size={15} lh={1.4} color={colors.onNightMuted} center style={{ marginTop: 4 }}>
@@ -382,8 +390,6 @@ export default function ReadingScreen() {
           Ton document reste privé.
         </T>
       </View>
-
-      <SayBubble light top={insets.top + 64} />
-    </View>
+    </Screen>
   );
 }
