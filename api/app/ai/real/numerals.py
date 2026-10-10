@@ -142,6 +142,7 @@ async def spell_out_numbers(
 
     if remaining:
         language_name = prompts.LANGUAGE_NAMES[language.value]
+        words_by_value: dict[int, str] = {}
         try:
             words_by_value = await _convert_to_words(client, profile, remaining, language_name)
             verified = (
