@@ -4,6 +4,8 @@ import { colors, fonts } from '@/lib/theme';
 
 type Weight = 400 | 500 | 600 | 700 | 800;
 
+export const MAX_FONT_SCALE = 1.2;
+
 type Props = TextProps & {
   display?: boolean;
   w?: Weight;
@@ -34,6 +36,7 @@ export function T({
   upper,
   center,
   style,
+  maxFontSizeMultiplier = MAX_FONT_SCALE,
   ...rest
 }: Props) {
   const base: TextStyle = {
@@ -45,5 +48,5 @@ export function T({
     textTransform: upper ? 'uppercase' : undefined,
     textAlign: center ? 'center' : undefined,
   };
-  return <Text {...rest} style={[base, style]} />;
+  return <Text {...rest} maxFontSizeMultiplier={maxFontSizeMultiplier} style={[base, style]} />;
 }

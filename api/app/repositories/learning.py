@@ -93,7 +93,7 @@ class UserWordRepository(Repository[UserWord]):
                     & (WordTranslation.language == language),
                 )
                 .where(UserWord.user_id == user_id, UserWord.next_review_at <= now)
-                .order_by(UserWord.next_review_at)
+                .order_by(UserWord.next_review_at, func.random())
                 .limit(limit)
             )
         ).all()

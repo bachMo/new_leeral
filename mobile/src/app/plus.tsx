@@ -10,9 +10,11 @@ import {
   MiniSpeaker,
   PrimaryButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   Tap,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
@@ -23,6 +25,7 @@ import type { Payment, Plan } from '@/lib/types';
 
 export default function PlusScreen() {
   const insets = useInsets();
+  const { fit } = useLayout();
   const { me, isGuest, refreshMe } = useSession();
   const { say, sayError } = useScreenVoice();
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -98,17 +101,77 @@ export default function PlusScreen() {
     }).catch(() => undefined);
   };
 
+  const overlay = (
+    <>
+      <Modal visible={!!payment} transparent animationType="fade" onRequestClose={() => setPayment(null)}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(11,22,38,0.7)', justifyContent: 'flex-end' }}>
+          <View
+            style={{
+              backgroundColor: colors.paper,
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
+              padding: 20,
+              paddingBottom: 28 + insets.bottom - 16,
+              gap: 14,
+            }}
+          >
+            <View
+              style={{
+                alignSelf: 'center',
+                width: 44,
+                height: 5,
+                borderRadius: 3,
+                backgroundColor: colors.line,
+              }}
+            />
+            <T display w={700} size={24}>
+              Paiement Wave
+            </T>
+            <T size={15} lh={1.45} color={colors.muted}>
+              Paiement simulé pour la démo : aucun argent n&apos;est prélevé. Confirme pour activer Leeral+
+              pendant 30 jours.
+            </T>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: colors.sand,
+                borderRadius: 16,
+                padding: 14,
+              }}
+            >
+              <T w={700} size={16}>
+                Leeral+ · 1 mois
+              </T>
+              <T display w={800} size={18}>
+                {money(payment?.amount_xof ?? price)}
+              </T>
+            </View>
+            <PrimaryButton
+              label="Confirmer le paiement"
+              bg={colors.light}
+              fg={colors.night}
+              loading={busy}
+              onPress={confirmPayment}
+            />
+            <Tap
+              onPress={() => setPayment(null)}
+              style={{ height: 48, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <T w={700} size={15}>
+                Annuler
+              </T>
+            </Tap>
+          </View>
+        </View>
+      </Modal>
+
+      <SayBubble light top={insets.top + 64} />
+    </>
+  );
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.night,
-        paddingTop: insets.top,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom,
-        gap: 18,
-      }}
-    >
+    <Screen background={colors.night} overlay={overlay}>
       <StatusBar style="light" />
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <BackButton dark close />
@@ -116,14 +179,14 @@ export default function PlusScreen() {
       </View>
 
       <View>
-        <T display w={800} size={44} ls={-1.5} lh={1} color={colors.sand}>
+        <T display w={800} size={fit(44)} ls={-1.5} lh={1} color={colors.sand} numberOfLines={1}>
           leeral
-          <T display w={800} size={44} color={colors.light}>
+          <T display w={800} size={fit(44)} color={colors.light}>
             +
           </T>
         </T>
         <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 6, marginTop: 10 }}>
-          <T display w={800} size={34} color={colors.light}>
+          <T display w={800} size={fit(34)} color={colors.light}>
             {money(price)}
           </T>
           <T size={16} color={colors.onNightMuted}>
@@ -201,7 +264,7 @@ export default function PlusScreen() {
         ))}
       </View>
 
-      <View style={{ flex: 1 }} />
+      <View style={{ flexGrow: 1 }} />
 
       <View style={{ gap: 10 }}>
         {active ? (
@@ -266,71 +329,6 @@ export default function PlusScreen() {
           Pas de prélèvement automatique. Rappel 2 jours avant la fin.
         </T>
       </View>
-
-      <Modal visible={!!payment} transparent animationType="fade" onRequestClose={() => setPayment(null)}>
-        <View style={{ flex: 1, backgroundColor: 'rgba(11,22,38,0.7)', justifyContent: 'flex-end' }}>
-          <View
-            style={{
-              backgroundColor: colors.paper,
-              borderTopLeftRadius: 32,
-              borderTopRightRadius: 32,
-              padding: 20,
-              paddingBottom: 28 + insets.bottom - 16,
-              gap: 14,
-            }}
-          >
-            <View
-              style={{
-                alignSelf: 'center',
-                width: 44,
-                height: 5,
-                borderRadius: 3,
-                backgroundColor: colors.line,
-              }}
-            />
-            <T display w={700} size={24}>
-              Paiement Wave
-            </T>
-            <T size={15} lh={1.45} color={colors.muted}>
-              Paiement simulé pour la démo : aucun argent n&apos;est prélevé. Confirme pour activer Leeral+
-              pendant 30 jours.
-            </T>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                backgroundColor: colors.sand,
-                borderRadius: 16,
-                padding: 14,
-              }}
-            >
-              <T w={700} size={16}>
-                Leeral+ · 1 mois
-              </T>
-              <T display w={800} size={18}>
-                {money(payment?.amount_xof ?? price)}
-              </T>
-            </View>
-            <PrimaryButton
-              label="Confirmer le paiement"
-              bg={colors.light}
-              fg={colors.night}
-              loading={busy}
-              onPress={confirmPayment}
-            />
-            <Tap
-              onPress={() => setPayment(null)}
-              style={{ height: 48, alignItems: 'center', justifyContent: 'center' }}
-            >
-              <T w={700} size={15}>
-                Annuler
-              </T>
-            </Tap>
-          </View>
-        </View>
-      </Modal>
-
-      <SayBubble light top={insets.top + 64} />
-    </View>
+    </Screen>
   );
 }

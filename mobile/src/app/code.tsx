@@ -11,10 +11,12 @@ import {
   NumberPad,
   PrimaryButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   StepDots,
   Tap,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
@@ -32,6 +34,7 @@ export default function CodeScreen() {
   }>();
   const length = Math.min(Math.max(Number(params.length) || 4, 4), 8);
   const insets = useInsets();
+  const { fit } = useLayout();
   const { language, applyTokens } = useSession();
   const { sayError, sayText } = useScreenVoice();
   const [code, setCode] = useState('');
@@ -96,15 +99,18 @@ export default function CodeScreen() {
   const shown = `${local.slice(0, 2)} ${local.slice(2, 5)} ${local.slice(5, 7)} ${local.slice(7, 9)}`;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.sand,
-        paddingTop: insets.top,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom,
-        gap: 18,
-      }}
+    <Screen
+      footer={
+        <PrimaryButton
+          label="Continuer"
+          bg={full ? colors.night : colors.line}
+          fg={full ? colors.sand : colors.label}
+          disabled={!full}
+          loading={busy}
+          onPress={() => verify(code)}
+        />
+      }
+      overlay={<SayBubble top={insets.top + 64} />}
     >
       <StatusBar style="dark" />
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -114,7 +120,7 @@ export default function CodeScreen() {
       </View>
 
       <View>
-        <T display w={700} size={30} lh={1.05} ls={-0.8}>
+        <T display w={700} size={fit(30)} lh={1.05} ls={-0.8}>
           Regarde ton WhatsApp
         </T>
         <T size={15} lh={1.4} color={colors.muted} style={{ marginTop: 6 }}>
@@ -132,7 +138,7 @@ export default function CodeScreen() {
             key={index}
             style={{
               flex: 1,
-              height: length > 4 ? 64 : 80,
+              height: fit(length > 4 ? 64 : 76),
               borderRadius: 22,
               backgroundColor: colors.paper,
               borderWidth: 2,
@@ -141,7 +147,7 @@ export default function CodeScreen() {
               justifyContent: 'center',
             }}
           >
-            <T display w={800} size={length > 4 ? 30 : 38}>
+            <T display w={800} size={fit(length > 4 ? 30 : 36)}>
               {code[index] ?? ''}
             </T>
           </View>
@@ -180,20 +186,9 @@ export default function CodeScreen() {
         <MiniSpeaker prompt="app.code.resend" label="Écouter : renvoyer le code" width={44} height={44} />
       </View>
 
-      <View style={{ flex: 1 }} />
+      <View style={{ flexGrow: 1 }} />
 
       <NumberPad onKey={press} />
-
-      <PrimaryButton
-        label="Continuer"
-        bg={full ? colors.night : colors.line}
-        fg={full ? colors.sand : colors.label}
-        disabled={!full}
-        loading={busy}
-        onPress={() => verify(code)}
-      />
-
-      <SayBubble top={insets.top + 64} />
-    </View>
+    </Screen>
   );
 }

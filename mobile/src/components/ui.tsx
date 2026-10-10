@@ -5,7 +5,9 @@ import {
   Animated,
   Easing,
   Pressable,
+  ScrollView,
   StyleSheet,
+  useWindowDimensions,
   View,
   type AccessibilityActionEvent,
   type GestureResponderEvent,
@@ -26,6 +28,63 @@ import { T } from './T';
 export function useInsets() {
   const insets = useSafeAreaInsets();
   return { top: Math.max(insets.top, 20) + 12, bottom: Math.max(insets.bottom, 8) + 16 };
+}
+
+const REFERENCE_WIDTH = 400;
+const REFERENCE_HEIGHT = 820;
+const SMALLEST_SCALE = 0.78;
+
+export function useLayout() {
+  const { width, height } = useWindowDimensions();
+  const scale = Math.min(
+    1,
+    Math.max(SMALLEST_SCALE, Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT)),
+  );
+  return {
+    width,
+    height,
+    narrow: width < 400,
+    short: height < 720,
+    fit: (size: number) => Math.round(size * scale),
+  };
+}
+
+export function Screen({
+  children,
+  footer,
+  overlay,
+  background = colors.sand,
+  gap = 18,
+}: {
+  children: ReactNode;
+  footer?: ReactNode;
+  overlay?: ReactNode;
+  background?: string;
+  gap?: number;
+}) {
+  const insets = useInsets();
+  return (
+    <View style={{ flex: 1, backgroundColor: background }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingTop: insets.top,
+          paddingHorizontal: 20,
+          paddingBottom: footer ? 12 : insets.bottom,
+          gap,
+        }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        {children}
+      </ScrollView>
+      {footer ? (
+        <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: insets.bottom }}>{footer}</View>
+      ) : null}
+      {overlay}
+    </View>
+  );
 }
 
 export function useScreenVoice() {
@@ -365,6 +424,7 @@ export function PrimaryButton({
   radius,
   style,
 }: PrimaryProps) {
+  const { fit } = useLayout();
   return (
     <Tap
       accessibilityRole="button"
@@ -380,12 +440,21 @@ export function PrimaryButton({
           alignItems: 'center',
           justifyContent: 'center',
           gap: 10,
+          paddingHorizontal: 38,
         },
         style,
       ]}
     >
       {loading ? <ActivityIndicator color={fg} /> : left}
-      <T display w={700} size={size} color={fg}>
+      <T
+        display
+        w={700}
+        size={Math.max(15, fit(size))}
+        color={fg}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        style={{ flexShrink: 1 }}
+      >
         {label}
       </T>
       {loading ? null : right}
@@ -411,32 +480,41 @@ export function StepDots({ total, current }: { total: number; current: number })
   );
 }
 
-const PAD = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
+const PAD_ROWS = [
+  ['1', '2', '3'],
+  ['4', '5', '6'],
+  ['7', '8', '9'],
+  ['', '0', '⌫'],
+];
 
 export function NumberPad({ onKey }: { onKey: (key: string) => void }) {
+  const { fit } = useLayout();
   return (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-      {PAD.map((key, index) => (
-        <Tap
-          key={index}
-          accessibilityRole="button"
-          accessibilityLabel={key === '⌫' ? 'Effacer' : key || 'vide'}
-          disabled={!key}
-          onPress={() => key && onKey(key)}
-          style={{
-            width: '31.5%',
-            flexGrow: 1,
-            height: 60,
-            borderRadius: 18,
-            backgroundColor: key ? colors.paper : 'transparent',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <T display w={700} size={26}>
-            {key}
-          </T>
-        </Tap>
+    <View style={{ gap: 8 }}>
+      {PAD_ROWS.map((row, rowIndex) => (
+        <View key={rowIndex} style={{ flexDirection: 'row', gap: 8 }}>
+          {row.map((key, index) => (
+            <Tap
+              key={index}
+              accessibilityRole="button"
+              accessibilityLabel={key === '⌫' ? 'Effacer' : key || 'vide'}
+              disabled={!key}
+              onPress={() => key && onKey(key)}
+              style={{
+                flex: 1,
+                height: Math.max(48, fit(60)),
+                borderRadius: 18,
+                backgroundColor: key ? colors.paper : 'transparent',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <T display w={700} size={26}>
+                {key}
+              </T>
+            </Tap>
+          ))}
+        </View>
       ))}
     </View>
   );

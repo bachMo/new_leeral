@@ -44,7 +44,7 @@ function ControlButton({
   busy?: boolean;
 }) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flexGrow: 1, flexBasis: 130 }}>
       <Tap
         accessibilityRole="button"
         accessibilityLabel={label}
@@ -58,10 +58,11 @@ function ControlButton({
           flexDirection: 'row',
           alignItems: 'center',
           paddingLeft: 12,
+          paddingRight: 40,
           gap: 6,
         }}
       >
-        <T w={600} size={14} color={colors.sand}>
+        <T w={600} size={14} color={colors.sand} numberOfLines={1} style={{ flexShrink: 1 }}>
           {label}
         </T>
         {busy ? <ActivityIndicator size="small" color={colors.light} /> : null}
@@ -335,7 +336,7 @@ export default function ExplanationScreen() {
               L&apos;explication arrive…
             </T>
           )}
-          <View style={{ flexDirection: 'row', gap: 8 }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             <ControlButton label="Répéter" prompt="app.explanation.repeat" onPress={() => play(true)} />
             <ControlButton
               label="Plus lent"

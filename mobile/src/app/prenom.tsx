@@ -5,15 +5,17 @@ import { TextInput, View } from 'react-native';
 
 import { Icon } from '@/components/Icon';
 import { MicButton } from '@/components/Mic';
-import { T } from '@/components/T';
+import { MAX_FONT_SCALE, T } from '@/components/T';
 import {
   MiniSpeaker,
   PrimaryButton,
   SayBubble,
+  Screen,
   ScreenSpeaker,
   StepDots,
   Tap,
   useInsets,
+  useLayout,
   useScreenVoice,
 } from '@/components/ui';
 import { api } from '@/lib/api';
@@ -34,6 +36,7 @@ function cleanName(text: string): string {
 export default function FirstNameScreen() {
   const { next } = useLocalSearchParams<{ next?: string }>();
   const insets = useInsets();
+  const { fit } = useLayout();
   const { me, refreshMe } = useSession();
   const { sayError, sayText } = useScreenVoice();
   const recorder = useVoiceRecorder();
@@ -98,16 +101,7 @@ export default function FirstNameScreen() {
   );
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.sand,
-        paddingTop: insets.top,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom,
-        gap: 18,
-      }}
-    >
+    <Screen footer={typing ? undefined : confirmButton} overlay={<SayBubble top={insets.top + 64} />}>
       <StatusBar style="dark" />
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ width: 44 }} />
@@ -116,7 +110,7 @@ export default function FirstNameScreen() {
       </View>
 
       <View>
-        <T display w={700} size={30} lh={1.05} ls={-0.8}>
+        <T display w={700} size={fit(30)} lh={1.05} ls={-0.8}>
           Comment tu t&apos;appelles ?
         </T>
         <T size={15} lh={1.4} color={colors.muted} style={{ marginTop: 6 }}>
@@ -125,7 +119,12 @@ export default function FirstNameScreen() {
       </View>
 
       <View
-        style={{ flex: 1, alignItems: 'center', justifyContent: typing ? 'flex-start' : 'center', gap: 18 }}
+        style={{
+          flexGrow: 1,
+          alignItems: 'center',
+          justifyContent: typing ? 'flex-start' : 'center',
+          gap: 18,
+        }}
       >
         {typing ? null : (
           <>
@@ -133,10 +132,10 @@ export default function FirstNameScreen() {
               recording={recorder.recording}
               busy={listening}
               onPress={toggleMic}
-              size={168}
-              inset={20}
-              core={92}
-              iconSize={38}
+              size={fit(168)}
+              inset={fit(20)}
+              core={fit(92)}
+              iconSize={fit(38)}
               idleLabel="Appuyer et dire mon prénom"
               recordingLabel="J'ai fini de parler"
             />
@@ -168,13 +167,15 @@ export default function FirstNameScreen() {
               onChangeText={setName}
               autoFocus
               autoCapitalize="words"
+              maxFontSizeMultiplier={MAX_FONT_SCALE}
               placeholder="Ton prénom"
               placeholderTextColor={colors.placeholder}
               returnKeyType="done"
               onSubmitEditing={() => setTyping(false)}
               style={{
                 fontFamily: fonts.display800,
-                fontSize: 36,
+                fontSize: fit(36),
+                alignSelf: 'stretch',
                 color: colors.night,
                 textAlign: 'center',
                 minWidth: 200,
@@ -215,10 +216,6 @@ export default function FirstNameScreen() {
         </View>
         {typing ? confirmButton : null}
       </View>
-
-      {typing ? null : confirmButton}
-
-      <SayBubble top={insets.top + 64} />
-    </View>
+    </Screen>
   );
 }
