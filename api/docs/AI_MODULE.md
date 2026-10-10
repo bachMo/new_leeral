@@ -23,13 +23,14 @@ app/ai/
     ├── pages.py          double classification (photo ou texte), transcription, préparation des images
     ├── prescription.py   double lecture, alignement, vérification ligne par ligne
     ├── translation.py    traduction phrase par phrase avec jetons protégés, modèle de secours
-    ├── speech.py         découpage ≤ 500 caractères, TTS en parallèle, MP3
+    ├── speech.py         découpage ≤ 500 caractères, TTS en parallèle, silences de début et de fin, MP3
+    ├── numerals.py       nombres écrits en toutes lettres (wolof, pulaar) avant la voix
     ├── analysis.py       analyse d'un document (titre, résumé, points clés, montants, dates)
     ├── dialogue.py       réponses aux questions, avec contrôle des chiffres
     ├── writing.py        compréhension des réponses et rédaction (CV, lettres)
     ├── vocabulary.py     mots utiles d'un document pour « Apprendre le français »
     ├── reasoning.py      choix du LLM court ou long selon la taille du prompt
-    ├── safety/           lexique, règles de pharmacologie, jetons protégés
+    ├── safety/           lexique, pharmacologie, jetons protégés, noms de marques, nombres wolof et pulaar
     └── data/             lexicon_terms.csv, pharmacology_rules.csv
 ```
 
@@ -42,7 +43,7 @@ app/ai/
 | `simplify(document)` | version « plus simple » en français |
 | `localize(text_fr, language, protected_terms)` | français → wolof ou pulaar |
 | `to_french(text, language)` | wolof ou pulaar → français |
-| `speak(text, language)` | voix KIRIKU, renvoie un MP3 |
+| `speak(text, language)` | voix KIRIKU, renvoie un MP3 (point final ajouté, 0,2 s de silence avant et 0,4 s après) |
 | `transcribe(audio, filename, language)` | voix → texte avec KIRIKU |
 | `answer(context)` | réponse en français à une question, à partir du document |
 | `interpret_writing_answer(field, answer_fr)` | extrait l'information d'une réponse orale |
