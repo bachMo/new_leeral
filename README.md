@@ -15,8 +15,10 @@ Leeral rend ces documents compréhensibles **sans savoir lire**, seul et tout de
 | Canal | Accès |
 |---|---|
 | **WhatsApp** | Écrire « Salam » au **+221 76 611 10 21** ([ouvrir la discussion](https://wa.me/221766111021)) |
-| **Application Android** | [Installer l'APK](https://expo.dev/accounts/bach_johnson/projects/leeral/builds/578f2236-5fa4-49b4-993e-37789ed84705) |
+| **Application Android** | [Installer l'APK](https://expo.dev/accounts/bach_johnson/projects/leeral/builds/578f2236-5fa4-49b4-993e-37789ed84705) (Android uniquement) |
 | **Web (iPhone, ordinateur)** | [leeral.expo.app](https://leeral.expo.app), puis « Sur l'écran d'accueil » dans Safari |
+
+L'APK ne s'installe que sur Android : sur iPhone, utiliser la version web ou WhatsApp. L'application se met à jour d'elle-même à l'ouverture, sans réinstaller l'APK.
 
 Le mode invité permet de tout essayer sans créer de compte. Le code de connexion de démonstration est donné dans le dossier de soumission.
 
@@ -24,11 +26,12 @@ Le mode invité permet de tout essayer sans créer de compte. Le code de connexi
 
 - **Explication vocale d'un document** : photo d'une ou plusieurs pages, PDF ou DOCX. Leeral contrôle la netteté de la photo, lit le document, puis donne un résumé et les points importants (montants, dates, démarches) à l'écrit et à l'oral, en wolof ou en pulaar.
 - **Questions à voix haute** : « Kañ laa wara fey ? » Leeral répond à partir du document, sans inventer de chiffre.
+- **Sur WhatsApp, rien à installer** : au premier message, un vocal d'accueil propose de choisir sa langue, avec les boutons ou en disant simplement « wolof » ou « pulaar » dans un vocal. Les photos et documents envoyés ensemble forment un seul document, expliqué dans un seul vocal.
 - **Ordonnances, avec prudence** : double lecture, vérification de chaque médicament avec un lexique et des règles de posologie. Une ligne douteuse renvoie vers le pharmacien au lieu de donner une dose.
 - **« Écrire pour moi »** : Leeral pose les questions à l'oral et rédige un CV ou une lettre en français, prêt à partager en PDF.
-- **« Apprendre le français »** : des exercices courts à partir des mots des documents de l'utilisateur.
+- **« Apprendre le français »** : des exercices courts sur les mots essentiels des papiers du quotidien, puis, avec Leeral+, sur les mots des documents de l'utilisateur.
 - **Leeral+** : abonnement à 500 F CFA par mois (paiement simulé dans le prototype).
-- **Interface pensée pour ne pas lire** : chaque écran et chaque bouton a sa consigne vocale dans la langue choisie.
+- **Interface pensée pour ne pas lire** : chaque écran et chaque bouton a sa consigne vocale dans la langue choisie. Les écrans s'adaptent aux petits téléphones et à la taille de texte choisie dans les réglages.
 
 ## Langues
 
@@ -43,7 +46,7 @@ Le mode invité permet de tout essayer sans créer de compte. Le code de connexi
 ```mermaid
 flowchart LR
     U1[WhatsApp] --> W[Webhook Meta Cloud API]
-    U2[Application Android / iOS] --> A
+    U2[Application Android] --> A
     U3[Web] --> A
     W --> A[API FastAPI]
     A --> DB[(PostgreSQL)]
@@ -57,12 +60,14 @@ flowchart LR
     K --> R2
 ```
 
-Tout le raisonnement se fait en français. La traduction et la voix viennent à la fin : le texte est traduit en wolof ou en pulaar, puis lu par la voix KIRIKU. Les noms de médicaments et tous les nombres sont protégés pendant la traduction, pour qu'aucun chiffre ne soit déformé.
+Tout le raisonnement se fait en français. La traduction et la voix viennent à la fin : le texte est traduit en wolof ou en pulaar, puis lu par la voix KIRIKU. Les noms de médicaments, de marques et d'organismes, ainsi que tous les nombres, sont protégés pendant la traduction, pour qu'aucun chiffre ne soit déformé. Avant la synthèse vocale, les nombres sont écrits en toutes lettres dans la langue choisie, pour que la voix les prononce.
 
 | Dossier | Contenu |
 |---|---|
 | [`api/`](api/README.md) | API FastAPI, worker ARQ, intégration WhatsApp et module IA ([détails du module IA](api/docs/AI_MODULE.md)) |
-| [`mobile/`](mobile/README.md) | Application Expo (React Native) pour Android, iOS et le web |
+| [`mobile/`](mobile/README.md) | Application Expo (React Native) pour Android et le web |
+| [`deploy/`](deploy/deploy.sh) | Script de déploiement exécuté sur le serveur |
+| [`eval/`](eval/README.md) | Bancs d'essai qui ont servi à choisir les modèles IA |
 
 ## Lancer le projet
 
@@ -76,6 +81,22 @@ Sans aucune clé, le projet tourne avec un moteur IA simulé : `AI_PROVIDER=mock
 
 - API et worker : voir [`api/README.md`](api/README.md).
 - Application : voir [`mobile/README.md`](mobile/README.md).
+
+## Déploiement et intégration continue
+
+En production, tout tourne avec Docker Compose sur un serveur : PostgreSQL, Redis, l'API, le worker et un tunnel ngrok qui expose l'API en HTTPS sur un domaine fixe.
+
+```bash
+docker compose up -d --build
+```
+
+Trois workflows GitHub Actions :
+
+| Workflow | Déclenchement | Rôle |
+|---|---|---|
+| `ci.yml` | chaque pull request, et chaque push sur `main` | API : ruff, mypy, migrations, tests, audit des dépendances. Application : prettier, typage, export web |
+| `deploy.yml` | CI réussie sur `main` | Connexion SSH au serveur et exécution de [`deploy/deploy.sh`](deploy/deploy.sh) : mise à jour du code, reconstruction des conteneurs (les migrations s'appliquent au démarrage de l'API), consignes vocales et vocabulaire de base |
+| `mobile-release.yml` | manuel (« Publier l'app ») | Mise à jour de l'application installée (EAS Update) et du site web |
 
 ## Données et éthique
 

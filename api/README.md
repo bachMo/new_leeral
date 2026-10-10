@@ -50,7 +50,7 @@ Toutes les erreurs ont la même enveloppe :
 
 ## Installation (Windows)
 
-Prérequis : [uv](https://docs.astral.sh/uv/), PostgreSQL et Redis.
+Prérequis : [uv](https://docs.astral.sh/uv/), PostgreSQL, Redis et [ffmpeg](https://ffmpeg.org) (conversion des réponses WhatsApp en notes vocales ; sans lui, elles partent en fichier MP3). L'image Docker contient déjà ffmpeg.
 
 ```powershell
 cd new_leeral\api
@@ -113,12 +113,12 @@ Documentation interactive : http://localhost:8000/docs
 ### Données de départ
 
 ```powershell
-leeral seed-channel --display-number "+1 555 638 9708"
+leeral seed-channel --display-number "+221 76 611 10 21"
 leeral seed-words
 leeral sync-prompts
 ```
 
-`seed-words` crée le vocabulaire de base et sa traduction audio. `sync-prompts` génère les consignes vocales des écrans de l'application (`app.*`), de WhatsApp et des erreurs. `GET /prompts` renvoie toujours le texte de chaque consigne, et son audio dès qu'il est généré. Relance les deux après le passage à `AI_PROVIDER=real` (`sync-prompts --force`).
+`seed-words` crée le vocabulaire de base et sa traduction audio. Chaque mot est dit dans une courte phrase (« Baat bi mooy : … » en wolof), car la voix KIRIKU coupe les mots trop courts prononcés seuls. `revoice-words` régénère l'audio de tous les mots déjà créés. `sync-prompts` génère les consignes vocales des écrans de l'application (`app.*`), de WhatsApp et des erreurs. `GET /prompts` renvoie toujours le texte de chaque consigne, et son audio dès qu'il est généré. Relance les deux après le passage à `AI_PROVIDER=real` (`sync-prompts --force`).
 
 ### Vérifier que tout marche
 
@@ -157,6 +157,17 @@ ngrok http 8000 --url <ton-domaine-statique>.ngrok-free.app
 ```
 
 Dans la console Meta, URL de rappel : `https://<ton-domaine>/v1/webhooks/whatsapp`, jeton de vérification : `WHATSAPP_VERIFY_TOKEN`, champ abonné : `messages`. Chaque requête est vérifiée avec `META_APP_SECRET` (en-tête `X-Hub-Signature-256`). Le modèle `leeral_rappel` est envoyé sans variable.
+
+### Comportement de l'assistant WhatsApp
+
+- **Premier message** : un vocal d'accueil (wolof puis pulaar) et les boutons de langue. La langue se choisit aussi en vocal ou par écrit, avec seulement son nom (« wolof », « pulaar ») : un vocal de plus de 4 secondes ou de plus de 3 mots reste une question. On peut changer de langue à tout moment de la même façon.
+- **Documents** : les photos et fichiers reçus à moins de `WHATSAPP_MEDIA_BATCH_SECONDS` secondes d'intervalle (10 par défaut) forment un seul document. Un document envoyé avant le choix de la langue attend ce choix.
+- **Réponse** : un seul vocal par document, qui contient l'explication puis l'invitation à poser une question. Les réponses sont des notes vocales OGG/Opus.
+- **Messages non pris en charge** : l'enveloppe vide que WhatsApp envoie avant un album est ignorée. Une localisation, un sticker ou un autre type reçoit, 10 secondes plus tard, la consigne « Envoie-moi une photo, un PDF ou un message vocal ».
+
+## Déploiement
+
+Docker Compose et les workflows GitHub Actions sont décrits dans le [README principal](../README.md#déploiement-et-intégration-continue). À chaque déploiement, `deploy/deploy.sh` lance `sync-prompts` et `seed-words` : les nouvelles consignes et les mots manquants sont générés automatiquement.
 
 ## Choix techniques
 

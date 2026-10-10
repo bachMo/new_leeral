@@ -795,3 +795,25 @@ conséquence directe d'un seul point technique non résolu (l'imbrication du suf
 fois ce point réglé par un exemple concret, rien ne justifiait de garder les montants de 100 000
 à 9 999 999 sur le mécanisme de secours, moins fiable, alors que la majorité des montants réels
 signalés par l'utilisateur se trouvent précisément dans cette plage.
+
+## 30. Mots courts lus dans une phrase porteuse, avec des silences autour de la voix
+
+**Constat.** Dans « Apprendre », les mots très courts (« oui », « non », « lait »…) sortaient de
+KIRIKU coupés ou incompréhensibles : pour un mot seul, le TTS ne produisait qu'environ 0,1 s de
+parole, la première syllabe étant souvent avalée. Répéter le mot deux fois donnait environ 1 s de
+parole audible, mais l'écoute paraissait bizarre.
+
+**Décision.**
+- Le sens de chaque mot est lu dans une phrase porteuse : « Baat bi mooy : … » en wolof,
+  « Konngol ngol ko : … » en pulaar (`spoken_meaning` dans `app/services/vocabulary_builder.py`).
+  Le mot est ainsi prononcé en entier, environ 0,7 s de parole, sans répétition.
+- Chaque morceau envoyé au TTS se termine par un point (`_with_final_stop`), pour que la voix
+  descende en fin de phrase au lieu de couper net.
+- `speak` ajoute 0,2 s de silence avant la voix et 0,4 s après (`LEAD_SILENCE_S`, `TAIL_SILENCE_S`
+  dans `speech.py`), pour que le lecteur du téléphone ne mange pas le début ni la fin.
+
+**Mise à jour des audios existants.** `leeral revoice-words` régénère l'audio de tous les mots déjà
+en base avec ces règles.
+
+**Raison.** Le problème venait de la longueur du texte envoyé au TTS, pas du mot lui-même : une
+phrase courte et fixe autour du mot règle tous les cas sans traitement mot par mot.

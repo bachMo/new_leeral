@@ -65,7 +65,7 @@ npx expo start
 ```
 
 - **Android :** ouvre Expo Go et touche « Scan QR code ».
-- **iPhone :** scanne le QR code avec l'appareil photo, puis ouvre le lien dans Expo Go.
+- **iPhone :** scanne le QR code avec l'appareil photo, puis ouvre le lien dans Expo Go. Sur un iPhone, Expo Go doit être connecté au même compte Expo que `npx expo start` (`npx expo whoami` pour le vérifier).
 
 Le téléphone et le PC doivent être sur le **même Wi-Fi**.
 
@@ -101,8 +101,33 @@ npx expo install --fix
 
 ```powershell
 npm run typecheck
+npx prettier --check "src/**/*.{ts,tsx}"
 npx expo-doctor
 ```
+
+## Écrans et petits téléphones
+
+Chaque écran doit rester utilisable sur un téléphone de 320 px de large et avec une grande taille de texte dans les réglages Android :
+
+- `Screen` (dans `components/ui.tsx`) : le contenu défile toujours, et le bouton principal peut rester fixé en bas (`footer`).
+- `useLayout()` : `fit(taille)` réduit les grandes tailles (titres, micro, halo) sur les petits écrans ; `narrow` et `short` signalent un écran étroit ou bas.
+- `T` limite l'agrandissement du texte par le système à `MAX_FONT_SCALE` (1,2).
+- Les petits haut-parleurs posés sur un bouton ne doivent jamais recouvrir son texte : réserver leur place avec un `paddingRight` sur le bouton.
+
+## Publier une nouvelle version
+
+| Quoi | Comment |
+|---|---|
+| Code de l'app (écrans, logique) | GitHub Actions → **Publier l'app** : envoie une mise à jour EAS sur le canal `preview` et republie [leeral.expo.app](https://leeral.expo.app). L'APK installé la télécharge à l'ouverture et l'applique au lancement suivant |
+| Nouvelle dépendance native, icône, permissions, version d'Expo | Nouvel APK : `npx eas-cli build -p android --profile preview`, puis partager le nouveau lien |
+
+Pour savoir si un nouvel APK est nécessaire, compare l'empreinte native du projet avec celle du build installé :
+
+```powershell
+npx eas-cli fingerprint:compare --build-id <id-du-build> --environment preview
+```
+
+L'APK ne s'installe que sur Android. Sur iPhone, utiliser la version web ou WhatsApp.
 
 ## Ce que l'app utilise côté API
 
