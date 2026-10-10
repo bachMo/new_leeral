@@ -100,6 +100,7 @@ Réponds uniquement par un objet JSON valide, sans texte autour, au format exact
  "key_points": [{{"kind": "action|date|amount|info", "tag": "un mot", "title_fr": "...",
    "detail_fr": "... ou null", "due_date": "AAAA-MM-JJ ou null", "amount_xof": entier ou null}}],
  "suggested_questions": ["question 1", "question 2", "question 3"],
+ "proper_nouns": ["nom d'organisme, de marque ou de service tel qu'écrit dans le texte", "..."],
  "contract": null si ce n'est pas un contrat, sinon
    {{"duration": "durée de l'engagement telle qu'écrite, ou null",
     "auto_renewal": "condition de reconduction telle qu'écrite, ou null",
@@ -121,6 +122,9 @@ le texte. Si le document ne dit rien sur un point, n'en parle pas.
 - 2 à 5 points clés, du plus important au moins important.
 - Les questions proposées sont celles que la personne se poserait, formulées à la première \
 personne, courtes.
+- "proper_nouns" : uniquement des noms d'organisme, de marque ou de service (banque, opérateur \
+téléphonique, administration...), copiés exactement comme écrits dans le texte. Jamais un nom de \
+personne. Vide si aucun.
 - Remplis "contract" uniquement si le document est un contrat ou un engagement avec des \
 conditions (durée, résiliation, pénalités...). Chaque champ reprend ce qui est écrit dans le \
 texte, jamais une valeur déduite ou habituelle pour ce type de contrat. Laisse à null ou vide \
@@ -233,6 +237,30 @@ Réponds uniquement par un objet JSON valide :
 {{"words": [{{"word_fr": "mot au singulier, en minuscules",
   "category": "health|money|school|admin|common",
   "sentence_fr": "phrase courte du document qui contient le mot"}}]}}"""
+
+NUMBER_TO_WORDS = """Write each of these numbers in full words, in {language}, exactly as a \
+fluent native speaker would say it out loud to someone who cannot read. Do not add, drop, or \
+change a single digit's value.
+Work it out silently. Never write your reasoning, a draft, or any comment about your own answer \
+— even if it takes several steps to get right. Output ONLY a valid JSON object, no text before \
+or after it, no markdown.
+
+Numbers: {numbers}
+
+Exact format: {{"numbers": [{{"value": 12500, "words": "..."}}, ...]}}, one entry per number \
+above, same order, "value" copied exactly as given."""
+
+WORDS_TO_NUMBER = """Each of these phrases is a number written out in full words, in {language}. \
+Read each one and write back the number it represents, as digits only. If a phrase is not a \
+valid number, or you are not fully sure, use null.
+Work it out silently. Never write your reasoning, a draft, or any comment about your own answer \
+— even if it takes several steps to get right. Output ONLY a valid JSON object, no text before \
+or after it, no markdown.
+
+Phrases: {phrases}
+
+Exact format: {{"numbers": [{{"words": "...", "value": 12500}}, ...]}}, one entry per phrase \
+above, same order, "words" copied exactly as given."""
 
 TRANSLATE = """Translate the following text from {source} to {target}. Output ONLY the \
 translation. No explanation, no quotes, no notes. The text may contain markers of the exact form \

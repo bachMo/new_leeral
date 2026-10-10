@@ -117,6 +117,7 @@ class DocumentContext:
     summary_fr: str
     full_text: str
     medications: tuple[MedicationLine, ...] = ()
+    extra_protected_terms: tuple[str, ...] = ()
 
     @property
     def is_prescription(self) -> bool:
@@ -124,7 +125,8 @@ class DocumentContext:
 
     @property
     def protected_terms(self) -> tuple[str, ...]:
-        return tuple(name for line in self.medications if (name := line.display_name))
+        medication_names = (name for line in self.medications if (name := line.display_name))
+        return tuple(dict.fromkeys((*medication_names, *self.extra_protected_terms)))
 
 
 @dataclass(frozen=True, slots=True)

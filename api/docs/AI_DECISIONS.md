@@ -597,3 +597,104 @@ par erreur en pensant combler un manque) :
 - **Schéma de base de données détaillé du dépôt d'étude** : supersedé par le schéma réellement
   migré ici (30 tables, voir `api/README.md`), non repris — il décrivait une base différente,
   jamais migrée au-delà d'un sous-ensemble partiel dans le dépôt d'étude.
+
+---
+
+## 27. Noms propres (marques, institutions) jamais traduits
+
+**Décision (10 octobre 2026).** Signalé par l'utilisateur en testant avec des documents réels :
+le traducteur altère parfois des noms propres comme « Orange Money », « Wave » ou « Banque
+Islamique du Sénégal » — ce sont les mêmes mots quelle que soit la langue, les traduire n'a aucun
+sens et produit du charabia. Même catégorie de problème que les noms de médicaments (décision déjà
+en place via `protected_terms`), étendue ici aux documents génériques (factures, courriers...).
+
+**Deux parties, les deux demandées par l'utilisateur :**
+1. **Catalogue statique** (`app/ai/real/safety/brand_names.py`, `KNOWN_BRAND_NAMES`) : marques et
+   institutions sénégalaises courantes (argent mobile, télécom, énergie, eau, banques,
+   administration) — non exhaustif par construction, complété par la partie 2.
+2. **Extraction dynamique** : `ANALYZE_DOCUMENT` (`prompts.py`) renvoie désormais `proper_nouns`
+   (noms d'organisme/marque/service tels qu'écrits dans le texte). `analysis.py::analyze_text`
+   ne garde que ceux qui apparaissent **verbatim** dans le document (`_protected_terms`,
+   grounding identique au reste du module — jamais un nom inventé par le modèle) et les fusionne
+   avec les correspondances du catalogue statique dans `DocumentAnalysis.protected_terms`.
+
+**Câblage jusqu'au bout de la chaîne**, qui n'existait pas pour les documents génériques avant
+cette décision : `DocumentContext` (`app/ai/contracts.py`) gagne un champ stocké
+`extra_protected_terms`, unifié avec les noms de médicaments dans la propriété `protected_terms` ;
+`ai_mapping.document_context()` le relit depuis `document.extracted_data["protected_terms"]` (déjà
+persisté par `document_processor.py`, simplement jamais relu jusqu'ici) ; `cli.py` (chemin
+`try-document`, sans base de données) le branche directement depuis `DocumentAnalysis`. Tous les
+appelants existants de `protected_terms` (`cli.py`, `explanation_builder.py`,
+`question_answerer.py`) en bénéficient sans modification de leur côté.
+
+**Vérifié** sur un document réel (`eval/documents/doc_02.jpg`, mentionne SONATEL) via
+`leeral try-document --language wo --back-translate` : « Sonatel » traverse la traduction en
+wolof et la traduction retour en français sans altération (`ai_http` : `protected_terms=3`).
+
+**Raison.** Contrairement aux expressions de posologie (décision 23) ou aux mois (décision 14),
+protéger un nom propre ne demande aucune traduction à rédiger — on ne décide jamais de ce qu'il
+devient dans une autre langue, on décide seulement de le laisser identique. Le risque qui a
+justifié la prudence des décisions 14/23 (une traduction erronée que j'aurais rédigée moi-même)
+ne s'applique donc pas ici, le mécanisme peut être activé sans relecture préalable par un locuteur
+natif.
+
+---
+
+## 28. Nombres > 10 écrits en toutes lettres avant la synthèse vocale, vérifiés par aller-retour
+
+**Décision (10 octobre 2026).** Deuxième point signalé par l'utilisateur : les montants, prix et
+âges sont souvent « confus » dans l'audio. Hypothèse testée et confirmée par comparaison d'audio
+octet pour octet : KIRIKU (TTS wolof/pulaar) convertit correctement les nombres 0 à 10 en mots,
+mais **supprime silencieusement** tout nombre au-dessus de 10 au lieu de le prononcer (`'Fey
+francs.'` et `'Fey 500 francs.'` produisent le même audio, 19226 octets — le « 500 » disparaît
+sans erreur ni avertissement).
+
+**Approche retenue, proposée par l'utilisateur plutôt qu'un tableau statique construit à la
+main** : repérer les nombres > 10 dans le texte déjà traduit (`app/ai/real/numerals.py`,
+`_numbers_above`), demander à un LLM de les écrire en toutes lettres dans la langue cible, puis
+**vérifier par un appel indépendant en sens inverse** (donner seulement les mots, sans le nombre
+d'origine, et demander quelle valeur ils représentent) — un nombre qui ne survit pas à cet
+aller-retour est laissé en chiffres (comportement actuel, déjà connu, pas de régression) plutôt
+que risqué faux à l'oral. Un nombre que KIRIKU supprime reste moins grave qu'un nombre que KIRIKU
+prononcerait faux. Branché dans `RealAiEngine.speak()` (`app/ai/real/engine.py`), donc appliqué
+partout où `speak()` est déjà appelé, sans changement dans les appelants.
+
+**Modèle utilisé : `translator_model_primary` (`claude-sonnet-5.5`, décision 22), pas le
+`Reasoner` générique (`qwen/qwen3.8-27b`).** Testé d'abord avec `qwen3.8-27b` : production de
+nombres wolof clairement fausses et incohérentes (« ñaar juróom ñaari ñaari » donné à la fois pour
+45 et pour 500) — rejetées sans exception par la vérification aller-retour, qui a immédiatement
+démontré son utilité. Avec `claude-sonnet-5.5`, construction correcte et reproductible observée
+sur plusieurs essais (12500 → « fukk ak ñaar junni ak juróom téeméer », 45 → « ñent-fukk ak
+juróom », 500 → « juróom téeméer »), un seul cas observé où la vérification a correctement rejeté
+une proposition fausse (« fanweer » proposé pour 30, mais confirmé représenter 20 lors du contrôle
+inverse — rejeté, chiffre brut conservé).
+
+**Point technique rencontré et corrigé** : à `reasoning_effort="minimal"`, `claude-sonnet-5.5`
+« réfléchit à voix haute » avant de répondre (construit le nombre étape par étape dans du texte
+libre) au lieu de répondre directement en JSON, et dépassait le budget de tokens avant d'arriver
+au JSON final (`AiOutputError`). Corrigé par une consigne explicite dans
+`prompts.NUMBER_TO_WORDS`/`WORDS_TO_NUMBER` (même famille que la consigne anti-brouillon de
+`TRANSLATE`, décision 22) et un budget de tokens nettement plus large.
+
+**Limite connue, acceptée plutôt que corrigée ici : tous les nombres ne sont pas convertis.** La
+vérification aller-retour rejette une partie des nombres (observé sur les plus grands montants en
+particulier) — ceux-ci restent en chiffres, donc toujours supprimés par KIRIKU à l'oral, exactement
+comme avant cette décision. Aucune garantie que l'utilisateur entende systématiquement chaque
+montant, seulement la garantie qu'aucun montant entendu ne soit un nombre inventé. Aucune
+relecture par un locuteur natif n'a eu lieu sur les formes produites ; seule la vérification
+automatique (aller-retour) a été appliquée, pas une validation humaine des mots eux-mêmes.
+
+**Hors de portée de cette décision** : les suites de chiffres qui ne sont pas des quantités
+(numéros de téléphone, numéros de série) peuvent être repérées par la même expression régulière et
+« corrigées » en nombre cardinal à tort (un numéro de téléphone n'est pas un montant) — comportement
+non pire qu'avant (ces chiffres étaient déjà supprimés par KIRIKU au-delà de 10) mais non résolu
+par ce chantier, qui visait spécifiquement les montants et les âges signalés par l'utilisateur.
+
+**Raison.** Construire soi-même un tableau de conversion nombre→mots pour le wolof/pulaar (système
+agglutinant : fukk=10, teemeer=100, junni=1000, composés par « ak »/« e ») aurait demandé un
+algorithme de génération complet, pas une simple table, avec le même risque d'erreur qu'un
+traducteur humain non spécialiste — exactement la situation qui a justifié la prudence de la
+décision 23. Déléguer au modèle déjà validé pour le wolof/pulaar (décision 22) et vérifier le
+résultat par aller-retour obtient une partie du bénéfice sans ce risque, à la manière de
+`back_translate` déjà utilisé ailleurs dans ce dépôt pour donner une prise de vérification sur une
+traduction.

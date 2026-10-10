@@ -9,6 +9,7 @@ from app.ai.contracts import DocumentAnalysis, KeyPointDraft, UrgencyValue
 from app.ai.errors import AiOutputError
 from app.ai.real import prompts
 from app.ai.real.reasoning import Reasoner
+from app.ai.real.safety.brand_names import known_brand_terms
 from app.ai.real.safety.dates import FRENCH_MONTHS
 from app.ai.real.translation import split_sentences
 
@@ -104,6 +105,7 @@ class _Analysis(BaseModel):
     summary_fr: str
     key_points: list[_KeyPoint] = Field(default_factory=list)
     suggested_questions: list[str] = Field(default_factory=list)
+    proper_nouns: list[str] = Field(default_factory=list)
     contract: _ContractTerms | None = None
 
     @field_validator("document_date", "main_due_date", mode="before")
@@ -142,6 +144,14 @@ def _date_in_text(value: date | None, text: str) -> date | None:
     if any(form in text for form in numeric) or spelled in lowered:
         return value
     return None
+
+
+def _protected_terms(proper_nouns: list[str], text: str) -> tuple[str, ...]:
+    """Brand/institution names to keep untranslated: the known catalog plus names the model saw,
+    kept only when they appear verbatim in the source (never trust an invented name)."""
+    grounded = (noun.strip() for noun in proper_nouns if noun.strip())
+    dynamic = (noun for noun in grounded if noun.lower() in text.lower())
+    return tuple(dict.fromkeys((*known_brand_terms(text), *dynamic)))
 
 
 def _is_grounded(fragment: str, text: str) -> bool:
@@ -294,4 +304,5 @@ async def analyze_text(
         main_amount_xof=_amount_in_text(parsed.main_amount_xof, clipped),
         key_points=key_points,
         suggested_questions_fr=suggested_questions,
+        protected_terms=_protected_terms(parsed.proper_nouns, clipped),
     )

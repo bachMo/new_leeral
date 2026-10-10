@@ -54,10 +54,12 @@ def row_from_medication(document_id: uuid.UUID, line: MedicationLine) -> Prescri
 
 
 def document_context(document: Document, lines: Sequence[PrescriptionLine]) -> DocumentContext:
+    protected_terms = (document.extracted_data or {}).get("protected_terms", [])
     return DocumentContext(
         doc_type=document.doc_type,
         title=document.title,
         summary_fr=document.summary_fr or "",
         full_text=document.ocr_text or "",
         medications=tuple(medication_from_row(line) for line in lines),
+        extra_protected_terms=tuple(protected_terms) if isinstance(protected_terms, list) else (),
     )
