@@ -24,7 +24,7 @@ from app.ai.contracts import (
 )
 from app.ai.errors import AiOutputError
 from app.ai.quality import assess_quality
-from app.ai.real import analysis, dialogue, prescription, prompts, vocabulary, writing
+from app.ai.real import analysis, dialogue, numerals, prescription, prompts, vocabulary, writing
 from app.ai.real.clients.kiriku import KirikuClient
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
 from app.ai.real.pages import Classification, PageReader
@@ -109,14 +109,15 @@ class RealAiEngine:
             ),
             long_threshold_tokens=settings.llm_long_document_token_threshold,
         )
+        numerals_profile = ModelProfile(
+            settings.translator_model_primary,
+            settings.translator_model_primary_reasoning_effort,
+            settings.translator_timeout_seconds,
+            settings.translator_max_retries,
+        )
         self._translator = Translator(
             openrouter,
-            ModelProfile(
-                settings.translator_model_primary,
-                settings.translator_model_primary_reasoning_effort,
-                settings.translator_timeout_seconds,
-                settings.translator_max_retries,
-            ),
+            numerals_profile,
             ModelProfile(
                 settings.translator_model_fallback,
                 settings.translator_model_fallback_reasoning_effort,
@@ -125,6 +126,8 @@ class RealAiEngine:
             ),
             max_attempts=settings.translator_max_attempts_per_sentence,
         )
+        self._openrouter = openrouter
+        self._numerals_profile = numerals_profile
         self._speech = SpeechSynthesizer(
             kiriku,
             max_chars=settings.tts_max_input_chars,
@@ -246,7 +249,10 @@ class RealAiEngine:
 
     async def speak(self, text: str, language: Language) -> SpeechAudio:
         with log_step(logger, "speak", language=language.value, length=len(text)) as out:
-            audio = await self._speech.speak(text, language)
+            spoken_text = await numerals.spell_out_numbers(
+                self._openrouter, self._numerals_profile, text, language
+            )
+            audio = await self._speech.speak(spoken_text, language)
             out["duration_s"] = audio.duration_s
             out["bytes"] = len(audio.content)
             return audio

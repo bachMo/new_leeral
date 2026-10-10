@@ -204,6 +204,7 @@ async def try_document(
             summary_fr=analysis.summary_fr,
             full_text=analysis.full_text,
             medications=analysis.medications,
+            extra_protected_terms=analysis.protected_terms,
         )
         report.section(f"Explanation ({target.value})")
         await _voice(

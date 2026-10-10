@@ -597,3 +597,201 @@ par erreur en pensant combler un manque) :
 - **Schéma de base de données détaillé du dépôt d'étude** : supersedé par le schéma réellement
   migré ici (30 tables, voir `api/README.md`), non repris — il décrivait une base différente,
   jamais migrée au-delà d'un sous-ensemble partiel dans le dépôt d'étude.
+
+---
+
+## 27. Noms propres (marques, institutions) jamais traduits
+
+**Décision (10 octobre 2026).** Signalé par l'utilisateur en testant avec des documents réels :
+le traducteur altère parfois des noms propres comme « Orange Money », « Wave » ou « Banque
+Islamique du Sénégal » — ce sont les mêmes mots quelle que soit la langue, les traduire n'a aucun
+sens et produit du charabia. Même catégorie de problème que les noms de médicaments (décision déjà
+en place via `protected_terms`), étendue ici aux documents génériques (factures, courriers...).
+
+**Deux parties, les deux demandées par l'utilisateur :**
+1. **Catalogue statique** (`app/ai/real/safety/brand_names.py`, `KNOWN_BRAND_NAMES`) : marques et
+   institutions sénégalaises courantes (argent mobile, télécom, énergie, eau, banques,
+   administration) — non exhaustif par construction, complété par la partie 2.
+2. **Extraction dynamique** : `ANALYZE_DOCUMENT` (`prompts.py`) renvoie désormais `proper_nouns`
+   (noms d'organisme/marque/service tels qu'écrits dans le texte). `analysis.py::analyze_text`
+   ne garde que ceux qui apparaissent **verbatim** dans le document (`_protected_terms`,
+   grounding identique au reste du module — jamais un nom inventé par le modèle) et les fusionne
+   avec les correspondances du catalogue statique dans `DocumentAnalysis.protected_terms`.
+
+**Câblage jusqu'au bout de la chaîne**, qui n'existait pas pour les documents génériques avant
+cette décision : `DocumentContext` (`app/ai/contracts.py`) gagne un champ stocké
+`extra_protected_terms`, unifié avec les noms de médicaments dans la propriété `protected_terms` ;
+`ai_mapping.document_context()` le relit depuis `document.extracted_data["protected_terms"]` (déjà
+persisté par `document_processor.py`, simplement jamais relu jusqu'ici) ; `cli.py` (chemin
+`try-document`, sans base de données) le branche directement depuis `DocumentAnalysis`. Tous les
+appelants existants de `protected_terms` (`cli.py`, `explanation_builder.py`,
+`question_answerer.py`) en bénéficient sans modification de leur côté.
+
+**Vérifié** sur un document réel (`eval/documents/doc_02.jpg`, mentionne SONATEL) via
+`leeral try-document --language wo --back-translate` : « Sonatel » traverse la traduction en
+wolof et la traduction retour en français sans altération (`ai_http` : `protected_terms=3`).
+
+**Raison.** Contrairement aux expressions de posologie (décision 23) ou aux mois (décision 14),
+protéger un nom propre ne demande aucune traduction à rédiger — on ne décide jamais de ce qu'il
+devient dans une autre langue, on décide seulement de le laisser identique. Le risque qui a
+justifié la prudence des décisions 14/23 (une traduction erronée que j'aurais rédigée moi-même)
+ne s'applique donc pas ici, le mécanisme peut être activé sans relecture préalable par un locuteur
+natif.
+
+---
+
+## 28. Nombres > 10 écrits en toutes lettres avant la synthèse vocale, générés par un algorithme cité plutôt qu'un LLM
+
+**Décision (10 octobre 2026).** Deuxième point signalé par l'utilisateur : les montants, prix et
+âges sont souvent « confus » dans l'audio. Hypothèse testée et confirmée par comparaison d'audio
+octet pour octet : KIRIKU (TTS wolof/pulaar) convertit correctement les nombres 0 à 10 en mots,
+mais **supprime silencieusement** tout nombre au-dessus de 10 au lieu de le prononcer (`'Fey
+francs.'` et `'Fey 500 francs.'` produisent le même audio, 19226 octets — le « 500 » disparaît
+sans erreur ni avertissement).
+
+**Première approche testée, puis corrigée en cours de route.** L'utilisateur a d'abord proposé de
+demander à un LLM (Claude) d'écrire chaque nombre en toutes lettres, avec une vérification par
+appel indépendant en sens inverse (donner les mots seuls, sans le nombre d'origine, et demander
+quelle valeur ils représentent) — un nombre qui ne survit pas à cet aller-retour étant laissé en
+chiffres plutôt que risqué faux à l'oral. Cette vérification a immédiatement montré son utilité
+avec `qwen/qwen3.8-27b` (nombres wolof incohérents, rejetés sans exception) puis semblé fiable
+avec `claude-sonnet-5.5`. **Un cas a cependant révélé une faille du mécanisme lui-même** :
+`claude-sonnet-5.5` proposait correctement « fanweer » pour 30, mais l'appel de vérification en
+sens inverse a répondu (à tort) que « fanweer » représentait 20 — l'utilisateur a confirmé, en
+citant Guérin (2020, voir plus bas), que 30 était la bonne réponse. La vérification aller-retour
+n'est donc pas un oracle fiable : un LLM qui se trompe dans un sens n'est pas forcément plus juste
+dans l'autre, et un nombre correct peut être rejeté à tort (faux négatif) — le mécanisme restait
+sûr par construction (jamais de nombre faux prononcé avec confiance) mais sa fiabilité réelle était
+surestimée.
+
+**Approche finale : un algorithme déterministe, construit à partir de sources citées, plutôt que
+du LLM.** L'utilisateur a fourni deux sources fiables qui couvrent l'essentiel du besoin :
+- **Wolof** : Guérin, Maximilien (2020), « Système de numération en wolof : description et
+  comparaison avec les autres langues atlantiques », *Faits de langues* 51(2), 121-144 — article
+  relu par les pairs, qui décrit le système comme décimal à pivot additif 5, **entièrement
+  régulier à l'exception de 20 et 30** (les deux formes citées : « ñaar fukk »/« nit » pour 20,
+  « fanweer »/« ñett fukk » pour 30 — « fanweer » confirmé comme la forme la plus employée au
+  Sénégal).
+- **Pulaar** : Sylla, Yèro (1982), *Grammaire moderne du pulaar*, Les Nouvelles Éditions
+  Africaines (Dakar) — citée dans l'article ci-dessus, structure identique mais sans irrégularité
+  signalée. Un site grand public (languagesandnumbers.com) décrit une structure identique mais
+  avec des mots différents pour 10/20/1000 (`nogay`, `wuluure`) — sa page précise que ce dialecte
+  est le « pular fuuta » de l'ancien imamat du Fouta-Djalon, c'est-à-dire la Guinée, pas le
+  pulaar sénégalais visé ici : écarté comme source pour cette raison précise, pas par principe.
+
+`app/ai/real/safety/wolof_numerals.py` et `pulaar_numerals.py` implémentent chacun un générateur
+déterministe (`spell_number(n) -> str | None`), **chacun reproduit exactement tous les exemples
+travaillés donnés par sa source** (wolof : 11, 17, 19, 20, 30, 90, 100, 119, 426, 600, 1000, 4000,
+9112 ; pulaar : 1245) — vérifié par test avant intégration.
+
+**Recalibré le jour même** après remarque de l'utilisateur : les documents réels ont plus souvent
+des montants élevés (loyer, facture, salaire) que des petits — se limiter à 0-9999 aurait laissé
+la majorité des montants réalistes hors de portée de l'algorithme. Étendu à un multiplicateur de
+dizaines/centaines devant « téeméer »/« junni » (ex. « ñaar fukk ak juróom-i junni » = 25 000),
+même principe que la construction attestée, juste généralisé à un multiplicateur à plusieurs
+chiffres. **Plafond différent entre les deux langues, pour une raison technique précise, pas
+juste par prudence** :
+- **Wolof : 0-99 999.** Un multiplicateur à 3 chiffres (ex. 500 pour 500 000) demanderait sa
+  propre construction génitive interne (500 = « juróom-i téeméer »), puis une *deuxième* marque
+  génitive par-dessus pour en faire un multiplicateur de « junni » — une double imbrication sans
+  aucun appui textuel, même par extrapolation (contrairement au multiplicateur à 2 chiffres, qui
+  ne s'imbrique jamais puisqu'il reste sous le seuil des centaines). Un bug exactement de cette
+  nature (double trait d'union, incohérent) a été détecté par les tests avant d'être exclu par ce
+  plafond plutôt que corrigé à l'aveugle.
+- **Pulaar : 0-999 999.** Pas de risque d'imbrication ici : la construction pulaar juxtapose
+  simplement la forme plurielle du mot de base et le multiplicateur écrit tel quel (pas de
+  suffixe génitif à accrocher), donc un multiplicateur à 3 chiffres (« ujunnaaje teemedde joy » =
+  500 000) ne pose pas le même problème.
+
+**Le mécanisme LLM+vérification de la première approche est conservé, mais rétrogradé en
+secours** (`app/ai/real/numerals.py`, `spell_out_numbers`) : pour chaque nombre trouvé, l'algorithme
+déterministe est essayé en premier (gratuit, instantané, aucun appel réseau) ; seuls les nombres
+hors de sa plage couverte (≥ 100 000 en wolof, ≥ 1 000 000 en pulaar) passent encore par le LLM
+`claude-sonnet-5.5` avec vérification aller-retour (décision conservée malgré la faille découverte
+: un faux négatif reste plus sûr qu'un faux positif, et c'est toujours mieux que rien pour ces
+plages hors de portée de l'algorithme). Branché dans `RealAiEngine.speak()`
+(`app/ai/real/engine.py`), donc appliqué partout où `speak()` est déjà appelé, sans changement
+dans les appelants. Mesuré sur des textes de facture/loyer réalistes (`leeral`, script ad hoc) :
+45 000, 99 999, 2 500 passent en 0,00 s (aucun appel réseau) ; 150 000 et 300 000 (hors plage
+wolof) passent par le secours LLM, qui a accepté 300 000 et rejeté 150 000 lors du même test —
+confirme que le secours reste imparfait sur cette plage, comme attendu, sans régression.
+
+**Point technique rencontré et corrigé en cours de route (toujours valable pour le secours LLM)** :
+à `reasoning_effort="minimal"`, `claude-sonnet-5.5` « réfléchit à voix haute » avant de répondre
+au lieu de répondre directement en JSON, et dépassait le budget de tokens avant d'arriver au JSON
+final (`AiOutputError`). Corrigé par une consigne explicite dans
+`prompts.NUMBER_TO_WORDS`/`WORDS_TO_NUMBER` (même famille que la consigne anti-brouillon de
+`TRANSLATE`, décision 22) et un budget de tokens nettement plus large.
+
+**Limite connue, acceptée plutôt que corrigée ici.** Au-delà du plafond de chaque langue (100 000
+en wolof, 1 000 000 en pulaar), tous les nombres ne sont pas convertis (le secours LLM rejette une
+partie des propositions) — ceux-ci restent en chiffres, donc toujours supprimés par KIRIKU à
+l'oral, comme avant cette décision. Le pulaar n'a, de plus, pas été vérifié aussi exhaustivement
+que le wolof : l'article source ne lui consacre qu'une section courte et ne signale aucune
+irrégularité, ce qui peut aussi vouloir dire qu'aucune n'a été cherchée pour ce système précis —
+traiter comme moins éprouvé que le wolof, pas comme équivalent.
+
+**Hors de portée de cette décision** : les suites de chiffres qui ne sont pas des quantités
+(numéros de téléphone, numéros de série) peuvent être repérées par la même expression régulière et
+« corrigées » en nombre cardinal à tort (un numéro de téléphone n'est pas un montant) — comportement
+non pire qu'avant (ces chiffres étaient déjà supprimés par KIRIKU au-delà de 10) mais non résolu
+par ce chantier, qui visait spécifiquement les montants et les âges signalés par l'utilisateur.
+
+**Raison.** La première approche (décision initiale de ce point) supposait qu'un LLM serait plus
+fiable qu'un tableau construit à la main pour un système agglutinant (fukk=10, teemeer=100,
+junni=1000, composés par « ak »/« e ») — l'incident « fanweer » a montré que ce n'était vrai ni
+dans un sens ni dans l'autre sans source fiable pour trancher. Une fois des sources citées,
+vérifiables et relues par les pairs en main, un algorithme déterministe devient strictement
+supérieur à une génération par LLM sur ce point précis : aucun risque d'erreur du modèle, aucun
+coût, aucune latence, et une correction vérifiable (les exemples de la source) plutôt qu'une
+vérification elle-même faillible.
+
+---
+
+## 29. Wolof étendu jusqu'à 9 999 999 (palier du million), grâce à un exemple trouvé par recherche web
+
+**Décision (10 octobre 2026), même jour.** L'utilisateur a fait remarquer que les documents réels
+ont plus souvent des montants élevés (loyer, facture, prêt, achat) que des petits — le plafond de
+99 999 de la décision 28 aurait laissé la majorité des montants plausibles hors de portée de
+l'algorithme. Demande explicite : chercher, par recherche web, de quoi couvrir le palier du
+million, pour pouvoir ensuite composer jusqu'à 9 millions facilement.
+
+**Recherche effectuée.** `languagesandnumbers.com` (déjà utilisé pour le pulaar, décision 28) n'a
+pas de page wolof (vérifié directement : sa carte du site ne mentionne pas le wolof). Une
+recherche plus large a trouvé la page de vocabulaire « 200 Words » du wolof par l'Université de
+Boston (bu.edu/200word/wolof/numbers) — pas une source relue par les pairs, mais la seule trouvée
+donnant un exemple réel au-delà de 10 000 : **« Fukki Téémééri Junni / Benn Milyoŋ »** pour un
+million, soit deux formes valides : la forme composée native « fukk-i téeméer-i junni »
+(littéralement 10 × 100 × 1000) et la forme empruntée au français « benn milyoŋ » (« un million »,
+multiplicateur toujours explicite, contrairement à téeméer/junni qui l'omettent pour 1).
+
+**Ce que cet exemple a corrigé.** En décomposant « fukk-i téeméer-i junni », la règle du suffixe
+génitif « -i » (`_genitive` dans `wolof_numerals.py`) s'est révélée plus simple et plus générale
+que ce que la décision 28 avait supposé : le suffixe s'attache **toujours seulement au dernier mot
+de la phrase multiplicatrice**, y compris quand cette phrase porte déjà son propre « -i » issu d'un
+niveau de construction précédent (ici : fukk-i d'abord, puis téeméer reçoit aussi -i en devenant à
+son tour multiplicateur de junni) — seule exception, toujours attestée telle quelle : le composé
+additif à deux mots juróom+unité (6 à 9), entièrement fusionné par des traits d'union
+(juróom-benn-i). La décision 28 plafonnait à 99 999 précisément parce qu'elle n'avait pas cette
+règle et produisait un double trait d'union incohérent au-delà — **ce plafond est levé**, la
+nouvelle règle gère correctement n'importe quelle profondeur d'imbrication (vérifié par un balayage
+automatique de 1 à 9 999 999 sans artefact).
+
+**Portée : wolof seulement.** Une recherche équivalente pour le mot « million » en pulaar
+sénégalais n'a rien donné de fiable — seule trouvaille : le fulfulde du Nigéria (`dubuure`/
+`dubuuje`, source `languagesandnumbers.com`), un dialecte déjà écarté comme référence pour le
+pulaar dans la décision 28 pour une raison similaire (mauvais pays). Pas de mot extrapolé sans
+source : le pulaar reste plafonné à 999 999 (décision 28, inchangé), le secours LLM prenant le
+relais au-delà comme avant.
+
+**`app/ai/real/safety/wolof_numerals.py` couvre maintenant 0-9 999 999** (un chiffre de millions,
+1 à 9, plus un reste 0-999 999 composé avec « ak »). Vérifié : tous les exemples travaillés des
+deux sources (décision 28 + le nouvel exemple du million) reproduits exactement, plus des montants
+réalistes testés en conditions réelles via `ai.speak()` (achat à 2 500 000, caution à 500 000,
+prêt à 9 000 000) — tous résolus en 0,00 s, aucun appel réseau.
+
+**Raison.** Le plafond de la décision 28 n'était pas une limite de confiance générale mais la
+conséquence directe d'un seul point technique non résolu (l'imbrication du suffixe génitif) — une
+fois ce point réglé par un exemple concret, rien ne justifiait de garder les montants de 100 000
+à 9 999 999 sur le mécanisme de secours, moins fiable, alors que la majorité des montants réels
+signalés par l'utilisateur se trouvent précisément dans cette plage.
