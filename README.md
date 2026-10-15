@@ -60,7 +60,7 @@ flowchart LR
     K --> R2
 ```
 
-Tout le raisonnement se fait en français. La traduction et la voix viennent à la fin : le texte est traduit en wolof ou en pulaar, puis lu par la voix KIRIKU. Les noms de médicaments, de marques et d'organismes, ainsi que tous les nombres, sont protégés pendant la traduction, pour qu'aucun chiffre ne soit déformé. Avant la synthèse vocale, les nombres sont écrits en toutes lettres dans la langue choisie, pour que la voix les prononce.
+Tout le raisonnement se fait en français. La traduction et la voix viennent à la fin : le texte entier est traduit en wolof ou en pulaar, pour être compris à l'oral, puis lu par la voix KIRIKU. Les noms de médicaments, de marques et d'organismes, ainsi que tous les nombres, sont protégés pendant la traduction, pour qu'aucun chiffre ne soit déformé. Avant la synthèse vocale, les nombres sont écrits en toutes lettres dans la langue choisie, pour que la voix les prononce.
 
 | Dossier | Contenu |
 |---|---|

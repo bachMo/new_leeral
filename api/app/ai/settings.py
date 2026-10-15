@@ -58,7 +58,7 @@ class AiSettings(BaseSettings):
     classifier_timeout_seconds: float = 30.0
     classifier_max_retries: int = 2
 
-    translator_model_primary: str = "anthropic/claude-sonnet-5.5"
+    translator_model_primary: str = "anthropic/claude-opus-5.5"
     translator_model_primary_reasoning_effort: ReasoningEffort = "minimal"
     translator_model_fallback: str = "openai/gpt-5-mini"
     translator_model_fallback_reasoning_effort: ReasoningEffort = "minimal"

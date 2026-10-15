@@ -163,6 +163,8 @@ du fournisseur de secours (`gpt-5-mini`) et la réserve sur le pulaar restent va
 
 ## 10. Jetons protégés et traduction phrase par phrase avec repli gracieux
 
+> **Mise à jour (15 octobre 2026).** La traduction phrase par phrase n'est plus la voie principale : elle sert de repli quand la traduction du texte entier échoue. Voir décision 31.
+
 **Décision.** `real/safety/protected_tokens.py` (jetons `⟦N⟧` pour noms de médicaments et
 nombres, avec limites de mots `\b` pour ne jamais couper un nombre en plein milieu d'un autre) et
 `real/translation.py` (traduction phrase par phrase, une relance sur le modèle de secours si un
@@ -422,6 +424,8 @@ appliqué à `CONTRACT_DISCLAIMER` : jamais de responsabilité déléguée à la
 ---
 
 ## 22. Changement de traducteur principal : `anthropic/claude-sonnet-5.5`
+
+> **Mise à jour (15 octobre 2026).** Le traducteur principal est maintenant `anthropic/claude-opus-5.5`. Voir décision 32.
 
 **Décision (7 octobre 2026).** `TRANSLATOR_MODEL_PRIMARY` passe de `google/gemini-2.5-flash-lite`
 à `anthropic/claude-sonnet-5.5` (`reasoning_effort=minimal` — ce modèle refuse `"none"`, même
@@ -844,4 +848,31 @@ traduisait mot à mot. C'était la première cause d'une voix difficile à compr
 **Raison.** La qualité de la langue parlée dépend du contexte : seul le texte entier permet une
 traduction naturelle. Les garde-fous qui faisaient la valeur de la décision 10 restent appliqués
 au texte entier, et l'ancienne voie reste disponible quand ils ne passent pas.
+
+## 32. Traducteur principal : `anthropic/claude-opus-5.5`
+
+**Décision (15 octobre 2026).** `TRANSLATOR_MODEL_PRIMARY` passe de `anthropic/claude-sonnet-5.5`
+à `anthropic/claude-opus-5.5`, avec `reasoning_effort=minimal`. Le modèle de secours reste
+`openai/gpt-5-mini`.
+
+**Constat.** Sur l'explication d'une ordonnance de démonstration, la voix wolof était difficile à
+comprendre. La cause principale était le texte envoyé au TTS, pas le TTS : une traduction
+littérale, phrase par phrase. Une traduction du même texte en entier, faite à la main pour la
+démonstration et relue par l'équipe, sonnait nettement plus naturelle.
+
+**Vérification.** Avec la traduction du texte entier (décision 31), `claude-opus-5.5` traduit
+l'explication complète d'une ordonnance en wolof et en pulaar du premier coup : tous les jetons
+reviennent, aucune bascule vers la voie phrase par phrase, et le wolof obtenu est proche de la
+version relue à la main.
+
+**Conséquences.**
+- Le même modèle sert aussi au secours LLM des nombres en toutes lettres (`numerals.py`), qui
+  réutilise le profil du traducteur principal.
+- Opus coûte plus cher par appel que Sonnet, mais la traduction du texte entier ne fait plus
+  qu'un appel par texte au lieu d'un par phrase.
+- Le pulaar produit n'a pas encore été relu par un locuteur natif : même réserve qu'à la
+  décision 22.
+
+**Pour revenir en arrière.** Remettre `TRANSLATOR_MODEL_PRIMARY=anthropic/claude-sonnet-5.5` dans
+le `.env`, puis recréer les conteneurs `api` et `worker`.
 
