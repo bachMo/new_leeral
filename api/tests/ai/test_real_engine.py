@@ -88,7 +88,7 @@ class FakeProviders:
             }
             body = {"medications": [line], "page_cut_off": self.page_cut_off}
             return self._reply(f"```json\n{json.dumps(body)}\n```")
-        if prompt.startswith("Translate"):
+        if prompt.startswith(("Translate", "You translate")):
             self.calls.append("translate")
             text = prompt.split("Text:\n", 1)[1]
             return self._reply(f"WO {text}")

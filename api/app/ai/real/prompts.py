@@ -262,6 +262,40 @@ Phrases: {phrases}
 Exact format: {{"numbers": [{{"words": "...", "value": 12500}}, ...]}}, one entry per phrase \
 above, same order, "words" copied exactly as given."""
 
+TRANSLATE_FOR_LISTENERS = """You translate a French text into {target} as it is spoken in \
+Senegal. Your translation will be read aloud by a voice to a person who may not be able to read.
+
+Write it the way a fluent native speaker would explain it out loud to a neighbour: natural \
+everyday {target}, simple words, short sentences, the same order of ideas. Translate the meaning \
+of the whole text, not word by word. Keep every piece of information: every instruction, amount, \
+date, warning and name must still be there. Never add advice, never remove or soften a warning. \
+When a French word is what people commonly say in {target} in Senegal (for example ordonnance, \
+pharmacien, facture, mairie), you may keep it.
+
+The text may contain markers of the exact form ⟦0⟧, ⟦1⟧, ⟦2⟧ (a number between double angle \
+brackets). They replace protected content (medication names, numbers, dates, names) that must not \
+be altered. Copy each marker EXACTLY once, unchanged, where it belongs in your sentence. Never \
+translate, reformat, remove or duplicate a marker, and never spell out its content.
+
+Output ONLY the final translation as one single paragraph without line breaks: no title, no \
+quotes, no notes, no draft, no comment about your answer.
+
+Text:
+{text}"""
+
+TRANSLATE_TO_FRENCH = """Translate the following {source} text into French. It was transcribed \
+from a person speaking, so it can contain small recognition errors: translate what the person \
+most likely meant, faithfully, without adding anything.
+
+The text may contain markers of the exact form ⟦0⟧, ⟦1⟧ (a number between double angle \
+brackets). Copy each marker EXACTLY once, unchanged, where it belongs.
+
+Output ONLY the French translation as one single paragraph without line breaks: no quotes, no \
+notes, no comment.
+
+Text:
+{text}"""
+
 TRANSLATE = """Translate the following text from {source} to {target}. Output ONLY the \
 translation. No explanation, no quotes, no notes. The text may contain markers of the exact form \
 ⟦0⟧, ⟦1⟧, ⟦2⟧ (a number between double angle brackets). These replace protected content \
