@@ -817,3 +817,31 @@ en base avec ces règles.
 
 **Raison.** Le problème venait de la longueur du texte envoyé au TTS, pas du mot lui-même : une
 phrase courte et fixe autour du mot règle tous les cas sans traitement mot par mot.
+
+## 31. Le texte entier est traduit d'un coup, pour l'oral ; la traduction phrase par phrase devient le filet de sécurité
+
+**Constat.** Traduite phrase par phrase (décision 10), l'explication sonnait hachée en wolof et en
+pulaar : le modèle ne voyait jamais le texte entier, perdait le fil d'une phrase à l'autre et
+traduisait mot à mot. C'était la première cause d'une voix difficile à comprendre, avant le TTS.
+
+**Décision.**
+- `Translator.localize` envoie d'abord **tout le texte** au modèle principal avec
+  `prompts.TRANSLATE_FOR_LISTENERS` : traduire le sens pour quelqu'un qui écoute, avec des mots
+  simples, sans rien ajouter ni retirer. Les mots français d'usage courant au Sénégal
+  (ordonnance, pharmacien, facture) peuvent rester.
+- La sécurité est la même : chiffres, noms de médicaments, mois et moments de prise sont remplacés
+  par des jetons `⟦N⟧`. La réponse est rejetée si un jeton manque ou est dupliqué, si elle tient
+  sur plusieurs lignes (brouillon), ou si sa longueur est invraisemblable (moins de 0,3 fois ou
+  plus de 4 fois le texte d'origine).
+- Deux essais au maximum ; ensuite on retombe sur la traduction phrase par phrase de la
+  décision 10, inchangée, avec son modèle de secours.
+- `to_french` (questions vocales) suit le même schéma avec `prompts.TRANSLATE_TO_FRENCH`, qui
+  tient compte des petites erreurs de reconnaissance vocale.
+- Un mot isolé (vocabulaire d'« Apprendre ») reste traduit par la voie phrase par phrase, pour
+  ne pas autoriser un mot français à la place de sa traduction.
+- Une réponse vide du modèle principal bascule désormais aussi vers le modèle de secours.
+
+**Raison.** La qualité de la langue parlée dépend du contexte : seul le texte entier permet une
+traduction naturelle. Les garde-fous qui faisaient la valeur de la décision 10 restent appliqués
+au texte entier, et l'ancienne voie reste disponible quand ils ne passent pas.
+

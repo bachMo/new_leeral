@@ -5,7 +5,14 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from app.ai.contracts import LocalizedText
-from app.ai.errors import AiInputError, AiUnavailableError, TranslationError
+from app.ai.errors import (
+    AiAuthError,
+    AiError,
+    AiInputError,
+    AiOutputError,
+    AiUnavailableError,
+    TranslationError,
+)
 from app.ai.real import prompts
 from app.ai.real.clients.openrouter import ModelProfile, OpenRouterClient
 from app.ai.real.safety.dates import localize_month_names
@@ -17,6 +24,11 @@ logger = logging.getLogger("leeral.ai.translation")
 
 _SENTENCE_BOUNDARY = re.compile(r"(?<=[.!?:;\n])\s+")
 _CONCURRENCY = 4
+_WHOLE_TEXT_ATTEMPTS = 2
+_MIN_LENGTH_RATIO = 0.3
+_MAX_LENGTH_RATIO = 4.0
+_ISOLATED_TERM_MAX_WORDS = 4
+_SENTENCE_END = re.compile(r"[.!?]")
 
 UNTRANSLATED_NOTICE_FR = (
     "Une partie n'a pas pu être traduite avec certitude. "
@@ -28,6 +40,10 @@ UNTRANSLATED_NOTICE_FR = (
 class _Segment:
     source: str
     translated: str | None
+
+
+def _is_isolated_term(text: str) -> bool:
+    return not _SENTENCE_END.search(text) and len(text.split()) <= _ISOLATED_TERM_MAX_WORDS
 
 
 def split_sentences(text: str) -> list[str]:
@@ -63,6 +79,27 @@ class Translator:
         sentences = split_sentences(text_fr)
         if not sentences:
             raise AiInputError("nothing to translate")
+        if _is_isolated_term(text_fr):
+            return await self._localize_by_sentence(sentences, text_fr, language, protected_terms)
+        prepared_text, extra_terms = _protect_known_phrases(" ".join(sentences), language)
+        whole = await self._translate_whole(
+            prepared_text,
+            "fr",
+            language,
+            (*protected_terms, *extra_terms),
+            source_length=len(text_fr),
+        )
+        if whole is not None:
+            return LocalizedText(language=language, text=whole, text_fr=text_fr, complete=True)
+        return await self._localize_by_sentence(sentences, text_fr, language, protected_terms)
+
+    async def _localize_by_sentence(
+        self,
+        sentences: list[str],
+        text_fr: str,
+        language: Language,
+        protected_terms: Sequence[str],
+    ) -> LocalizedText:
         prepared = [_protect_known_phrases(sentence, language) for sentence in sentences]
         segments = await asyncio.gather(
             *(
@@ -91,6 +128,11 @@ class Translator:
 
     async def to_french(self, text: str, language: Language) -> str:
         sentences = split_sentences(text) or [text]
+        whole = await self._translate_whole(
+            " ".join(sentences), language.value, "fr", (), source_length=len(text)
+        )
+        if whole is not None:
+            return whole
         segments = await asyncio.gather(
             *(
                 self._translate_sentence(sentence, language.value, "fr", ())
@@ -120,7 +162,7 @@ class Translator:
                 profile = self._primary if attempt == 0 else self._fallback
                 try:
                     raw = await self._call(profile, protected.text, source, target_code)
-                except AiUnavailableError:
+                except (AiUnavailableError, AiOutputError):
                     if profile is self._fallback:
                         raise
                     raw = await self._call(self._fallback, protected.text, source, target_code)
@@ -152,3 +194,66 @@ class Translator:
         )
         raw = await self._client.complete(profile, prompt, operation="translate", max_tokens=1500)
         return raw.strip().strip('"').strip()
+
+    async def _translate_whole(
+        self,
+        text: str,
+        source: str,
+        target: Language | str,
+        protected_terms: Sequence[str],
+        *,
+        source_length: int,
+    ) -> str | None:
+        target_code = target.value if isinstance(target, Language) else target
+        protected = protect(text, protected_terms=protected_terms)
+        prompt = _whole_text_prompt(protected.text, source, target_code)
+        max_tokens = min(8000, 1500 + len(protected.text))
+        for attempt in range(_WHOLE_TEXT_ATTEMPTS):
+            try:
+                async with self._semaphore:
+                    raw = await self._client.complete(
+                        self._primary, prompt, operation="translate_text", max_tokens=max_tokens
+                    )
+            except AiAuthError:
+                raise
+            except AiError as exc:
+                logger.warning(
+                    "translation_whole_failed",
+                    extra={"attempt": attempt, "target": target_code, "error": type(exc).__name__},
+                )
+                continue
+            candidate = raw.strip().strip('"').strip()
+            if "\n" in candidate:
+                logger.warning(
+                    "translation_whole_multiline", extra={"attempt": attempt, "target": target_code}
+                )
+                continue
+            try:
+                restored = restore(candidate, protected)
+            except TokenMismatchError as exc:
+                logger.warning(
+                    "translation_whole_token_mismatch",
+                    extra={
+                        "attempt": attempt,
+                        "missing": exc.missing,
+                        "duplicated": exc.duplicated,
+                        "target": target_code,
+                    },
+                )
+                continue
+            ratio = len(restored) / max(1, source_length)
+            if not _MIN_LENGTH_RATIO <= ratio <= _MAX_LENGTH_RATIO:
+                logger.warning(
+                    "translation_whole_length_suspicious",
+                    extra={"attempt": attempt, "ratio": round(ratio, 2), "target": target_code},
+                )
+                continue
+            return restored
+        logger.warning("translation_falls_back_to_sentences", extra={"target": target_code})
+        return None
+
+
+def _whole_text_prompt(text: str, source: str, target: str) -> str:
+    if target == "fr":
+        return prompts.TRANSLATE_TO_FRENCH.format(source=prompts.LANGUAGE_NAMES[source], text=text)
+    return prompts.TRANSLATE_FOR_LISTENERS.format(target=prompts.LANGUAGE_NAMES[target], text=text)

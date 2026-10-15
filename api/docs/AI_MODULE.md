@@ -22,7 +22,7 @@ app/ai/
     ├── clients/          http.py (User-Agent, relances 429/5xx), kiriku.py (ASR, TTS), openrouter.py
     ├── pages.py          double classification (photo ou texte), transcription, préparation des images
     ├── prescription.py   double lecture, alignement, vérification ligne par ligne
-    ├── translation.py    traduction phrase par phrase avec jetons protégés, modèle de secours
+    ├── translation.py    texte entier traduit pour l'oral (jetons protégés), repli phrase par phrase
     ├── speech.py         découpage ≤ 500 caractères, TTS en parallèle, silences de début et de fin, MP3
     ├── numerals.py       nombres écrits en toutes lettres (wolof, pulaar) avant la voix
     ├── analysis.py       analyse d'un document (titre, résumé, points clés, montants, dates)
