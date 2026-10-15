@@ -69,13 +69,13 @@ Tout raisonne en français. La traduction et la voix se font à la fin, par `loc
 - Le moment de prise (« après le repas ») est vérifié comme les autres champs.
 - Le dosage n'est jamais lu ni affiché pour une ligne `to_check` : seulement le nom.
 - L'explication ne donne une posologie que pour les lignes `sure`. Pour les autres, elle renvoie vers le pharmacien.
-- À la traduction, les noms de médicaments et tous les nombres sont remplacés par `⟦0⟧`, `⟦1⟧`… Chaque jeton doit revenir exactement une fois : sinon, on relance avec le modèle de secours. Si la phrase échoue encore, elle est remplacée par un avertissement traduit, jamais par du français. Si rien ne se traduit, la tâche échoue avec `TRANSLATION_FAILED`.
+- À la traduction, les noms de médicaments et tous les nombres sont remplacés par `⟦0⟧`, `⟦1⟧`… Le texte entier part d'abord en un seul appel, avec une consigne écrite pour l'oral. La réponse est rejetée si un jeton manque ou est en double, si elle fait plusieurs lignes, ou si sa longueur est invraisemblable. Après deux échecs, on traduit phrase par phrase : chaque jeton doit revenir exactement une fois, sinon on relance avec le modèle de secours. Une phrase qui échoue encore est remplacée par un avertissement traduit, jamais par du français. Si rien ne se traduit, la tâche échoue avec `TRANSLATION_FAILED`.
 - Une réponse qui contient un chiffre absent du document est remplacée par une réponse prudente. Les chiffres de la question ne comptent pas : « C'est 3 fois par jour ? » ne peut pas être confirmé si le 3 n'est pas sur l'ordonnance.
 
 ## Ce qui a changé par rapport à ton dépôt
 
 - Lexique : la suggestion pointe toujours vers un terme fiable, jamais vers sa propre coquille. Une faute sur la première lettre est rattrapée (index par trigrammes au lieu de la première lettre). Les termes de moins de 3 lettres ne comptent plus.
-- Traduction : une phrase en échec n'est plus perdue en silence, et le français n'est jamais lu à la place.
+- Traduction : le texte entier est traduit d'un coup pour un rendu naturel à l'oral, avec la traduction phrase par phrase en repli. Une phrase en échec n'est plus perdue en silence, et le français n'est jamais lu à la place.
 - Nom de fichier audio nettoyé avant l'envoi à KIRIKU (plus de traversée de répertoire).
 - Réponses JSON validées par Pydantic : une sortie invalide devient `AiOutputError` au lieu de faire planter la tâche.
 - Lectures et classifications A et B en parallèle, plusieurs pages, PDF et DOCX.
