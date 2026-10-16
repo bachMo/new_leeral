@@ -30,6 +30,7 @@ export default function CodeScreen() {
     local: string;
     length?: string;
     resend?: string;
+    demo?: string;
     next?: string;
   }>();
   const length = Math.min(Math.max(Number(params.length) || 4, 4), 8);
@@ -37,7 +38,8 @@ export default function CodeScreen() {
   const { fit } = useLayout();
   const { language, applyTokens } = useSession();
   const { sayError, sayText } = useScreenVoice();
-  const [code, setCode] = useState('');
+  const demo = /^\d+$/.test(params.demo ?? '') ? (params.demo ?? '').slice(0, length) : '';
+  const [code, setCode] = useState(demo);
   const [busy, setBusy] = useState(false);
   const [wait, setWait] = useState(Number(params.resend) || 60);
   const submitted = useRef('');
@@ -121,16 +123,37 @@ export default function CodeScreen() {
 
       <View>
         <T display w={700} size={fit(30)} lh={1.05} ls={-0.8}>
-          Regarde ton WhatsApp
+          {demo ? 'Ton code de connexion' : 'Regarde ton WhatsApp'}
         </T>
         <T size={15} lh={1.4} color={colors.muted} style={{ marginTop: 6 }}>
-          On a envoyé un code à {length} chiffres au{' '}
+          {demo ? 'Pour le numéro ' : `On a envoyé un code à ${length} chiffres au `}
           <T w={700} size={15}>
             {shown}
           </T>
           .
         </T>
       </View>
+
+      {demo ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 10,
+            alignItems: 'flex-start',
+            backgroundColor: colors.lightSoft,
+            borderRadius: 16,
+            padding: 14,
+          }}
+        >
+          <Icon name="info" size={20} color={colors.lightInk} />
+          <T size={14} lh={1.4} color={colors.brown} style={{ flex: 1 }}>
+            <T w={700} size={14} color={colors.brown}>
+              Version prototype :{' '}
+            </T>
+            ce code est fictif et déjà rempli. Aucun message n&apos;est envoyé. Touche « Continuer ».
+          </T>
+        </View>
+      ) : null}
 
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {Array.from({ length }, (_, index) => (
@@ -156,6 +179,7 @@ export default function CodeScreen() {
 
       <View
         style={{
+          display: demo ? 'none' : 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           gap: 10,

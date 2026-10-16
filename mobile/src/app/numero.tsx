@@ -55,6 +55,7 @@ export default function PhoneScreen() {
           local: digits,
           length: String(challenge.code_length),
           resend: String(challenge.resend_in),
+          demo: challenge.demo_code ?? '',
           next: next ?? '',
         },
       });

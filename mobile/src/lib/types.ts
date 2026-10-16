@@ -32,6 +32,7 @@ export interface OtpChallenge {
   expires_in: number;
   resend_in: number;
   code_length: number;
+  demo_code?: string | null;
 }
 
 export interface Usage {

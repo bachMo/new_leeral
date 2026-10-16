@@ -32,6 +32,7 @@ class OtpChallengeOut(Schema):
     expires_in: int
     resend_in: int
     code_length: int
+    demo_code: str | None = None
 
 
 class OtpVerifyIn(DeviceIn):
