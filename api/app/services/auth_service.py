@@ -48,6 +48,13 @@ class OtpChallenge:
     expires_in: int
     resend_in: int
     code_length: int
+    demo_code: str | None = None
+
+
+def public_demo_code(settings: Settings) -> str | None:
+    if settings.otp_delivery != "demo":
+        return None
+    return settings.otp_demo_code.get_secret_value()
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,6 +123,7 @@ class AuthService:
             expires_in=int(ttl.total_seconds()),
             resend_in=self._settings.otp_resend_cooldown_seconds,
             code_length=self._settings.otp_length,
+            demo_code=public_demo_code(self._settings),
         )
 
     async def verify_otp(

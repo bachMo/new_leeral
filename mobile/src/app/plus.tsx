@@ -128,8 +128,8 @@ export default function PlusScreen() {
               Paiement Wave
             </T>
             <T size={15} lh={1.45} color={colors.muted}>
-              Paiement simulé pour la démo : aucun argent n&apos;est prélevé. Confirme pour activer Leeral+
-              pendant 30 jours.
+              Version prototype : le paiement est fictif et passera avec succès. Aucun argent n&apos;est
+              prélevé. Confirme pour activer Leeral+ pendant 30 jours.
             </T>
             <View
               style={{
@@ -282,21 +282,41 @@ export default function PlusScreen() {
             </T>
           </View>
         ) : (
-          <View>
-            <PrimaryButton
-              label={`Payer avec Wave · ${money(price)}`}
-              height={64}
-              bg={colors.light}
-              fg={colors.night}
-              loading={busy}
-              onPress={pay}
-            />
-            <MiniSpeaker
-              prompt="app.plus.pay"
-              label="Écouter : payer avec Wave"
-              color={colors.night}
-              style={{ position: 'absolute', right: 6, top: 12 }}
-            />
+          <View style={{ gap: 10 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+                alignItems: 'flex-start',
+                backgroundColor: 'rgba(246,240,228,0.08)',
+                borderRadius: 16,
+                padding: 12,
+              }}
+            >
+              <Icon name="info" size={18} color={colors.light} />
+              <T size={13.5} lh={1.4} color={colors.sand} style={{ flex: 1 }}>
+                <T w={700} size={13.5} color={colors.sand}>
+                  Version prototype :{' '}
+                </T>
+                le paiement est fictif et passera avec succès. Aucun argent n&apos;est prélevé.
+              </T>
+            </View>
+            <View>
+              <PrimaryButton
+                label={`Payer avec Wave · ${money(price)}`}
+                height={64}
+                bg={colors.light}
+                fg={colors.night}
+                loading={busy}
+                onPress={pay}
+              />
+              <MiniSpeaker
+                prompt="app.plus.pay"
+                label="Écouter : payer avec Wave"
+                color={colors.night}
+                style={{ position: 'absolute', right: 6, top: 12 }}
+              />
+            </View>
           </View>
         )}
         <View>
