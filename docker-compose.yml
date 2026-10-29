@@ -60,6 +60,16 @@ services:
       api:
         condition: service_healthy
 
+  kiriku:
+    build: ./kiriku
+    image: leeral-kiriku
+    restart: unless-stopped
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
+      KIRIKU_THREADS: ${KIRIKU_THREADS:-}
+    volumes:
+      - kiriku-models:/models
+
   ngrok:
     image: ngrok/ngrok:latest
     restart: unless-stopped
@@ -73,3 +83,4 @@ services:
 volumes:
   postgres-data:
   redis-data:
+  kiriku-models:
