@@ -1,0 +1,10 @@
+coqui-tts==0.24.3
+transformers==4.46.3
+accelerate==1.1.1
+ctranslate2==4.5.0
+huggingface-hub==0.36.2
+numpy==1.26.4
+scipy==1.14.1
+fastapi==0.115.6
+uvicorn==0.32.1
+python-multipart==0.0.20

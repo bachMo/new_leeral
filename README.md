@@ -68,6 +68,7 @@ Tout le raisonnement se fait en français. La traduction et la voix viennent à 
 | [`mobile/`](mobile/README.md) | Application Expo (React Native) pour Android et le web |
 | [`deploy/`](deploy/deploy.sh) | Script de déploiement exécuté sur le serveur |
 | [`eval/`](eval/README.md) | Bancs d'essai qui ont servi à choisir les modèles IA |
+| [`kiriku/`](kiriku/README.md) | Service KIRIKU local : voix et reconnaissance vocale sur le CPU du serveur |
 
 ## Lancer le projet
 
@@ -84,7 +85,7 @@ Sans aucune clé, le projet tourne avec un moteur IA simulé : `AI_PROVIDER=mock
 
 ## Déploiement et intégration continue
 
-En production, tout tourne avec Docker Compose sur un serveur : PostgreSQL, Redis, l'API, le worker et un tunnel ngrok qui expose l'API en HTTPS sur un domaine fixe.
+En production, tout tourne avec Docker Compose sur un serveur : PostgreSQL, Redis, l'API, le worker, le service KIRIKU local (voix et reconnaissance vocale) et un tunnel ngrok qui expose l'API en HTTPS sur un domaine fixe.
 
 ```bash
 docker compose up -d --build
@@ -118,7 +119,7 @@ Trois workflows GitHub Actions :
 
 | Ressource | Usage |
 |---|---|
-| [KIRIKU ASR et TTS](https://huggingface.co/AIHubSN), AI Hub Sénégal | Reconnaissance et synthèse vocales en wolof et en pulaar |
+| [KIRIKU ASR et TTS](https://huggingface.co/AIHubSN), AI Hub Sénégal | Reconnaissance et synthèse vocales en wolof et en pulaar, hébergées sur notre serveur (`kiriku/`) |
 | [OpenRouter](https://openrouter.ai) | Accès aux modèles de lecture, d'analyse et de traduction (modèles configurables dans `.env.example`) |
 | Meta WhatsApp Cloud API | Canal WhatsApp |
 | FastAPI, SQLAlchemy, Alembic, ARQ, Pydantic | API et tâches de fond |
