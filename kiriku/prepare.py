@@ -43,7 +43,7 @@ def prepare_asr(settings: Settings) -> None:
     log.info("converting ASR to CTranslate2 int8")
     tmp = settings.asr_ct2_dir.with_name(settings.asr_ct2_dir.name + ".tmp")
     shutil.rmtree(tmp, ignore_errors=True)
-    TransformersConverter(str(source), low_cpu_mem_usage=True).convert(
+    TransformersConverter(str(source), load_as_float16=True, low_cpu_mem_usage=True).convert(
         str(tmp), quantization="int8", force=True
     )
     tmp.rename(settings.asr_ct2_dir)
