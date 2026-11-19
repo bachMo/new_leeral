@@ -68,6 +68,7 @@ Tout le raisonnement se fait en français. La traduction et la voix viennent à 
 | [`mobile/`](mobile/README.md) | Application Expo (React Native) pour Android et le web |
 | [`deploy/`](deploy/deploy.sh) | Script de déploiement exécuté sur le serveur |
 | [`eval/`](eval/README.md) | Bancs d'essai qui ont servi à choisir les modèles IA |
+| [`inbox/`](inbox/README.md) | Leeral Messages : l'application web de l'équipe pour lire les messages WhatsApp et y répondre (Vercel) |
 | [`kiriku/`](kiriku/README.md) | Service KIRIKU local : voix et reconnaissance vocale sur le CPU du serveur |
 
 ## Lancer le projet
@@ -99,12 +100,15 @@ Trois workflows GitHub Actions :
 | `deploy.yml` | CI réussie sur `main` | Connexion SSH au serveur et exécution de [`deploy/deploy.sh`](deploy/deploy.sh) : mise à jour du code, reconstruction des conteneurs (les migrations s'appliquent au démarrage de l'API), consignes vocales et vocabulaire de base |
 | `mobile-release.yml` | manuel (« Publier l'app ») | Mise à jour de l'application installée (EAS Update) et du site web |
 
+L'application `inbox/` est déployée par Vercel à chaque push sur `main` (voir [`inbox/README.md`](inbox/README.md)).
+
 ## Données et éthique
 
 - Les documents sont privés : stockage chiffré sur R2, accès par des liens signés qui expirent.
 - Les documents des invités sont supprimés automatiquement, ainsi que les comptes invités inactifs.
 - Aucun contenu de document, aucune transcription et aucun numéro de téléphone complet n'apparaissent dans les journaux.
 - Les ordonnances réelles utilisées pour évaluer le module IA ne sont pas dans ce dépôt.
+- Seuls les comptes de l'équipe, créés sur le serveur, peuvent lire les conversations WhatsApp. Les médias reçus sont archivés avec le compte de l'utilisateur et supprimés avec lui.
 - Leeral explique un document : il ne remplace ni le médecin, ni le pharmacien, ni l'administration.
 
 ## Limites connues

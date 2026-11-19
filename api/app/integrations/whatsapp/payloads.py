@@ -39,6 +39,37 @@ class Button(_Model):
     text: str = ""
 
 
+class Location(_Model):
+    latitude: float
+    longitude: float
+    name: str | None = None
+    address: str | None = None
+
+
+class ContactName(_Model):
+    formatted_name: str = ""
+
+
+class ContactPhone(_Model):
+    phone: str | None = None
+    wa_id: str | None = None
+    type: str | None = None
+
+
+class SharedContact(_Model):
+    name: ContactName | None = None
+    phones: list[ContactPhone] = Field(default_factory=list)
+
+
+class Reaction(_Model):
+    message_id: str
+    emoji: str | None = None
+
+
+class Context(_Model):
+    id: str | None = None
+
+
 class InboundMessage(_Model):
     sender: str = Field(alias="from")
     id: str
@@ -48,6 +79,12 @@ class InboundMessage(_Model):
     image: Media | None = None
     document: Media | None = None
     audio: Media | None = None
+    video: Media | None = None
+    sticker: Media | None = None
+    location: Location | None = None
+    contacts: list[SharedContact] = Field(default_factory=list)
+    reaction: Reaction | None = None
+    context: Context | None = None
     interactive: Interactive | None = None
     button: Button | None = None
     errors: list[dict[str, Any]] = Field(default_factory=list)
@@ -55,6 +92,18 @@ class InboundMessage(_Model):
     @property
     def media(self) -> Media | None:
         return self.image or self.document or self.audio
+
+    @property
+    def any_media(self) -> Media | None:
+        return self.media or self.video or self.sticker
+
+    @property
+    def reply_title(self) -> str | None:
+        if self.interactive and self.interactive.reply:
+            return self.interactive.reply.title or None
+        if self.button:
+            return self.button.text or None
+        return None
 
     @property
     def reply_id(self) -> str | None:

@@ -13,9 +13,21 @@ MAX_BUTTON_TITLE = 20
 MAX_TEXT_LENGTH = 4096
 
 
+MAX_CAPTION_LENGTH = 1024
+
+
 class WhatsAppError(Exception):
-    def __init__(self, message: str, *, status_code: int | None = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        status_code: int | None = None,
+        error_code: int | None = None,
+        details: str | None = None,
+    ) -> None:
         self.status_code = status_code
+        self.error_code = error_code
+        self.details = details
         super().__init__(message)
 
 
@@ -44,11 +56,54 @@ class WhatsAppClient:
     async def aclose(self) -> None:
         await self._http.aclose()
 
-    async def send_text(self, phone_number_id: str, to: str, body: str) -> str:
+    async def send_text(
+        self, phone_number_id: str, to: str, body: str, *, reply_to: str | None = None
+    ) -> str:
         return await self._send(
             phone_number_id,
             to,
             {"type": "text", "text": {"body": body[:MAX_TEXT_LENGTH], "preview_url": False}},
+            reply_to=reply_to,
+        )
+
+    async def send_media(
+        self,
+        phone_number_id: str,
+        to: str,
+        kind: str,
+        content: bytes,
+        mime_type: str,
+        filename: str,
+        *,
+        caption: str | None = None,
+        voice: bool = False,
+        reply_to: str | None = None,
+    ) -> str:
+        media_id = await self.upload_media(phone_number_id, content, mime_type, filename)
+        media: dict[str, Any] = {"id": media_id}
+        if kind == "document":
+            media["filename"] = filename
+        if caption and kind in {"image", "video", "document"}:
+            media["caption"] = caption[:MAX_CAPTION_LENGTH]
+        if voice and kind == "audio":
+            media["voice"] = True
+        return await self._send(phone_number_id, to, {"type": kind, kind: media}, reply_to=reply_to)
+
+    async def send_contact(
+        self,
+        phone_number_id: str,
+        to: str,
+        name: str,
+        phone: str,
+        *,
+        reply_to: str | None = None,
+    ) -> str:
+        contact = {
+            "name": {"formatted_name": name, "first_name": name},
+            "phones": [{"phone": phone, "type": "CELL", "wa_id": phone.lstrip("+")}],
+        }
+        return await self._send(
+            phone_number_id, to, {"type": "contacts", "contacts": [contact]}, reply_to=reply_to
         )
 
     async def send_buttons(
@@ -173,12 +228,22 @@ class WhatsAppClient:
             content=response.content, mime_type=mime_type.split(";", maxsplit=1)[0]
         )
 
-    async def _send(self, phone_number_id: str, to: str, message: dict[str, Any]) -> str:
-        body = await self._post(
-            f"/{phone_number_id}/messages",
-            json={"messaging_product": "whatsapp", "recipient_type": "individual", "to": to}
-            | message,
-        )
+    async def _send(
+        self,
+        phone_number_id: str,
+        to: str,
+        message: dict[str, Any],
+        *,
+        reply_to: str | None = None,
+    ) -> str:
+        envelope: dict[str, Any] = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": to,
+        }
+        if reply_to:
+            envelope["context"] = {"message_id": reply_to}
+        body = await self._post(f"/{phone_number_id}/messages", json=envelope | message)
         try:
             return str(body["messages"][0]["id"])
         except (KeyError, IndexError, TypeError) as exc:
@@ -221,9 +286,33 @@ class WhatsAppClient:
                 "whatsapp_api_error",
                 extra={"status": response.status_code, "body": response.text[:300]},
             )
-            raise WhatsAppError("graph api error", status_code=response.status_code)
+            error_code, details = _graph_error(response)
+            raise WhatsAppError(
+                "graph api error",
+                status_code=response.status_code,
+                error_code=error_code,
+                details=details,
+            )
         payload = response.json()
         return payload if isinstance(payload, dict) else {}
 
     def _headers(self) -> dict[str, str]:
         return {"Authorization": f"Bearer {self._token}"}
+
+
+def _graph_error(response: httpx.Response) -> tuple[int | None, str | None]:
+    try:
+        payload = response.json()
+    except ValueError:
+        return None, None
+    error = payload.get("error") if isinstance(payload, dict) else None
+    if not isinstance(error, dict):
+        return None, None
+    code = error.get("code")
+    data = error.get("error_data")
+    details = data.get("details") if isinstance(data, dict) else None
+    message = details or error.get("message")
+    return (
+        code if isinstance(code, int) else None,
+        str(message)[:300] if message else None,
+    )

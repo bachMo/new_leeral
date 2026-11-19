@@ -1,3 +1,4 @@
+from app.models.admin import AdminSession, AdminUser
 from app.models.billing import Payment, Plan, Subscription, UsageCounter
 from app.models.conversation import Conversation, ConversationDocument, Message
 from app.models.document import (
@@ -18,10 +19,17 @@ from app.models.learning import (
 )
 from app.models.system import AiJob, UiPrompt
 from app.models.user import AuthSession, OtpCode, User
-from app.models.whatsapp import WhatsAppChannel, WhatsAppMessage, WhatsAppSession
+from app.models.whatsapp import (
+    WhatsAppChannel,
+    WhatsAppMessage,
+    WhatsAppSession,
+    WhatsAppThread,
+)
 from app.models.writing import Writing, WritingOutput, WritingStep
 
 __all__ = [
+    "AdminSession",
+    "AdminUser",
     "AiJob",
     "AuthSession",
     "Conversation",
@@ -47,6 +55,7 @@ __all__ = [
     "WhatsAppChannel",
     "WhatsAppMessage",
     "WhatsAppSession",
+    "WhatsAppThread",
     "Word",
     "WordTranslation",
     "Writing",

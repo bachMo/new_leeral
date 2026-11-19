@@ -89,6 +89,11 @@ class WhatsAppMessageType(StrEnum):
     BUTTON = "button"
     INTERACTIVE = "interactive"
     TEMPLATE = "template"
+    VIDEO = "video"
+    STICKER = "sticker"
+    LOCATION = "location"
+    CONTACTS = "contacts"
+    REACTION = "reaction"
     UNSUPPORTED = "unsupported"
 
 

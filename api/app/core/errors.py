@@ -54,6 +54,12 @@ class ErrorCode(StrEnum):
 
     WEBHOOK_SIGNATURE_INVALID = "WEBHOOK_SIGNATURE_INVALID"
 
+    INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
+    ACCOUNT_LOCKED = "ACCOUNT_LOCKED"
+    WHATSAPP_WINDOW_CLOSED = "WHATSAPP_WINDOW_CLOSED"
+    WHATSAPP_SEND_FAILED = "WHATSAPP_SEND_FAILED"
+    MEDIA_UNAVAILABLE = "MEDIA_UNAVAILABLE"
+
 
 @dataclass(frozen=True, slots=True)
 class ErrorSpec:
@@ -114,6 +120,15 @@ ERROR_CATALOG: dict[ErrorCode, ErrorSpec] = {
     ErrorCode.AI_OUTPUT_INVALID: ErrorSpec(502, "Leeral n'a pas pu terminer. Réessaie.", True),
     ErrorCode.TRANSLATION_FAILED: ErrorSpec(502, "Leeral n'a pas pu traduire ce document.", True),
     ErrorCode.WEBHOOK_SIGNATURE_INVALID: ErrorSpec(401, "Signature invalide."),
+    ErrorCode.INVALID_CREDENTIALS: ErrorSpec(401, "E-mail ou mot de passe incorrect."),
+    ErrorCode.ACCOUNT_LOCKED: ErrorSpec(
+        429, "Trop d'essais. Ce compte est bloqué pendant quelques minutes."
+    ),
+    ErrorCode.WHATSAPP_WINDOW_CLOSED: ErrorSpec(
+        409, "La fenêtre de 24 h est fermée : seul le modèle de relance peut être envoyé."
+    ),
+    ErrorCode.WHATSAPP_SEND_FAILED: ErrorSpec(502, "WhatsApp a refusé l'envoi.", True),
+    ErrorCode.MEDIA_UNAVAILABLE: ErrorSpec(410, "Ce média n'est plus disponible."),
 }
 
 

@@ -10,8 +10,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from app.ai.contracts import PRESCRIPTION
 from app.ai.engine import AiEngine
 from app.ai.errors import AiError, TranslationError
+from app.channels.whatsapp.inbound_meta import UNHANDLED_TYPES
 from app.channels.whatsapp.language_choice import named_language
+from app.channels.whatsapp.media_archive import MediaArchiver
 from app.channels.whatsapp.outbox import WhatsAppOutbox
+from app.channels.whatsapp.threads import bot_is_paused, ensure_thread
 from app.core.clock import utcnow
 from app.core.config import Settings
 from app.core.errors import AppError, ErrorCode
@@ -103,8 +106,23 @@ class WhatsAppAssistant:
                 return
             user, is_new = await self._user(session, inbound.wa_phone, channel, profile_name)
             inbound.user_id = user.id
+            thread = await ensure_thread(session, channel.id, inbound.wa_phone, user.id)
             wa_session = await self._session(session, user, channel, is_new=is_new)
+            if inbound.wa_media_id is not None:
+                uow.defer(
+                    Job.ARCHIVE_WHATSAPP_MEDIA,
+                    key=f"whatsapp-archive:{inbound.id}",
+                    message_id=str(inbound.id),
+                )
+            if inbound.type is WhatsAppMessageType.REACTION:
+                inbound.status = WhatsAppMessageStatus.PROCESSED
+                await uow.commit()
+                return
             wa_session.last_inbound_at = utcnow()
+            if bot_is_paused(thread, utcnow()):
+                inbound.status = WhatsAppMessageStatus.PROCESSED
+                await uow.commit()
+                return
             await uow.commit()
             await self._mark_read(channel, inbound)
             outbox = WhatsAppOutbox(
@@ -112,6 +130,24 @@ class WhatsAppAssistant:
             )
             await self._dispatch(uow, outbox, user, channel, wa_session, inbound, is_new=is_new)
             await uow.commit()
+
+    async def archive_media(self, message_id: uuid.UUID) -> None:
+        async with self._session_factory() as session:
+            message = await session.get(WhatsAppMessage, message_id)
+            if message is None:
+                return
+            try:
+                archived = await MediaArchiver(session, self._client, self._storage).archive(
+                    message
+                )
+            except WhatsAppError as exc:
+                logger.warning(
+                    "whatsapp_media_archive_failed",
+                    extra={"message_id": str(message_id), "status": exc.status_code},
+                )
+                return
+            if archived:
+                await session.commit()
 
     async def collect_media(self, user_id: uuid.UUID, message_id: uuid.UUID) -> None:
         async with self._session_factory() as session:
@@ -266,7 +302,7 @@ class WhatsAppAssistant:
         if inbound.type in SPEECH_TYPES:
             await self._receive_question(uow, outbox, user, channel, wa_session, inbound, audio)
             return
-        if inbound.type is WhatsAppMessageType.UNSUPPORTED:
+        if inbound.type in UNHANDLED_TYPES:
             uow.defer(
                 Job.REJECT_WHATSAPP_MESSAGE,
                 key=f"whatsapp-unsupported:{inbound.id}",
