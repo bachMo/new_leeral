@@ -40,3 +40,8 @@ def word_audio(word_id: uuid.UUID, language: Language) -> str:
 
 def prompt_audio(key: str, language: Language) -> str:
     return f"shared/prompts/{language.value}/{key}-{_suffix()}.mp3"
+
+
+def whatsapp_media(user: User | None, name: str, extension: str) -> str:
+    prefix = owner_prefix(user.id, is_guest=user.is_guest) if user else "whatsapp/unlinked"
+    return f"{prefix}/whatsapp/{name}-{_suffix()}.{extension}"

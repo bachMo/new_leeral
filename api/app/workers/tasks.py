@@ -73,6 +73,10 @@ async def reject_whatsapp_message(ctx: Context, message_id: str) -> None:
     await _runtime(ctx).whatsapp.reject_unsupported(uuid.UUID(message_id))
 
 
+async def archive_whatsapp_media(ctx: Context, message_id: str) -> None:
+    await _runtime(ctx).whatsapp.archive_media(uuid.UUID(message_id))
+
+
 async def promote_guest_files(ctx: Context, user_id: str) -> int:
     return await _runtime(ctx).maintenance.promote_guest_files(uuid.UUID(user_id))
 

@@ -1,12 +1,20 @@
 import logging
+from typing import Any
 
 from sqlalchemy.exc import IntegrityError
 
+from app.channels.whatsapp.inbound_meta import (
+    TYPE_MAP,
+    inbound_body,
+    inbound_meta,
+    message_type,
+)
+from app.channels.whatsapp.threads import ensure_thread
 from app.core.config import Settings
 from app.db.unit_of_work import UnitOfWork
 from app.integrations.whatsapp.payloads import ChangeValue, InboundMessage, WebhookPayload
 from app.models import WhatsAppChannel, WhatsAppMessage
-from app.models.enums import WhatsAppDirection, WhatsAppMessageStatus, WhatsAppMessageType
+from app.models.enums import WhatsAppDirection, WhatsAppMessageStatus
 from app.repositories.system import WhatsAppChannelRepository, WhatsAppMessageRepository
 from app.workers.jobs import Job
 
@@ -18,13 +26,11 @@ _STATUS_MAP = {
     "read": WhatsAppMessageStatus.READ,
     "failed": WhatsAppMessageStatus.FAILED,
 }
-_TYPE_MAP = {
-    "text": WhatsAppMessageType.TEXT,
-    "image": WhatsAppMessageType.IMAGE,
-    "document": WhatsAppMessageType.DOCUMENT,
-    "audio": WhatsAppMessageType.AUDIO,
-    "button": WhatsAppMessageType.BUTTON,
-    "interactive": WhatsAppMessageType.INTERACTIVE,
+_STATUS_RANK = {
+    WhatsAppMessageStatus.SENT: 1,
+    WhatsAppMessageStatus.DELIVERED: 2,
+    WhatsAppMessageStatus.READ: 3,
+    WhatsAppMessageStatus.FAILED: 4,
 }
 
 
@@ -72,16 +78,18 @@ class WebhookIngestor:
             record = await self._messages.by_wa_id(update.id)
             if record is None or status is None:
                 continue
+            if _STATUS_RANK.get(status, 0) < _STATUS_RANK.get(record.status, 0):
+                continue
             record.status = status
             if update.errors:
-                record.error = str(update.errors[0].get("title") or update.errors[0])[:300]
+                record.error = _status_error(update.errors[0])
 
     async def _accept(
         self, channel: WhatsAppChannel, value: ChangeValue, message: InboundMessage
     ) -> int:
         if await self._messages.by_wa_id(message.id) is not None:
             return 0
-        if message.type not in _TYPE_MAP:
+        if message.type not in TYPE_MAP:
             logger.info(
                 "whatsapp_unsupported_message",
                 extra={
@@ -92,15 +100,17 @@ class WebhookIngestor:
                     ],
                 },
             )
-        media = message.media
+        media = message.any_media
         record = WhatsAppMessage(
             wa_phone=message.sender,
             channel_id=channel.id,
             direction=WhatsAppDirection.INBOUND,
             wa_message_id=message.id,
-            type=_TYPE_MAP.get(message.type, WhatsAppMessageType.UNSUPPORTED),
-            body_text=_body(message),
+            type=message_type(message),
+            body_text=inbound_body(message),
             wa_media_id=media.id if media else None,
+            media_mime=media.mime_type if media else None,
+            meta=inbound_meta(message),
             status=WhatsAppMessageStatus.RECEIVED,
         )
         try:
@@ -109,6 +119,7 @@ class WebhookIngestor:
                 await self._messages.flush()
         except IntegrityError:
             return 0
+        await ensure_thread(self._uow.session, channel.id, message.sender)
         self._uow.defer(
             Job.HANDLE_WHATSAPP_MESSAGE,
             message_id=str(record.id),
@@ -117,12 +128,7 @@ class WebhookIngestor:
         return 1
 
 
-def _body(message: InboundMessage) -> str | None:
-    if message.text is not None:
-        return message.text.body
-    if message.reply_id is not None:
-        return message.reply_id
-    media = message.media
-    if media is not None:
-        return media.caption or media.filename
-    return None
+def _status_error(error: dict[str, Any]) -> str:
+    title = error.get("title") or error.get("message") or "erreur inconnue"
+    code = error.get("code")
+    return (f"{code} · {title}" if code is not None else str(title))[:300]

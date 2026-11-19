@@ -3,12 +3,13 @@ import asyncio
 import logging
 import sys
 import time
-from collections.abc import Sequence
+from collections.abc import Awaitable, Callable, Sequence
 from datetime import datetime
 from pathlib import Path
 
 from sqlalchemy import select
 
+from app import admin_cli
 from app.ai import build_ai_engine
 from app.ai.contracts import (
     ConversationTurn,
@@ -393,6 +394,17 @@ def main(argv: list[str] | None = None) -> None:
         help="transcribe the generated audio back (ASR) to spot-check numbers/names (extra calls)",
     )
 
+    admin_create = commands.add_parser("admin-create", help="create an inbox admin account")
+    admin_create.add_argument("--email", required=True)
+    admin_create.add_argument("--name", required=True)
+    admin_password = commands.add_parser("admin-password", help="change an admin password")
+    admin_password.add_argument("--email", required=True)
+    admin_disable = commands.add_parser("admin-disable", help="disable an admin account")
+    admin_disable.add_argument("--email", required=True)
+    admin_enable = commands.add_parser("admin-enable", help="enable an admin account")
+    admin_enable.add_argument("--email", required=True)
+    commands.add_parser("admin-list", help="list admin accounts")
+
     args = parser.parse_args(argv)
     if args.command == "try-document":
         missing = [raw for raw in (*args.files, *args.question_audio) if not Path(raw).is_file()]
@@ -400,12 +412,17 @@ def main(argv: list[str] | None = None) -> None:
             raise SystemExit(f"file not found: {', '.join(missing)}")
     diagnostic = args.command in {"try-document", "check-ai"}
     configure_logging("INFO" if diagnostic else "WARNING", json_output=False)
-    runners = {
+    runners: dict[str, Callable[[], Awaitable[None]]] = {
         "seed-channel": lambda: seed_channel(args.display_number, args.language),
         "seed-words": lambda: seed_words(args.language),
         "sync-prompts": lambda: sync_prompts(args.language, args.force),
         "revoice-words": lambda: revoice_words(args.language),
         "check-ai": lambda: check_ai(args.language),
+        "admin-create": lambda: admin_cli.create_admin(args.email, args.name),
+        "admin-password": lambda: admin_cli.set_password(args.email),
+        "admin-disable": lambda: admin_cli.set_active(args.email, active=False),
+        "admin-enable": lambda: admin_cli.set_active(args.email, active=True),
+        "admin-list": admin_cli.list_admins,
         "try-document": lambda: try_document(
             args.files,
             args.language,

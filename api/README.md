@@ -147,8 +147,35 @@ ruff check . ; mypy app ; pytest
 | Leeral+ | `GET /billing/plans`, `POST /billing/checkout`, `GET /billing/payments/{token}`, `POST /billing/payments/{token}/simulate` |
 | Voix | `POST /speech/transcriptions` (multipart `audio`) : texte entendu et sa traduction en français |
 | WhatsApp | `GET` et `POST /webhooks/whatsapp` |
+| Messagerie (équipe) | `POST /admin/auth/login`, `POST /admin/auth/refresh`, `POST /admin/auth/logout`, `GET /admin/me`, `GET /admin/inbox/threads`, `GET /admin/inbox/threads/{id}`, `GET` et `POST /admin/inbox/threads/{id}/messages`, `POST /admin/inbox/threads/{id}/read`, `PUT /admin/inbox/threads/{id}/bot`, `GET /admin/inbox/messages/{id}/media` |
 
 Un invité qui vérifie son numéro avec son jeton d'invité dans l'en-tête `Authorization` garde ses documents : la même ligne `users` devient un compte, et ses fichiers passent de `tmp/` à `users/` dans R2.
+
+## Messagerie de l'équipe
+
+Les routes `/v1/admin/...` servent l'application [`inbox/`](../inbox/README.md) : lire les conversations WhatsApp et y répondre dans la fenêtre de 24 h. Elles ont leurs propres comptes (`admin_users`), sans lien avec les comptes de l'application mobile, et leurs propres jetons (`typ: admin`).
+
+```powershell
+leeral admin-create --email bachir@exemple.sn --name Bachir
+leeral admin-list
+leeral admin-password --email bachir@exemple.sn
+leeral admin-disable --email bachir@exemple.sn
+```
+
+| Variable | Rôle |
+|---|---|
+| `ADMIN_ACCESS_TOKEN_TTL_MINUTES` | durée du jeton d'accès (15) |
+| `ADMIN_REFRESH_TOKEN_TTL_DAYS` | durée du jeton de renouvellement (7) |
+| `ADMIN_MAX_FAILED_LOGINS`, `ADMIN_LOCKOUT_MINUTES` | blocage après des mots de passe faux (5 essais, 15 min) |
+| `INBOX_BOT_PAUSE_MINUTES` | pause automatique du bot après une réponse de l'équipe (60) |
+| `INBOX_MAX_UPLOAD_BYTES` | taille maximale d'un fichier envoyé (25 Mo) |
+
+- Une conversation (`whatsapp_threads`) correspond à un numéro sur une ligne WhatsApp. Elle porte la pause du bot et la date de dernière lecture.
+- Tant que le bot est en pause, l'assistant enregistre les messages sans y répondre. Les photos reçues pendant la pause ne sont pas transformées en document.
+- Les médias reçus sont archivés par la tâche `archive_whatsapp_media`, ou au premier affichage s'ils ne l'ont pas encore été.
+- La fenêtre de 24 h part du dernier message du contact. Les réactions ne la rouvrent pas.
+- Les réactions ne déclenchent plus la consigne « envoie une photo ».
+- Un statut WhatsApp arrivé en retard (« reçu » après « lu ») ne fait plus reculer un message.
 
 ## WhatsApp en local
 

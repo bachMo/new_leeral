@@ -60,6 +60,13 @@ class Settings(BaseSettings):
     whatsapp_template_language: str = "fr"
     whatsapp_media_batch_seconds: float = 10.0
 
+    admin_access_token_ttl_minutes: int = 15
+    admin_refresh_token_ttl_days: int = 7
+    admin_max_failed_logins: int = 5
+    admin_lockout_minutes: int = 15
+    inbox_bot_pause_minutes: int = 60
+    inbox_max_upload_bytes: int = 25 * 1024 * 1024
+
     payment_provider: Literal["simulated"] = "simulated"
 
     max_pages_per_document: int = 10

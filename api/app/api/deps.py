@@ -1,3 +1,4 @@
+import uuid
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Annotated
@@ -15,12 +16,15 @@ from app.db.unit_of_work import UnitOfWork
 from app.integrations.payments import PaymentGateway
 from app.integrations.storage import FileStorage
 from app.integrations.whatsapp.client import WhatsAppClient
-from app.models import User
+from app.models import AdminUser, User
 from app.repositories.users import UserRepository
+from app.services.admin_auth_service import AdminAuthService
 from app.services.auth_service import AuthService
 from app.services.billing_service import BillingService, EntitlementService
 from app.services.conversation_service import ConversationService
 from app.services.document_service import DocumentService
+from app.services.inbox_sender import InboxSender
+from app.services.inbox_service import InboxService
 from app.services.learning_service import LearningService
 from app.services.otp_delivery import OtpDelivery
 from app.services.user_service import UserService
@@ -158,3 +162,43 @@ ConversationServiceDep = Annotated[ConversationService, Depends(get_conversation
 WritingServiceDep = Annotated[WritingService, Depends(get_writing_service)]
 LearningServiceDep = Annotated[LearningService, Depends(get_learning_service)]
 BillingServiceDep = Annotated[BillingService, Depends(get_billing_service)]
+
+
+def get_admin_auth_service(uow: Uow, container: Container) -> AdminAuthService:
+    return AdminAuthService(uow, container.settings, container.tokens)
+
+
+AdminAuthServiceDep = Annotated[AdminAuthService, Depends(get_admin_auth_service)]
+
+
+@dataclass(frozen=True, slots=True)
+class AdminPrincipal:
+    admin: AdminUser
+    session_id: uuid.UUID
+
+
+async def require_admin(
+    container: Container,
+    service: AdminAuthServiceDep,
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(_bearer)],
+) -> AdminPrincipal:
+    if credentials is None:
+        raise AppError(ErrorCode.UNAUTHENTICATED)
+    claims = container.tokens.decode_admin_token(credentials.credentials)
+    admin = await service.authenticate(claims)
+    return AdminPrincipal(admin=admin, session_id=claims.session_id)
+
+
+CurrentAdmin = Annotated[AdminPrincipal, Depends(require_admin)]
+
+
+def get_inbox_service(uow: Uow, container: Container) -> InboxService:
+    return InboxService(uow, container.storage, container.whatsapp)
+
+
+def get_inbox_sender(uow: Uow, container: Container) -> InboxSender:
+    return InboxSender(uow, container.storage, container.whatsapp, container.settings)
+
+
+InboxServiceDep = Annotated[InboxService, Depends(get_inbox_service)]
+InboxSenderDep = Annotated[InboxSender, Depends(get_inbox_sender)]

@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import ForeignKey, Index, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
@@ -28,6 +29,7 @@ class WhatsAppMessage(Entity):
     __table_args__ = (
         Index("ix_whatsapp_messages_user_created", "user_id", "created_at"),
         Index("ix_whatsapp_messages_phone_created", "wa_phone", "created_at"),
+        Index("ix_whatsapp_messages_thread_updated", "channel_id", "wa_phone", "updated_at"),
     )
 
     user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
@@ -44,6 +46,25 @@ class WhatsAppMessage(Entity):
     media_key: Mapped[str | None]
     status: Mapped[WhatsAppMessageStatus] = mapped_column(TextEnum(WhatsAppMessageStatus))
     error: Mapped[str | None]
+    media_mime: Mapped[str | None]
+    meta: Mapped[dict[str, Any] | None]
+    admin_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
+    )
+
+
+class WhatsAppThread(Entity):
+    __tablename__ = "whatsapp_threads"
+    __table_args__ = (UniqueConstraint("channel_id", "wa_phone"),)
+
+    channel_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("whatsapp_channels.id", ondelete="RESTRICT")
+    )
+    wa_phone: Mapped[str]
+    user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    bot_paused: Mapped[bool] = mapped_column(default=False)
+    bot_paused_until: Mapped[datetime | None]
+    last_read_at: Mapped[datetime | None]
 
 
 class WhatsAppSession(Entity):

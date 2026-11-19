@@ -12,6 +12,7 @@ from app.core.config import Settings
 from app.core.errors import AppError, ErrorCode
 
 ACCESS_TOKEN_TYPE = "access"
+ADMIN_TOKEN_TYPE = "admin"
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,12 +22,20 @@ class AccessTokenClaims:
     is_guest: bool
 
 
+@dataclass(frozen=True, slots=True)
+class AdminTokenClaims:
+    admin_id: uuid.UUID
+    session_id: uuid.UUID
+
+
 class TokenService:
     def __init__(self, settings: Settings) -> None:
         self._secret = settings.jwt_secret.get_secret_value()
         self._algorithm = settings.jwt_algorithm
         self._access_ttl = timedelta(minutes=settings.access_token_ttl_minutes)
         self._refresh_ttl = timedelta(days=settings.refresh_token_ttl_days)
+        self._admin_access_ttl = timedelta(minutes=settings.admin_access_token_ttl_minutes)
+        self._admin_refresh_ttl = timedelta(days=settings.admin_refresh_token_ttl_days)
         if len(self._secret) < 32:
             raise RuntimeError("JWT_SECRET must be at least 32 characters long")
 
@@ -64,6 +73,41 @@ class TokenService:
                 user_id=uuid.UUID(payload["sub"]),
                 session_id=uuid.UUID(payload["sid"]),
                 is_guest=bool(payload.get("gst", False)),
+            )
+        except (KeyError, ValueError) as exc:
+            raise AppError(ErrorCode.UNAUTHENTICATED) from exc
+
+    @property
+    def admin_access_ttl(self) -> timedelta:
+        return self._admin_access_ttl
+
+    @property
+    def admin_refresh_ttl(self) -> timedelta:
+        return self._admin_refresh_ttl
+
+    def issue_admin_token(self, claims: AdminTokenClaims, now: datetime | None = None) -> str:
+        issued_at = now or utcnow()
+        payload = {
+            "sub": str(claims.admin_id),
+            "sid": str(claims.session_id),
+            "typ": ADMIN_TOKEN_TYPE,
+            "iat": issued_at,
+            "exp": issued_at + self._admin_access_ttl,
+        }
+        return jwt.encode(payload, self._secret, algorithm=self._algorithm)
+
+    def decode_admin_token(self, token: str) -> AdminTokenClaims:
+        try:
+            payload = jwt.decode(token, self._secret, algorithms=[self._algorithm])
+        except jwt.ExpiredSignatureError as exc:
+            raise AppError(ErrorCode.TOKEN_EXPIRED) from exc
+        except jwt.PyJWTError as exc:
+            raise AppError(ErrorCode.UNAUTHENTICATED) from exc
+        if payload.get("typ") != ADMIN_TOKEN_TYPE:
+            raise AppError(ErrorCode.UNAUTHENTICATED)
+        try:
+            return AdminTokenClaims(
+                admin_id=uuid.UUID(payload["sub"]), session_id=uuid.UUID(payload["sid"])
             )
         except (KeyError, ValueError) as exc:
             raise AppError(ErrorCode.UNAUTHENTICATED) from exc
