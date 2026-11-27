@@ -63,6 +63,7 @@ services:
   kiriku:
     build: ./kiriku
     image: leeral-kiriku
+    profiles: ["kiriku"]
     restart: unless-stopped
     environment:
       HF_TOKEN: ${HF_TOKEN:-}

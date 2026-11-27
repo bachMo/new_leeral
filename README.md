@@ -86,7 +86,7 @@ Sans aucune clé, le projet tourne avec un moteur IA simulé : `AI_PROVIDER=mock
 
 ## Déploiement et intégration continue
 
-En production, tout tourne avec Docker Compose sur un serveur : PostgreSQL, Redis, l'API, le worker, le service KIRIKU local (voix et reconnaissance vocale) et un tunnel ngrok qui expose l'API en HTTPS sur un domaine fixe.
+En production, tout tourne avec Docker Compose sur un serveur : PostgreSQL, Redis, l'API, le worker et un tunnel ngrok qui expose l'API en HTTPS sur un domaine fixe. Le service KIRIKU local (voix et reconnaissance vocale) est trop lent sur le processeur du serveur actuel : il ne démarre que si on le demande (`docker compose up -d kiriku`), et les déploiements ne le relancent pas.
 
 ```bash
 docker compose up -d --build
