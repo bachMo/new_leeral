@@ -23,6 +23,8 @@ TTS_CONCURRENCY=2
 
 puis `docker compose up -d api worker`.
 
+Le service fait partie du profil `kiriku` : `docker compose up -d` sans le nommer ne le lance pas, et les déploiements automatiques ne le relancent pas. Pour l'arrêter : `docker compose stop kiriku`.
+
 ## Réglages
 
 | Variable | Rôle |
